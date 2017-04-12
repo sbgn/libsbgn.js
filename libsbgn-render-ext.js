@@ -211,7 +211,10 @@ ns.RenderInformation.prototype.setListOfStyles = function(listOfStyles) {
 };
 ns.RenderInformation.prototype.toXML = function() {
 	// tag and its attributes
-	var xmlString = "<renderInformation id='"+this.id+"'";
+	var xmlString = "<renderInformation";
+	if (this.id != null) {
+		xmlString += " id='"+this.id+"'";
+	}
 	if (this.name != null) {
 		xmlString += " name='"+this.name+"'";
 	}
