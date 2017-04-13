@@ -4,6 +4,29 @@ var ns = {};
 
 ns.xmlns = "http://sbgn.org/libsbgn/0.3";
 
+// ------- UTILITIES -------
+/*
+	guarantees to return an object with given args being set to null if not present, other args returned as is
+*/
+ns.checkParams = function (params, names) {
+	if (typeof params == "undefined" || params == null) {
+		params = {};
+	}
+	if (typeof params != 'object') {
+		throw new Error("Bad params. Object with named parameters must be passed.");
+	}
+	for(var i=0; i < names.length; i++) {
+		var argName = names[i];
+		if (typeof params[argName] == 'undefined') {
+			params[argName] = null;
+		}
+	}
+	return params;
+}
+
+// ------- END UTILITIES -------
+
+
 // ------- SBGNBase -------
 /*
 	Every sbgn element inherit from this. Allows to put notes everywhere.
@@ -14,9 +37,10 @@ ns.SBGNBase = function () {
 // ------- END SBGNBase -------
 
 // ------- SBGN -------
-ns.Sbgn = function (xmlns) {
-	this.xmlns = xmlns;
-	this.map = null;
+ns.Sbgn = function (params) {
+	var params = ns.checkParams(params, ['xmlns', 'map']);
+	this.xmlns 	= params.xmlns;
+	this.map 	= params.map;
 };
 ns.Sbgn.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Sbgn.prototype.constructor = ns.Sbgn;
@@ -51,12 +75,13 @@ ns.Sbgn.fromXML = function (xmlObj) {
 // ------- END SBGN -------
 
 // ------- MAP -------
-ns.Map = function (id, language) {
-	this.id = id;
-	this.language = language;
-	this.extension = null;
-	this.glyphs = [];
-	this.arcs = [];
+ns.Map = function (params) {
+	var params = ns.checkParams(params, ['id', 'language', 'extension', 'glyphs', 'arcs']);
+	this.id 		= params.id;
+	this.language 	= params.language;
+	this.extension 	= params.extension;
+	this.glyphs 	= params.glyphs || [];
+	this.arcs 		= params.arcs || [];
 };
 ns.Map.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Map.prototype.constructor = ns.Map;
@@ -175,16 +200,17 @@ ns.Extension.fromXML = function (xmlObj) {
 // ------- END EXTENSIONS -------
 
 // ------- GLYPH -------
-ns.Glyph = function (id, class_, compartmentRef) {
-	this.id = id;
-	this.class_ = class_;
-	this.compartmentRef = compartmentRef;
+ns.Glyph = function (params) {
+	var params = ns.checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports']);
+	this.id 			= params.id;
+	this.class_ 		= params.class_;
+	this.compartmentRef = params.compartmentRef;
 
 	// children
-	this.label = null;
-	this.bbox = null;
-	this.glyphMembers = []; // case of complex, can have arbitrary list of nested glyphs
-	this.ports = [];
+	this.label 			= params.label;
+	this.bbox 			= params.bbox;
+	this.glyphMembers 	= params.glyphMembers || []; // case of complex, can have arbitrary list of nested glyphs
+	this.ports 			= params.ports || [];
 };
 ns.Glyph.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Glyph.prototype.constructor = ns.Glyph;
@@ -233,9 +259,9 @@ ns.Glyph.prototype.toXML = function () {
 };
 ns.Glyph.fromXML = function (xmlObj) {
 	var glyph = new ns.Glyph();
-	glyph.id = xmlObj.getAttribute('id');
-	glyph.class_ = xmlObj.getAttribute('class');
-	glyph.compartmentRef = xmlObj.getAttribute('compartmentRef');
+	glyph.id 				= xmlObj.getAttribute('id');
+	glyph.class_ 			= xmlObj.getAttribute('class');
+	glyph.compartmentRef 	= xmlObj.getAttribute('compartmentRef');
 
 	var labelXML = xmlObj.getElementsByTagName('label')[0];
 	if (labelXML != null) {
@@ -267,8 +293,9 @@ ns.Glyph.fromXML = function (xmlObj) {
 // ------- END GLYPH -------
 
 // ------- LABEL -------
-ns.Label = function (text) {
-	this.text = text;
+ns.Label = function (params) {
+	var params = ns.checkParams(params, ['text']);
+	this.text = params.text;
 };
 ns.Label.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Label.prototype.constructor = ns.Label;
@@ -289,11 +316,12 @@ ns.Label.fromXML = function (xmlObj) {
 // ------- END LABEL -------
 
 // ------- BBOX -------
-ns.Bbox = function (x, y, w, h) {
-	this.x = parseFloat(x);
-	this.y = parseFloat(y);
-	this.w = parseFloat(w);
-	this.h = parseFloat(h);
+ns.Bbox = function (params) {
+	var params = ns.checkParams(params, ['x', 'y', 'w', 'h']);
+	this.x = parseFloat(params.x);
+	this.y = parseFloat(params.y);
+	this.w = parseFloat(params.w);
+	this.h = parseFloat(params.h);
 };
 ns.Bbox.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Bbox.prototype.constructor = ns.Bbox;
@@ -326,10 +354,11 @@ ns.Bbox.fromXML = function (xmlObj) {
 // ------- END BBOX -------
 
 // ------- PORT -------
-ns.Port = function (id, x, y) {
-	this.id = id;
-	this.x = parseFloat(x);
-	this.y = parseFloat(y);
+ns.Port = function (params) {
+	var params = ns.checkParams(params, ['id', 'x', 'y']);
+	this.id = params.id;
+	this.x 	= parseFloat(params.x);
+	this.y 	= parseFloat(params.y);
 };
 ns.Port.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Port.prototype.constructor = ns.Port;
@@ -350,23 +379,24 @@ ns.Port.prototype.toXML = function () {
 }
 ns.Port.fromXML = function (xmlObj) {
 	var port = new ns.Port();
-	port.x = parseFloat(xmlObj.getAttribute('x'));
-	port.y = parseFloat(xmlObj.getAttribute('y'));
+	port.x 	= parseFloat(xmlObj.getAttribute('x'));
+	port.y 	= parseFloat(xmlObj.getAttribute('y'));
 	port.id = xmlObj.getAttribute('id');
 	return port;
 };
 // ------- END PORT -------
 
 // ------- ARC -------
-ns.Arc = function (id, class_, source, target) {
-	this.id = id;
-	this.class_ = class_;
-	this.source = source;
-	this.target = target;
+ns.Arc = function (params) {
+	var params = ns.checkParams(params, ['id', 'class_', 'source', 'target', 'start', 'end', 'nexts']);
+	this.id 	= params.id;
+	this.class_ = params.class_;
+	this.source = params.source;
+	this.target = params.target;
 
-	this.start = null;
-	this.end = null;
-	this.nexts = [];
+	this.start 	= params.start;
+	this.end 	= params.end;
+	this.nexts 	= params.nexts || [];
 };
 ns.Arc.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Arc.prototype.constructor = ns.Arc;
@@ -412,10 +442,10 @@ ns.Arc.prototype.toXML = function () {
 };
 ns.Arc.fromXML = function (xmlObj) {
 	var arc = new ns.Arc();
-	arc.id = xmlObj.getAttribute('id');
-	arc.class_ = xmlObj.getAttribute('class');
-	arc.source = xmlObj.getAttribute('source');
-	arc.target = xmlObj.getAttribute('target');
+	arc.id 		= xmlObj.getAttribute('id');
+	arc.class_ 	= xmlObj.getAttribute('class');
+	arc.source 	= xmlObj.getAttribute('source');
+	arc.target 	= xmlObj.getAttribute('target');
 
 	var startXML = xmlObj.getElementsByTagName('start')[0];
 	if (startXML != null) {
@@ -439,9 +469,10 @@ ns.Arc.fromXML = function (xmlObj) {
 // ------- END ARC -------
 
 // ------- STARTTYPE -------
-ns.StartType = function (x, y) {
-	this.x = parseFloat(x);
-	this.y = parseFloat(y);
+ns.StartType = function (params) {
+	var params = ns.checkParams(params, ['x', 'y']);
+	this.x = parseFloat(params.x);
+	this.y = parseFloat(params.y);
 };
 ns.StartType.prototype = Object.create(ns.SBGNBase.prototype);
 ns.StartType.prototype.constructor = ns.StartType;
@@ -466,9 +497,10 @@ ns.StartType.fromXML = function (xmlObj) {
 // ------- END STARTTYPE -------
 
 // ------- ENDTYPE -------
-ns.EndType = function (x, y) {
-	this.x = parseFloat(x);
-	this.y = parseFloat(y);
+ns.EndType = function (params) {
+	var params = ns.checkParams(params, ['x', 'y']);
+	this.x = parseFloat(params.x);
+	this.y = parseFloat(params.y);
 };
 ns.EndType.prototype = Object.create(ns.SBGNBase.prototype);
 ns.EndType.prototype.constructor = ns.EndType;
@@ -493,9 +525,10 @@ ns.EndType.fromXML = function (xmlObj) {
 // ------- END ENDTYPE -------
 
 // ------- NEXTTYPE -------
-ns.NextType = function (x, y) {
-	this.x = parseFloat(x);
-	this.y = parseFloat(y);
+ns.NextType = function (params) {
+	var params = ns.checkParams(params, ['x', 'y']);
+	this.x = parseFloat(params.x);
+	this.y = parseFloat(params.y);
 };
 ns.NextType.prototype = Object.create(ns.SBGNBase.prototype);
 ns.NextType.prototype.constructor = ns.NextType;

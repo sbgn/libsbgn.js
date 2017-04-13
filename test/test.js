@@ -7,6 +7,40 @@ describe('libsbgn', function() {
 	function getSpecificXmlObj(string, name) {
 		return new window.DOMParser().parseFromString(string, "text/xml").querySelector(name);
 	};
+	describe('utilities', function() {
+		describe('checkParams', function() {
+			it('should return empty object if undefined or null', function() {
+				sbgnjs.checkParams(undefined, []).should.deep.equal({});
+				sbgnjs.checkParams(null, []).should.deep.equal({});
+			});
+			it('should populate object with given args if undefined or null', function() {
+				sbgnjs.checkParams(undefined, ['a', 'b']).should.deep.equal({'a': null, 'b': null});
+				sbgnjs.checkParams(null, ['a', 'b']).should.deep.equal({'a': null, 'b': null});
+			});
+			it('should throw error if param is not an object and not undefined or null', function() {
+				var test1 = function(){sbgnjs.checkParams('', [])};
+				var test2 = function(){sbgnjs.checkParams(0, [])};
+				var test3 = function(){sbgnjs.checkParams({}, [])};
+				test1.should.throw(Error);
+				test2.should.throw(Error);
+				test3.should.not.throw(Error);
+			});
+			it('should give back params as they are passed', function() {
+				sbgnjs.checkParams({
+					'a': 1,
+					'b': 'test',
+					'c': null,
+					'd': NaN},
+					['a', 'b', 'c', 'd']).should.deep.equal({
+						'a': 1,
+						'b': 'test',
+						'c': null,
+						'd': NaN,
+					});
+			});
+		});
+	});
+
 	describe('sbgn', function() {
 		describe('parse from XML', function() {
 			function getXmlObj(string) {
@@ -34,12 +68,19 @@ describe('libsbgn', function() {
 		describe('write to XML', function() {
 			it('should write empty sbgn', function() {
 				var sbgn = new sbgnjs.Sbgn();
+				should.equal(sbgn.xmlns, null);
+				should.equal(sbgn.map, null);
 				sbgn.toXML().should.equal("<sbgn>\n</sbgn>\n");
 			});
 			it('should write complete sbgn with empty map', function() {
-				var sbgn = new sbgnjs.Sbgn("a");
+				var sbgn = new sbgnjs.Sbgn({'xmlns': "a"});
 				sbgn.setMap(new sbgnjs.Map());
 				sbgn.toXML().should.equal("<sbgn xmlns='a'>\n<map>\n</map>\n</sbgn>\n");
+			});
+			it('edge case should consider xmlns of 0', function() {
+				var sbgn = new sbgnjs.Sbgn({'xmlns': 0});
+				sbgn.setMap(new sbgnjs.Map());
+				sbgn.toXML().should.equal("<sbgn xmlns='0'>\n<map>\n</map>\n</sbgn>\n");
 			});
 		});
 	});
@@ -101,7 +142,7 @@ describe('libsbgn', function() {
 				map.toXML().should.equal("<map>\n</map>\n");
 			});
 			it('should write complete map with empty stuff', function() {
-				var map = new sbgnjs.Map("id", "language");
+				var map = new sbgnjs.Map({id: "id", language: "language"});
 				map.setExtension(new sbgnjs.Extension());
 				map.addGlyph(new sbgnjs.Glyph());
 				map.addArc(new sbgnjs.Arc());
@@ -181,7 +222,7 @@ describe('libsbgn', function() {
 			label.toXML().should.equal('<label />\n');
 		});
 		it('should write complete', function() {
-			var label = new sbgnjs.Label('some text');
+			var label = new sbgnjs.Label({text: 'some text'});
 			label.toXML().should.equal("<label text='some text' />\n");
 		});
 	});
@@ -216,7 +257,7 @@ describe('libsbgn', function() {
 			bbox.toXML().should.equal('<bbox />\n');
 		});
 		it('should write complete', function() {
-			var bbox = new sbgnjs.Bbox(1, 2, 3.1416, 4);
+			var bbox = new sbgnjs.Bbox({x: 1, y: 2, w: 3.1416, h: 4});
 			bbox.toXML().should.equal("<bbox x='1' y='2' w='3.1416' h='4' />\n");
 		});
 	});
@@ -247,7 +288,7 @@ describe('libsbgn', function() {
 			port.toXML().should.equal('<port />\n');
 		});
 		it('should write complete', function() {
-			var port = new sbgnjs.Port('id', 2, 3.1416);
+			var port = new sbgnjs.Port({id: 'id', x: 2, y: 3.1416});
 			port.toXML().should.equal("<port id='id' x='2' y='3.1416' />\n");
 		});
 	});
@@ -282,7 +323,7 @@ describe('libsbgn', function() {
 			bbox.toXML().should.equal('<bbox />\n');
 		});
 		it('should write complete', function() {
-			var bbox = new sbgnjs.Bbox(1, 2, 3.1416, 4);
+			var bbox = new sbgnjs.Bbox({x: 1, y: 2, w: 3.1416, h: 4});
 			bbox.toXML().should.equal("<bbox x='1' y='2' w='3.1416' h='4' />\n");
 		});
 	});
@@ -309,7 +350,7 @@ describe('libsbgn', function() {
 			start.toXML().should.equal('<start />\n');
 		});
 		it('should write complete', function() {
-			var start = new sbgnjs.StartType(1, 2);
+			var start = new sbgnjs.StartType({x: 1, y: 2});
 			start.toXML().should.equal("<start x='1' y='2' />\n");
 		});
 	});
@@ -336,7 +377,7 @@ describe('libsbgn', function() {
 			end.toXML().should.equal('<end />\n');
 		});
 		it('should write complete', function() {
-			var end = new sbgnjs.EndType(1, 2);
+			var end = new sbgnjs.EndType({x: 1, y: 2});
 			end.toXML().should.equal("<end x='1' y='2' />\n");
 		});
 	});
@@ -363,7 +404,7 @@ describe('libsbgn', function() {
 			next.toXML().should.equal('<next />\n');
 		});
 		it('should write complete', function() {
-			var next = new sbgnjs.NextType(1, 2);
+			var next = new sbgnjs.NextType({x: 1, y: 2});
 			next.toXML().should.equal("<next x='1' y='2' />\n");
 		});
 	});
@@ -444,7 +485,7 @@ describe('libsbgn', function() {
 				glyph.toXML().should.equal("<glyph>\n</glyph>\n");
 			});
 			it('should write complete glyph', function() {
-				var glyph = new sbgnjs.Glyph("id", "a_class", "a_compartment_id");
+				var glyph = new sbgnjs.Glyph({id: "id", class_: "a_class", compartmentRef: "a_compartment_id"});
 				glyph.setLabel(new sbgnjs.Label());
 				glyph.setBbox(new sbgnjs.Bbox());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
@@ -541,7 +582,7 @@ describe('libsbgn', function() {
 				arc.toXML().should.equal("<arc>\n</arc>\n");
 			});
 			it('should write complete arc', function() {
-				var arc = new sbgnjs.Arc("id", "a_class", "source", "target");
+				var arc = new sbgnjs.Arc({id: "id", class_: "a_class", source: "source", target: "target"});
 				arc.setStart(new sbgnjs.StartType());
 				arc.setEnd(new sbgnjs.EndType());
 				arc.addNext(new sbgnjs.NextType());
