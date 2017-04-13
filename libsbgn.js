@@ -61,6 +61,9 @@ ns.Sbgn.prototype.toXML = function () {
 	return xmlString;
 };
 ns.Sbgn.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'sbgn') {
+		throw new Error("Bad XML provided, expected tagName sbgn, got: " + xmlObj.tagName);
+	}
 	var sbgn = new ns.Sbgn();
 	sbgn.xmlns = xmlObj.getAttribute('xmlns');
 
@@ -120,6 +123,9 @@ ns.Map.prototype.toXML = function () {
 	return xmlString;
 };
 ns.Map.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'map') {
+		throw new Error("Bad XML provided, expected tagName map, got: " + xmlObj.tagName);
+	}
 	var map = new ns.Map();
 	map.id = xmlObj.getAttribute('id');
 	map.language = xmlObj.getAttribute('language');
@@ -189,6 +195,9 @@ ns.Extension.prototype.toXML = function () {
 	return xmlString;
 }
 ns.Extension.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'extension') {
+		throw new Error("Bad XML provided, expected tagName extension, got: " + xmlObj.tagName);
+	}
 	var extension = new ns.Extension();
 	var children = xmlObj.children;
 	for (var i=0; i < children.length; i++) {
@@ -258,6 +267,9 @@ ns.Glyph.prototype.toXML = function () {
 	return xmlString;
 };
 ns.Glyph.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'glyph') {
+		throw new Error("Bad XML provided, expected tagName glyph, got: " + xmlObj.tagName);
+	}
 	var glyph = new ns.Glyph();
 	glyph.id 				= xmlObj.getAttribute('id');
 	glyph.class_ 			= xmlObj.getAttribute('class');
@@ -309,6 +321,9 @@ ns.Label.prototype.toXML = function () {
 	return xmlString;
 };
 ns.Label.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'label') {
+		throw new Error("Bad XML provided, expected tagName label, got: " + xmlObj.tagName);
+	}
 	var label = new ns.Label();
 	label.text = xmlObj.getAttribute('text');
 	return label;
@@ -344,6 +359,9 @@ ns.Bbox.prototype.toXML = function () {
 	return xmlString;
 };
 ns.Bbox.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'bbox') {
+		throw new Error("Bad XML provided, expected tagName bbox, got: " + xmlObj.tagName);
+	}
 	var bbox = new ns.Bbox();
 	bbox.x = parseFloat(xmlObj.getAttribute('x'));
 	bbox.y = parseFloat(xmlObj.getAttribute('y'));
@@ -378,6 +396,9 @@ ns.Port.prototype.toXML = function () {
 	return xmlString;
 }
 ns.Port.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'port') {
+		throw new Error("Bad XML provided, expected tagName port, got: " + xmlObj.tagName);
+	}
 	var port = new ns.Port();
 	port.x 	= parseFloat(xmlObj.getAttribute('x'));
 	port.y 	= parseFloat(xmlObj.getAttribute('y'));
@@ -441,6 +462,9 @@ ns.Arc.prototype.toXML = function () {
 	return xmlString;
 };
 ns.Arc.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'arc') {
+		throw new Error("Bad XML provided, expected tagName arc, got: " + xmlObj.tagName);
+	}
 	var arc = new ns.Arc();
 	arc.id 		= xmlObj.getAttribute('id');
 	arc.class_ 	= xmlObj.getAttribute('class');
@@ -489,6 +513,9 @@ ns.StartType.prototype.toXML = function () {
 	return xmlString;
 }
 ns.StartType.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'start') {
+		throw new Error("Bad XML provided, expected tagName start, got: " + xmlObj.tagName);
+	}
 	var start = new ns.StartType();
 	start.x = parseFloat(xmlObj.getAttribute('x'));
 	start.y = parseFloat(xmlObj.getAttribute('y'));
@@ -517,6 +544,9 @@ ns.EndType.prototype.toXML = function () {
 	return xmlString;
 }
 ns.EndType.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'end') {
+		throw new Error("Bad XML provided, expected tagName end, got: " + xmlObj.tagName);
+	}
 	var end = new ns.EndType();
 	end.x = parseFloat(xmlObj.getAttribute('x'));
 	end.y = parseFloat(xmlObj.getAttribute('y'));
@@ -545,6 +575,9 @@ ns.NextType.prototype.toXML = function () {
 	return xmlString;
 }
 ns.NextType.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'next') {
+		throw new Error("Bad XML provided, expected tagName next, got: " + xmlObj.tagName);
+	}
 	var next = new ns.NextType();
 	next.x = parseFloat(xmlObj.getAttribute('x'));
 	next.y = parseFloat(xmlObj.getAttribute('y'));

@@ -7,6 +7,9 @@ describe('libsbgn', function() {
 	function getSpecificXmlObj(string, name) {
 		return new window.DOMParser().parseFromString(string, "text/xml").querySelector(name);
 	};
+	function getXmlObj(string) {
+		return new window.DOMParser().parseFromString(string, "text/xml").documentElement;
+	};
 	describe('utilities', function() {
 		describe('checkParams', function() {
 			it('should return empty object if undefined or null', function() {
@@ -43,9 +46,6 @@ describe('libsbgn', function() {
 
 	describe('sbgn', function() {
 		describe('parse from XML', function() {
-			function getXmlObj(string) {
-				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('sbgn');
-			};
 			it('should parse empty', function() {
 				var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn></sbgn>"));
 				sbgn.should.have.ownProperty('xmlns');
@@ -87,9 +87,6 @@ describe('libsbgn', function() {
 
 	describe('map', function() {
 		describe('parse from XML', function() {
-			function getXmlObj(string) {
-				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('map');
-			};
 			it('should parse empty', function() {
 				var map = sbgnjs.Map.fromXML(getXmlObj("<map></map>"));
 				map.should.have.ownProperty('id');
@@ -151,9 +148,6 @@ describe('libsbgn', function() {
 		});
 	});
 	describe('extension', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('extension');
-		};
 		describe('parse from XML', function() {
 			it('should parse empty', function () {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension></extension>'));
@@ -204,9 +198,6 @@ describe('libsbgn', function() {
 		});
 	});
 	describe('label', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('label');
-		};
 		it('should parse empty', function() {
 			var label = sbgnjs.Label.fromXML(getXmlObj("<label />"));
 			label.should.have.ownProperty('text');
@@ -227,9 +218,6 @@ describe('libsbgn', function() {
 		});
 	});
 	describe('bbox', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('bbox');
-		};
 		it('should parse empty', function() {
 			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox />"));
 			bbox.should.have.ownProperty('x');
@@ -262,9 +250,6 @@ describe('libsbgn', function() {
 		});
 	});
 	describe('port', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('port');
-		};
 		it('should parse empty', function() {
 			var port = sbgnjs.Port.fromXML(getXmlObj("<port />"));
 			port.should.have.ownProperty('id');
@@ -292,45 +277,7 @@ describe('libsbgn', function() {
 			port.toXML().should.equal("<port id='id' x='2' y='3.1416' />\n");
 		});
 	});
-	describe('bbox', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('bbox');
-		};
-		it('should parse empty', function() {
-			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox />"));
-			bbox.should.have.ownProperty('x');
-			bbox.x.should.be.NaN;
-			bbox.should.have.ownProperty('y');
-			bbox.y.should.be.NaN;
-			bbox.should.have.ownProperty('w');
-			bbox.w.should.be.NaN;
-			bbox.should.have.ownProperty('h');
-			bbox.h.should.be.NaN;
-		});
-		it('should parse complete', function() {
-			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox x='1' y='2' w='3.1416' h='4' />"));
-			should.exist(bbox.x);
-			bbox.x.should.equal(1);
-			should.exist(bbox.y);
-			bbox.y.should.equal(2);
-			should.exist(bbox.w);
-			bbox.w.should.equal(3.1416);
-			should.exist(bbox.h);
-			bbox.h.should.equal(4);
-		});
-		it('should write empty', function() {
-			var bbox = new sbgnjs.Bbox();
-			bbox.toXML().should.equal('<bbox />\n');
-		});
-		it('should write complete', function() {
-			var bbox = new sbgnjs.Bbox({x: 1, y: 2, w: 3.1416, h: 4});
-			bbox.toXML().should.equal("<bbox x='1' y='2' w='3.1416' h='4' />\n");
-		});
-	});
 	describe('start type', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('start');
-		};
 		it('should parse empty', function() {
 			var start = sbgnjs.StartType.fromXML(getXmlObj("<start />"));
 			start.should.have.ownProperty('x');
@@ -339,7 +286,7 @@ describe('libsbgn', function() {
 			start.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var start = sbgnjs.Bbox.fromXML(getXmlObj("<start x='1' y='2' />"));
+			var start = sbgnjs.StartType.fromXML(getXmlObj("<start x='1' y='2' />"));
 			should.exist(start.x);
 			start.x.should.equal(1);
 			should.exist(start.y);
@@ -355,9 +302,6 @@ describe('libsbgn', function() {
 		});
 	});
 	describe('end type', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('end');
-		};
 		it('should parse empty', function() {
 			var end = sbgnjs.EndType.fromXML(getXmlObj("<end />"));
 			end.should.have.ownProperty('x');
@@ -366,7 +310,7 @@ describe('libsbgn', function() {
 			end.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var end = sbgnjs.Bbox.fromXML(getXmlObj("<end x='1' y='2' />"));
+			var end = sbgnjs.EndType.fromXML(getXmlObj("<end x='1' y='2' />"));
 			should.exist(end.x);
 			end.x.should.equal(1);
 			should.exist(end.y);
@@ -382,9 +326,6 @@ describe('libsbgn', function() {
 		});
 	});
 	describe('next type', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('next');
-		};
 		it('should parse empty', function() {
 			var next = sbgnjs.NextType.fromXML(getXmlObj("<next />"));
 			next.should.have.ownProperty('x');
@@ -393,7 +334,7 @@ describe('libsbgn', function() {
 			next.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var next = sbgnjs.Bbox.fromXML(getXmlObj("<next x='1' y='2' />"));
+			var next = sbgnjs.NextType.fromXML(getXmlObj("<next x='1' y='2' />"));
 			should.exist(next.x);
 			next.x.should.equal(1);
 			should.exist(next.y);
@@ -411,9 +352,6 @@ describe('libsbgn', function() {
 
 	describe('glyph', function() {
 		describe('parse from XML', function() {
-			function getXmlObj(string) {
-				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('glyph');
-			};
 			it('should parse empty', function() {
 				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph></glyph>"));
 				glyph.should.have.ownProperty('id');
@@ -502,9 +440,6 @@ describe('libsbgn', function() {
 
 	describe('arc', function() {
 		describe('parse from XML', function() {
-			function getXmlObj(string) {
-				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('arc');
-			};
 			it('should parse empty', function() {
 				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc></arc>"));
 				arc.should.have.ownProperty('id');
@@ -597,9 +532,6 @@ describe('libsbgn', function() {
 		});
 	});
 	describe('complete tests', function() {
-		function getXmlObj(string) {
-			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('sbgn');
-		};
 		it('should parse full test', function() {
 			var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj(
 				"<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n"+
