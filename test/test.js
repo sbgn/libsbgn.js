@@ -12,24 +12,24 @@ describe('libsbgn', function() {
 			function getXmlObj(string) {
 				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('sbgn');
 			};
-		    it('should parse empty', function() {
-		    	var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn></sbgn>"));
-		    	sbgn.should.have.ownProperty('xmlns');
-		    	should.equal(sbgn.xmlns, null);
-		    	sbgn.should.have.ownProperty('map');
-		    	should.equal(sbgn.map, null);
-		    });
-		    it('should parse xmlns', function() {
-		    	var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn xmlns='a'></sbgn>"));
-		    	should.exist(sbgn.xmlns);
-		    	sbgn.xmlns.should.equal('a');
-		    });
-		    it('should parse map', function() {
-		    	var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn><map></map></sbgn>"));
-		    	should.exist(sbgn.map);
-		    	sbgn.map.should.be.a('object');
-		    	sbgn.map.should.be.instanceOf(sbgnjs.Map);
-		    });
+			it('should parse empty', function() {
+				var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn></sbgn>"));
+				sbgn.should.have.ownProperty('xmlns');
+				should.equal(sbgn.xmlns, null);
+				sbgn.should.have.ownProperty('map');
+				should.equal(sbgn.map, null);
+			});
+			it('should parse xmlns', function() {
+				var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn xmlns='a'></sbgn>"));
+				should.exist(sbgn.xmlns);
+				sbgn.xmlns.should.equal('a');
+			});
+			it('should parse map', function() {
+				var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn><map></map></sbgn>"));
+				should.exist(sbgn.map);
+				sbgn.map.should.be.a('object');
+				sbgn.map.should.be.instanceOf(sbgnjs.Map);
+			});
 		});
 		describe('write to XML', function() {
 			it('should write empty sbgn', function() {
@@ -50,50 +50,50 @@ describe('libsbgn', function() {
 				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('map');
 			};
 			it('should parse empty', function() {
-		    	var map = sbgnjs.Map.fromXML(getXmlObj("<map></map>"));
-		    	map.should.have.ownProperty('id');
-		    	should.equal(map.id, null);
-		    	map.should.have.ownProperty('language');
-		    	should.equal(map.language, null);
-		    	map.should.have.ownProperty('extension');
-		    	should.equal(map.extension, null);
-		    	map.should.have.ownProperty('glyphs');
-		    	map.glyphs.should.have.length(0);
-		    	map.should.have.ownProperty('arcs');
-		    	map.arcs.should.have.length(0);
-		    });
-		    it('should parse id', function() {
-		    	var map = sbgnjs.Map.fromXML(getXmlObj("<map id='a'></map>"));
-		    	should.exist(map.id);
-		    	map.id.should.equal('a');
-		    });
-		    it('should parse language', function() {
-		    	var map = sbgnjs.Map.fromXML(getXmlObj("<map language='a'></map>"));
-		    	should.exist(map.language);
-		    	map.language.should.equal('a');
-		    });
-		    it('should parse extension', function() {
-		    	var map = sbgnjs.Map.fromXML(getXmlObj("<map><extension></extension></map>"));
-		    	should.exist(map.extension);
-		    	map.extension.should.be.a('object');
-		    	map.extension.should.be.instanceOf(sbgnjs.Extension);
-		    });
-		    it('parse 2 empty glyphs', function() {
-		    	var map = sbgnjs.Map.fromXML(getXmlObj("<map><glyph></glyph><glyph></glyph></map>"));
-		    	map.glyphs.should.have.length(2);
-		    	should.exist(map.glyphs[0]);
-		    	map.glyphs[0].should.be.instanceOf(sbgnjs.Glyph);
-		    	should.exist(map.glyphs[1]);
-		    	map.glyphs[1].should.be.instanceOf(sbgnjs.Glyph);
-		    });
-		    it('parse 2 empty arcs', function() {
-		    	var map = sbgnjs.Map.fromXML(getXmlObj("<map><arc></arc><arc></arc></map>"));
-		    	map.arcs.should.have.length(2);
-		    	should.exist(map.arcs[0]);
-		    	map.arcs[0].should.be.instanceOf(sbgnjs.Arc);
-		    	should.exist(map.arcs[1]);
-		    	map.arcs[1].should.be.instanceOf(sbgnjs.Arc);
-		    });
+				var map = sbgnjs.Map.fromXML(getXmlObj("<map></map>"));
+				map.should.have.ownProperty('id');
+				should.equal(map.id, null);
+				map.should.have.ownProperty('language');
+				should.equal(map.language, null);
+				map.should.have.ownProperty('extension');
+				should.equal(map.extension, null);
+				map.should.have.ownProperty('glyphs');
+				map.glyphs.should.have.length(0);
+				map.should.have.ownProperty('arcs');
+				map.arcs.should.have.length(0);
+			});
+			it('should parse id', function() {
+				var map = sbgnjs.Map.fromXML(getXmlObj("<map id='a'></map>"));
+				should.exist(map.id);
+				map.id.should.equal('a');
+			});
+			it('should parse language', function() {
+				var map = sbgnjs.Map.fromXML(getXmlObj("<map language='a'></map>"));
+				should.exist(map.language);
+				map.language.should.equal('a');
+			});
+			it('should parse extension', function() {
+				var map = sbgnjs.Map.fromXML(getXmlObj("<map><extension></extension></map>"));
+				should.exist(map.extension);
+				map.extension.should.be.a('object');
+				map.extension.should.be.instanceOf(sbgnjs.Extension);
+			});
+			it('parse 2 empty glyphs', function() {
+				var map = sbgnjs.Map.fromXML(getXmlObj("<map><glyph></glyph><glyph></glyph></map>"));
+				map.glyphs.should.have.length(2);
+				should.exist(map.glyphs[0]);
+				map.glyphs[0].should.be.instanceOf(sbgnjs.Glyph);
+				should.exist(map.glyphs[1]);
+				map.glyphs[1].should.be.instanceOf(sbgnjs.Glyph);
+			});
+			it('parse 2 empty arcs', function() {
+				var map = sbgnjs.Map.fromXML(getXmlObj("<map><arc></arc><arc></arc></map>"));
+				map.arcs.should.have.length(2);
+				should.exist(map.arcs[0]);
+				map.arcs[0].should.be.instanceOf(sbgnjs.Arc);
+				should.exist(map.arcs[1]);
+				map.arcs[1].should.be.instanceOf(sbgnjs.Arc);
+			});
 		});
 		describe('write to XML', function() {
 			it('should write empty map', function() {
@@ -105,7 +105,7 @@ describe('libsbgn', function() {
 				map.setExtension(new sbgnjs.Extension());
 				map.addGlyph(new sbgnjs.Glyph());
 				map.addArc(new sbgnjs.Arc());
-				map.toXML().should.equal("<map id='id' language='language'>\n<extension>\n</extension>\n</map>\n");
+				map.toXML().should.equal("<map id='id' language='language'>\n<extension>\n</extension>\n<glyph>\n</glyph>\n<arc>\n</arc>\n</map>\n");
 			});
 		});
 	});
@@ -169,7 +169,7 @@ describe('libsbgn', function() {
 		it('should parse empty', function() {
 			var label = sbgnjs.Label.fromXML(getXmlObj("<label />"));
 			label.should.have.ownProperty('text');
-	    	should.equal(label.text, null);
+			should.equal(label.text, null);
 		});
 		it('should parse complete', function() {
 			var label = sbgnjs.Label.fromXML(getXmlObj("<label text='some text' />"));
@@ -192,13 +192,13 @@ describe('libsbgn', function() {
 		it('should parse empty', function() {
 			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox />"));
 			bbox.should.have.ownProperty('x');
-	    	bbox.x.should.be.NaN;
-	    	bbox.should.have.ownProperty('y');
-	    	bbox.y.should.be.NaN;
-	    	bbox.should.have.ownProperty('w');
-	    	bbox.w.should.be.NaN;
-	    	bbox.should.have.ownProperty('h');
-	    	bbox.h.should.be.NaN;
+			bbox.x.should.be.NaN;
+			bbox.should.have.ownProperty('y');
+			bbox.y.should.be.NaN;
+			bbox.should.have.ownProperty('w');
+			bbox.w.should.be.NaN;
+			bbox.should.have.ownProperty('h');
+			bbox.h.should.be.NaN;
 		});
 		it('should parse complete', function() {
 			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox x='1' y='2' w='3.1416' h='4' />"));
@@ -227,11 +227,11 @@ describe('libsbgn', function() {
 		it('should parse empty', function() {
 			var port = sbgnjs.Port.fromXML(getXmlObj("<port />"));
 			port.should.have.ownProperty('id');
-	    	should.equal(port.id, null);
+			should.equal(port.id, null);
 			port.should.have.ownProperty('x');
-	    	port.x.should.be.NaN;
-	    	port.should.have.ownProperty('y');
-	    	port.y.should.be.NaN;
+			port.x.should.be.NaN;
+			port.should.have.ownProperty('y');
+			port.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
 			var port = sbgnjs.Port.fromXML(getXmlObj("<port id='id' x='1.25' y='2' />"));
@@ -258,13 +258,13 @@ describe('libsbgn', function() {
 		it('should parse empty', function() {
 			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox />"));
 			bbox.should.have.ownProperty('x');
-	    	bbox.x.should.be.NaN;
-	    	bbox.should.have.ownProperty('y');
-	    	bbox.y.should.be.NaN;
-	    	bbox.should.have.ownProperty('w');
-	    	bbox.w.should.be.NaN;
-	    	bbox.should.have.ownProperty('h');
-	    	bbox.h.should.be.NaN;
+			bbox.x.should.be.NaN;
+			bbox.should.have.ownProperty('y');
+			bbox.y.should.be.NaN;
+			bbox.should.have.ownProperty('w');
+			bbox.w.should.be.NaN;
+			bbox.should.have.ownProperty('h');
+			bbox.h.should.be.NaN;
 		});
 		it('should parse complete', function() {
 			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox x='1' y='2' w='3.1416' h='4' />"));
@@ -293,9 +293,9 @@ describe('libsbgn', function() {
 		it('should parse empty', function() {
 			var start = sbgnjs.StartType.fromXML(getXmlObj("<start />"));
 			start.should.have.ownProperty('x');
-	    	start.x.should.be.NaN;
-	    	start.should.have.ownProperty('y');
-	    	start.y.should.be.NaN;
+			start.x.should.be.NaN;
+			start.should.have.ownProperty('y');
+			start.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
 			var start = sbgnjs.Bbox.fromXML(getXmlObj("<start x='1' y='2' />"));
@@ -320,9 +320,9 @@ describe('libsbgn', function() {
 		it('should parse empty', function() {
 			var end = sbgnjs.EndType.fromXML(getXmlObj("<end />"));
 			end.should.have.ownProperty('x');
-	    	end.x.should.be.NaN;
-	    	end.should.have.ownProperty('y');
-	    	end.y.should.be.NaN;
+			end.x.should.be.NaN;
+			end.should.have.ownProperty('y');
+			end.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
 			var end = sbgnjs.Bbox.fromXML(getXmlObj("<end x='1' y='2' />"));
@@ -347,9 +347,9 @@ describe('libsbgn', function() {
 		it('should parse empty', function() {
 			var next = sbgnjs.NextType.fromXML(getXmlObj("<next />"));
 			next.should.have.ownProperty('x');
-	    	next.x.should.be.NaN;
-	    	next.should.have.ownProperty('y');
-	    	next.y.should.be.NaN;
+			next.x.should.be.NaN;
+			next.should.have.ownProperty('y');
+			next.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
 			var next = sbgnjs.Bbox.fromXML(getXmlObj("<next x='1' y='2' />"));
@@ -373,82 +373,305 @@ describe('libsbgn', function() {
 			function getXmlObj(string) {
 				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('glyph');
 			};
-		    it('should parse empty', function() {
-		    	var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph></glyph>"));
-		    	glyph.should.have.ownProperty('id');
-		    	should.equal(glyph.id, null);
-		    	glyph.should.have.ownProperty('class_');
-		    	should.equal(glyph.class_, null);
-		    	glyph.should.have.ownProperty('compartmentRef');
-		    	should.equal(glyph.compartmentRef, null);
+			it('should parse empty', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph></glyph>"));
+				glyph.should.have.ownProperty('id');
+				should.equal(glyph.id, null);
+				glyph.should.have.ownProperty('class_');
+				should.equal(glyph.class_, null);
+				glyph.should.have.ownProperty('compartmentRef');
+				should.equal(glyph.compartmentRef, null);
 
-		    	glyph.should.have.ownProperty('label');
-		    	should.equal(glyph.label, null);
-		    	glyph.should.have.ownProperty('bbox');
-		    	should.equal(glyph.bbox, null);
-		    	glyph.should.have.ownProperty('glyphMembers');
-		    	glyph.glyphMembers.should.have.length(0);
-		    	glyph.should.have.ownProperty('ports');
-		    	glyph.ports.should.have.length(0);
-		    });
-		   	it('should parse attributes', function() {
-		    	var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph id='id' class='class' compartmentRef='ref'></glyph>"));
-		    	should.exist(glyph.id);
-		    	glyph.id.should.equal('id');
-		    	should.exist(glyph.class_);
-		    	glyph.class_.should.equal('class');
-		    	should.exist(glyph.compartmentRef);
-		    	glyph.compartmentRef.should.equal('ref');
-		    });
-		    it('should parse label child', function() {
-		    	var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><label></label></glyph>"));
-		    	should.exist(glyph.label);
-		    	glyph.label.should.be.a('object');
-		    	glyph.label.should.be.instanceOf(sbgnjs.Label);
-		    });
-		    it('should parse bbox child', function() {
-		    	var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><bbox></bbox></glyph>"));
-		    	should.exist(glyph.bbox);
-		    	glyph.bbox.should.be.a('object');
-		    	glyph.bbox.should.be.instanceOf(sbgnjs.Bbox);
-		    });
-		    it('should parse nested glyph child', function() {
-		    	var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><glyph></glyph></glyph>"));
-		    	should.exist(glyph.glyphMembers);
-		    	glyph.glyphMembers.should.be.a('array');
-		    	glyph.glyphMembers.should.have.lengthOf(1);
-		    	glyph.glyphMembers[0].should.be.instanceOf(sbgnjs.Glyph);
-		    });
-		    it('should parse nested glyph child 2 levels', function() {
-		    	var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><glyph><glyph></glyph></glyph></glyph>"));
-		    	should.exist(glyph.glyphMembers);
-		    	glyph.glyphMembers.should.be.a('array');
-		    	glyph.glyphMembers.should.have.lengthOf(1);
-		    	glyph.glyphMembers[0].should.be.instanceOf(sbgnjs.Glyph);
-		    	should.exist(glyph.glyphMembers[0].glyphMembers);
-		    	glyph.glyphMembers[0].glyphMembers.should.be.a('array');
-		    	glyph.glyphMembers[0].glyphMembers.should.have.lengthOf(1);
-		    	glyph.glyphMembers[0].glyphMembers[0].should.be.instanceOf(sbgnjs.Glyph);
-		    });
-		    it('should parse port child', function() {
-		    	var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><port></port></glyph>"));
-		    	should.exist(glyph.ports);
-		    	glyph.ports.should.be.a('array');
-		    	glyph.ports.should.have.lengthOf(1);
-		    	glyph.ports[0].should.be.instanceOf(sbgnjs.Port);
-		    });
+				glyph.should.have.ownProperty('label');
+				should.equal(glyph.label, null);
+				glyph.should.have.ownProperty('bbox');
+				should.equal(glyph.bbox, null);
+				glyph.should.have.ownProperty('glyphMembers');
+				glyph.glyphMembers.should.have.length(0);
+				glyph.should.have.ownProperty('ports');
+				glyph.ports.should.have.length(0);
+			});
+				it('should parse attributes', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph id='id' class='class' compartmentRef='ref'></glyph>"));
+				should.exist(glyph.id);
+				glyph.id.should.equal('id');
+				should.exist(glyph.class_);
+				glyph.class_.should.equal('class');
+				should.exist(glyph.compartmentRef);
+				glyph.compartmentRef.should.equal('ref');
+			});
+			it('should parse label child', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><label></label></glyph>"));
+				should.exist(glyph.label);
+				glyph.label.should.be.a('object');
+				glyph.label.should.be.instanceOf(sbgnjs.Label);
+			});
+			it('should parse bbox child', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><bbox></bbox></glyph>"));
+				should.exist(glyph.bbox);
+				glyph.bbox.should.be.a('object');
+				glyph.bbox.should.be.instanceOf(sbgnjs.Bbox);
+			});
+			it('should parse nested glyph child', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><glyph></glyph></glyph>"));
+				should.exist(glyph.glyphMembers);
+				glyph.glyphMembers.should.be.a('array');
+				glyph.glyphMembers.should.have.lengthOf(1);
+				glyph.glyphMembers[0].should.be.instanceOf(sbgnjs.Glyph);
+			});
+			it('should parse nested glyph child 2 levels', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><glyph><glyph></glyph></glyph></glyph>"));
+				should.exist(glyph.glyphMembers);
+				glyph.glyphMembers.should.be.a('array');
+				glyph.glyphMembers.should.have.lengthOf(1);
+				glyph.glyphMembers[0].should.be.instanceOf(sbgnjs.Glyph);
+				should.exist(glyph.glyphMembers[0].glyphMembers);
+				glyph.glyphMembers[0].glyphMembers.should.be.a('array');
+				glyph.glyphMembers[0].glyphMembers.should.have.lengthOf(1);
+				glyph.glyphMembers[0].glyphMembers[0].should.be.instanceOf(sbgnjs.Glyph);
+			});
+			it('should parse port child', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><port></port></glyph>"));
+				should.exist(glyph.ports);
+				glyph.ports.should.be.a('array');
+				glyph.ports.should.have.lengthOf(1);
+				glyph.ports[0].should.be.instanceOf(sbgnjs.Port);
+			});
 		});
-		/*describe('write to XML', function() {
-			it('should write empty sbgn', function() {
-				var sbgn = new sbgnjs.Sbgn();
-				sbgn.toXML().should.equal("<sbgn>\n</sbgn>\n");
+		describe('write to XML', function() {
+			it('should write empty glyph', function() {
+				var glyph = new sbgnjs.Glyph();
+				glyph.toXML().should.equal("<glyph>\n</glyph>\n");
 			});
-			it('should write complete sbgn with empty map', function() {
-				var sbgn = new sbgnjs.Sbgn("a");
-				sbgn.setMap(new sbgnjs.Map());
-				sbgn.toXML().should.equal("<sbgn xmlns='a'>\n<map>\n</map>\n</sbgn>\n");
+			it('should write complete glyph', function() {
+				var glyph = new sbgnjs.Glyph("id", "a_class", "a_compartment_id");
+				glyph.setLabel(new sbgnjs.Label());
+				glyph.setBbox(new sbgnjs.Bbox());
+				glyph.addGlyphMember(new sbgnjs.Glyph());
+				glyph.addPort(new sbgnjs.Port());
+				glyph.toXML().should.equal("<glyph id='id' class='a_class' compartmentRef='a_compartment_id'>\n"+
+												"<label />\n"+
+												"<bbox />\n"+
+												"<glyph>\n</glyph>\n"+
+												"<port />\n"+
+											"</glyph>\n");
 			});
-		});*/
+		});
+	});
+
+	describe('arc', function() {
+		describe('parse from XML', function() {
+			function getXmlObj(string) {
+				return new window.DOMParser().parseFromString(string, "text/xml").querySelector('arc');
+			};
+			it('should parse empty', function() {
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc></arc>"));
+				arc.should.have.ownProperty('id');
+				should.equal(arc.id, null);
+				arc.should.have.ownProperty('class_');
+				should.equal(arc.class_, null);
+				arc.should.have.ownProperty('source');
+				should.equal(arc.source, null);
+				arc.should.have.ownProperty('target');
+				should.equal(arc.target, null);
+
+				arc.should.have.ownProperty('start');
+				should.equal(arc.start, null);
+				arc.should.have.ownProperty('end');
+				should.equal(arc.end, null);
+				arc.should.have.ownProperty('nexts');
+				arc.nexts.should.have.length(0);
+			});
+			it('should parse attributes', function() {
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc id='id' class='class' source='source' target='target'></arc>"));
+				should.exist(arc.id);
+				arc.id.should.equal('id');
+				should.exist(arc.class_);
+				arc.class_.should.equal('class');
+				should.exist(arc.source);
+				arc.source.should.equal('source');
+				should.exist(arc.target);
+				arc.target.should.equal('target');
+			});
+			it('should parse start child', function() {
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc><start /></arc>"));
+				should.exist(arc.start);
+				arc.start.should.be.a('object');
+				arc.start.should.be.instanceOf(sbgnjs.StartType);
+			});
+			it('should parse end child', function() {
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc><end /></arc>"));
+				should.exist(arc.end);
+				arc.end.should.be.a('object');
+				arc.end.should.be.instanceOf(sbgnjs.EndType);
+			});
+			it('should parse next child', function() {
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc><next /></arc>"));
+				should.exist(arc.nexts);
+				arc.nexts.should.be.a('array');
+				arc.nexts.should.have.lengthOf(1);
+				arc.nexts[0].should.be.instanceOf(sbgnjs.NextType);
+			});
+			it('should parse complete', function() {
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc id='id' class='class' source='source' target='target'><start /><next /><next /><end /></arc>"));
+				should.exist(arc.id);
+				arc.id.should.equal('id');
+				should.exist(arc.class_);
+				arc.class_.should.equal('class');
+				should.exist(arc.source);
+				arc.source.should.equal('source');
+				should.exist(arc.target);
+				arc.target.should.equal('target');
+				should.exist(arc.start);
+				arc.start.should.be.a('object');
+				arc.start.should.be.instanceOf(sbgnjs.StartType);
+				should.exist(arc.nexts);
+				arc.nexts.should.be.a('array');
+				arc.nexts.should.have.lengthOf(2);
+				arc.nexts[0].should.be.instanceOf(sbgnjs.NextType);
+				arc.nexts[1].should.be.instanceOf(sbgnjs.NextType);
+				should.exist(arc.end);
+				arc.end.should.be.a('object');
+				arc.end.should.be.instanceOf(sbgnjs.EndType);
+			});
+		});
+		describe('write to XML', function() {
+			it('should write empty arc', function() {
+				var arc = new sbgnjs.Arc();
+				arc.toXML().should.equal("<arc>\n</arc>\n");
+			});
+			it('should write complete arc', function() {
+				var arc = new sbgnjs.Arc("id", "a_class", "source", "target");
+				arc.setStart(new sbgnjs.StartType());
+				arc.setEnd(new sbgnjs.EndType());
+				arc.addNext(new sbgnjs.NextType());
+				arc.addNext(new sbgnjs.NextType());
+				arc.toXML().should.equal("<arc id='id' class='a_class' source='source' target='target'>\n"+
+												"<start />\n"+
+												"<next />\n"+
+												"<next />\n"+
+												"<end />\n"+
+											"</arc>\n");
+			});
+		});
+	});
+	describe('complete tests', function() {
+		function getXmlObj(string) {
+			return new window.DOMParser().parseFromString(string, "text/xml").querySelector('sbgn');
+		};
+		it('should parse full test', function() {
+			var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj(
+				"<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n"+
+				"<sbgn xmlns='http://sbgn.org/libsbgn/0.3'>\n"+
+				"<map language='process description' id='mapID'>\n"+
+				"<extension>\n"+
+					"<renderInformation id='renderInformation' programName='sbgnviz' programVersion='3.1.0' backgroundColor='#ffffff' xmlns='http://www.sbml.org/sbml/level3/version1/render/version1'>\n"+
+					"</renderInformation>\n"+
+				"</extension>\n"+
+
+				"<glyph id='_82f19e9e-6aa2-42b3-8b5e-8cee17197085' class='compartment'  >\n"+
+					"<label text='synaptic button' />\n"+
+					"<bbox y='236.9443994213774' x='163.55225216049354' w='263.29323174695764' h='297.15583352545445' />\n"+
+				"</glyph>\n"+
+				"<glyph id='_66737d5c-5193-43a2-baa6-094aa1c21654' class='macromolecule' compartmentRef='_82f19e9e-6aa2-42b3-8b5e-8cee17197085' >\n"+
+					"<label text='CHT1' />\n"+
+					"<bbox y='497.47523294683185' x='300.32877164779546' w='70' h='35' />\n"+
+				"</glyph>\n"+
+
+				"<arc id='id' class='production' source='source' target='target'>\n"+
+					"<start y='353' x='208.35'/>\n"+
+					"<next y='1' x='2.35'/>\n"+
+					"<next y='3' x='4.35'/>\n"+
+					"<end y='5' x='6.35'/>\n"+
+				"</arc>\n"+
+				"<arc id='id2' class='consumption' source='source2' target='target2'>\n"+
+					"<start y='9' x='8'/>\n"+
+					"<end y='3' x='2'/>\n"+
+				"</arc>\n"+
+				"</map>\n"+
+				"</sbgn>\n"
+			));
+
+			should.exist(sbgn);
+			sbgn.should.be.instanceOf(sbgnjs.Sbgn);
+			sbgn.xmlns.should.equal('http://sbgn.org/libsbgn/0.3');
+			// map
+			should.exist(sbgn.map);
+			sbgn.map.should.be.instanceOf(sbgnjs.Map);
+			sbgn.map.language.should.equal('process description');
+			sbgn.map.id.should.equal('mapID');
+			// extension
+			should.exist(sbgn.map.extension);
+			sbgn.map.extension.should.be.instanceOf(sbgnjs.Extension);
+			sbgn.map.extension.list.should.have.ownProperty('renderInformation');
+			sbgn.map.extension.list.renderInformation.should.be.instanceOf(renderExt.RenderInformation);
+			// glyphs
+			sbgn.map.glyphs.should.have.lengthOf(2);
+			// glyph 1
+			var glyph1 = sbgn.map.glyphs[0];
+			glyph1.id.should.equal('_82f19e9e-6aa2-42b3-8b5e-8cee17197085');
+			glyph1.class_.should.equal('compartment');
+			should.exist(glyph1.label);
+			glyph1.label.should.be.instanceOf(sbgnjs.Label);
+			glyph1.label.text.should.equal('synaptic button');
+			should.exist(glyph1.bbox);
+			glyph1.bbox.should.be.instanceOf(sbgnjs.Bbox);
+			glyph1.bbox.y.should.equal(236.9443994213774);
+			glyph1.bbox.x.should.equal(163.55225216049354);
+			glyph1.bbox.w.should.equal(263.29323174695764);
+			glyph1.bbox.h.should.equal(297.15583352545445);
+			// glyph 2
+			var glyph2 = sbgn.map.glyphs[1];
+			glyph2.id.should.equal('_66737d5c-5193-43a2-baa6-094aa1c21654');
+			glyph2.class_.should.equal('macromolecule');
+			should.exist(glyph2.label);
+			glyph2.label.should.be.instanceOf(sbgnjs.Label);
+			glyph2.label.text.should.equal('CHT1');
+			should.exist(glyph2.bbox);
+			glyph2.bbox.should.be.instanceOf(sbgnjs.Bbox);
+			glyph2.bbox.y.should.equal(497.47523294683185);
+			glyph2.bbox.x.should.equal(300.32877164779546);
+			glyph2.bbox.w.should.equal(70);
+			glyph2.bbox.h.should.equal(35);
+			// arcs
+			sbgn.map.arcs.should.have.lengthOf(2);
+			// arc1
+			var arc1 = sbgn.map.arcs[0];
+			arc1.id.should.equal('id');
+			arc1.class_.should.equal('production');
+			arc1.source.should.equal('source');
+			arc1.target.should.equal('target');
+			should.exist(arc1.start);
+			arc1.start.should.be.instanceOf(sbgnjs.StartType);
+			arc1.start.x.should.equal(208.35);
+			arc1.start.y.should.equal(353);
+			should.exist(arc1.end);
+			arc1.end.should.be.instanceOf(sbgnjs.EndType);
+			arc1.end.x.should.equal(6.35);
+			arc1.end.y.should.equal(5);
+			arc1.nexts.should.have.lengthOf(2);
+			arc1.nexts[0].should.be.instanceOf(sbgnjs.NextType);
+			arc1.nexts[0].x.should.equal(2.35);
+			arc1.nexts[0].y.should.equal(1);
+			arc1.nexts[1].should.be.instanceOf(sbgnjs.NextType);
+			arc1.nexts[1].x.should.equal(4.35);
+			arc1.nexts[1].y.should.equal(3);
+			// arc2
+			var arc2 = sbgn.map.arcs[1];
+			arc2.id.should.equal('id2');
+			arc2.class_.should.equal('consumption');
+			arc2.source.should.equal('source2');
+			arc2.target.should.equal('target2');
+			should.exist(arc2.start);
+			arc2.start.should.be.instanceOf(sbgnjs.StartType);
+			arc2.start.x.should.equal(8);
+			arc2.start.y.should.equal(9);
+			should.exist(arc2.end);
+			arc2.end.should.be.instanceOf(sbgnjs.EndType);
+			arc2.end.x.should.equal(2);
+			arc2.end.y.should.equal(3);
+			arc2.nexts.should.have.lengthOf(0);
+		});
 	});
 });
 

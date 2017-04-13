@@ -84,10 +84,10 @@ ns.Map.prototype.toXML = function () {
 	if(this.extension != null) {
 		xmlString += this.extension.toXML();
 	}
-	for(var i=0; i < this.glyphs; i++) {
+	for(var i=0; i < this.glyphs.length; i++) {
 		xmlString += this.glyphs[i].toXML();
 	}
-	for(var i=0; i < this.arcs; i++) {
+	for(var i=0; i < this.arcs.length; i++) {
 		xmlString += this.arcs[i].toXML();
 	}
 	xmlString += "</map>\n";
@@ -221,10 +221,10 @@ ns.Glyph.prototype.toXML = function () {
 	if(this.bbox != null) {
 		xmlString += this.bbox.toXML();
 	}
-	for(var i=0; i < this.glyphMembers; i++) {
+	for(var i=0; i < this.glyphMembers.length; i++) {
 		xmlString += this.glyphMembers[i].toXML();
 	}
-	for(var i=0; i < this.ports; i++) {
+	for(var i=0; i < this.ports.length; i++) {
 		xmlString += this.ports[i].toXML();
 	}
 	xmlString += "</glyph>\n";
@@ -400,7 +400,7 @@ ns.Arc.prototype.toXML = function () {
 	if(this.start != null) {
 		xmlString += this.start.toXML();
 	}
-	for(var i=0; i < this.nexts; i++) {
+	for(var i=0; i < this.nexts.length; i++) {
 		xmlString += this.nexts[i].toXML();
 	}
 	if(this.end != null) {
