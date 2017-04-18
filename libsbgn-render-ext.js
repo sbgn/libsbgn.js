@@ -1,12 +1,16 @@
+var checkParams = require('./utilities').checkParams;
+
 var ns = {};
 
 ns.xmlns = "http://www.sbml.org/sbml/level3/version1/render/version1";
 
-ns.ColorDefinition = function(id, value) {
-	// both are optional
-	this.id = id;
-	this.value = value;
+// ------- COLORDEFINITION -------
+ns.ColorDefinition = function(params) {
+	var params = checkParams(params, ['id', 'value']);
+	this.id 	= params.id;
+	this.value 	= params.value;
 };
+
 ns.ColorDefinition.prototype.toXML = function () {
 	var xmlString = "<colorDefinition";
 	if (this.id != null) {
@@ -18,19 +22,24 @@ ns.ColorDefinition.prototype.toXML = function () {
 	xmlString += " />\n";
 	return xmlString;
 };
+
 ns.ColorDefinition.fromXML = function (xml) {
 	var colorDefinition = new ns.ColorDefinition();
-	colorDefinition.id = xml.getAttribute('id');
-	colorDefinition.value = xml.getAttribute('value');
+	colorDefinition.id 		= xml.getAttribute('id');
+	colorDefinition.value 	= xml.getAttribute('value');
 	return colorDefinition;
 };
+// ------- END COLORDEFINITION -------
 
+// ------- LISTOFCOLORDEFINITIONS -------
 ns.ListOfColorDefinitions = function () {
 	this.colorList = [];
 };
+
 ns.ListOfColorDefinitions.prototype.addColorDefinition = function (colorDefinition) {
 	this.colorList.push(colorDefinition);
 };
+
 ns.ListOfColorDefinitions.prototype.toXML = function () {
 	var xmlString = "<listOfColorDefinitions>\n";
 	for(var i=0; i<this.colorList.length; i++) {
@@ -40,6 +49,7 @@ ns.ListOfColorDefinitions.prototype.toXML = function () {
 	xmlString += "</listOfColorDefinitions>\n";
 	return xmlString;
 };
+
 ns.ListOfColorDefinitions.fromXML = function (xml) {
 	var listOfColorDefinitions = new ns.ListOfColorDefinitions();
 
@@ -51,24 +61,28 @@ ns.ListOfColorDefinitions.fromXML = function (xml) {
 	}
 	return listOfColorDefinitions;
 };
+// ------- END LISTOFCOLORDEFINITIONS -------
 
-
-ns.RenderGroup = function (param) {
+// ------- RENDERGROUP -------
+ns.RenderGroup = function (params) {
 	// each of those are optional, so test if it is defined is mandatory
+	var params = checkParams(params, ['fontSize', 'fontFamily', 'fontWeight', 
+		'fontStyle', 'textAnchor', 'vtextAnchor', 'fill', 'id', 'stroke', 'strokeWidth']);
 	// specific to renderGroup
-	this.fontSize = param.fontSize;
-	this.fontFamily = param.fontFamily;
-	this.fontWeight = param.fontWeight;
-	this.fontStyle = param.fontStyle;
-	this.textAnchor = param.textAnchor; // probably useless
-	this.vtextAnchor = param.vtextAnchor; // probably useless
+	this.fontSize 		= params.fontSize;
+	this.fontFamily 	= params.fontFamily;
+	this.fontWeight 	= params.fontWeight;
+	this.fontStyle 		= params.fontStyle;
+	this.textAnchor 	= params.textAnchor; // probably useless
+	this.vtextAnchor 	= params.vtextAnchor; // probably useless
 	// from GraphicalPrimitive2D
-	this.fill = param.fill; // fill color
+	this.fill 			= params.fill; // fill color
 	// from GraphicalPrimitive1D
-	this.id = param.id;
-	this.stroke = param.stroke; // stroke color
-	this.strokeWidth = param.strokeWidth;
+	this.id 			= params.id;
+	this.stroke 		= params.stroke; // stroke color
+	this.strokeWidth 	= params.strokeWidth;
 };
+
 ns.RenderGroup.prototype.toXML = function () {
 	var xmlString = "<g";
 	if (this.id != null) {
@@ -104,32 +118,37 @@ ns.RenderGroup.prototype.toXML = function () {
 	xmlString += " />\n";
 	return xmlString;
 };
+
 ns.RenderGroup.fromXML = function (xml) {
 	var renderGroup = new ns.RenderGroup({});
-	renderGroup.id = xml.getAttribute('id');
-	renderGroup.fontSize = xml.getAttribute('fontSize');
-	renderGroup.fontFamily = xml.getAttribute('fontFamily');
-	renderGroup.fontWeight = xml.getAttribute('fontWeight');
-	renderGroup.fontStyle = xml.getAttribute('fontStyle');
-	renderGroup.textAnchor = xml.getAttribute('textAnchor');
+	renderGroup.id 			= xml.getAttribute('id');
+	renderGroup.fontSize 	= xml.getAttribute('fontSize');
+	renderGroup.fontFamily 	= xml.getAttribute('fontFamily');
+	renderGroup.fontWeight 	= xml.getAttribute('fontWeight');
+	renderGroup.fontStyle 	= xml.getAttribute('fontStyle');
+	renderGroup.textAnchor 	= xml.getAttribute('textAnchor');
 	renderGroup.vtextAnchor = xml.getAttribute('vtextAnchor');
-	renderGroup.stroke = xml.getAttribute('stroke');
+	renderGroup.stroke 		= xml.getAttribute('stroke');
 	renderGroup.strokeWidth = xml.getAttribute('strokeWidth');
-	renderGroup.fill = xml.getAttribute('fill');
+	renderGroup.fill 		= xml.getAttribute('fill');
 	return renderGroup;
 };
+// ------- END RENDERGROUP -------
 
+// ------- STYLE -------
 // localStyle from specs
-ns.Style = function(id, name, idList) {
-	// everything is optional	
-	this.id = id;
-	this.name = name;
-	this.idList = idList;
-	this.renderGroup = null; // 0 or 1
+ns.Style = function(params) {
+	var params = checkParams(params, ['id', 'name', 'idList', 'renderGroup']);
+	this.id 			= params.id;
+	this.name 			= params.name;
+	this.idList 		= params.idList;
+	this.renderGroup 	= params.renderGroup;
 };
+
 ns.Style.prototype.setRenderGroup = function (renderGroup) {
 	this.renderGroup = renderGroup;
 };
+
 ns.Style.prototype.toXML = function () {
 	var xmlString = "<style";
 	if (this.id != null) {
@@ -150,12 +169,13 @@ ns.Style.prototype.toXML = function () {
 	xmlString += "</style>\n";
 	return xmlString;
 };
+
 ns.Style.fromXML = function (xml) {
 	var style = new ns.Style();
-	style.id = xml.getAttribute('id');
-	style.name = xml.getAttribute('name');
-	var idList = xml.getAttribute('idList');
-	style.idList = idList != null ? idList.split(' ') : [];
+	style.id 		= xml.getAttribute('id');
+	style.name 		= xml.getAttribute('name');
+	var idList 		= xml.getAttribute('idList');
+	style.idList 	= idList != null ? idList.split(' ') : [];
 
 	var renderGroupXML = xml.getElementsByTagName('g')[0];
 	if (renderGroupXML != null) {
@@ -163,13 +183,17 @@ ns.Style.fromXML = function (xml) {
 	}
 	return style;
 };
+// ------- END STYLE -------
 
+// ------- LISTOFSTYLES -------
 ns.ListOfStyles = function() {
 	this.styleList = [];
 };
+
 ns.ListOfStyles.prototype.addStyle = function(style) {
 	this.styleList.push(style);
 };
+
 ns.ListOfStyles.prototype.toXML = function () {
 	var xmlString = "<listOfStyles>\n";
 	for(var i=0; i<this.styleList.length; i++) {
@@ -179,6 +203,7 @@ ns.ListOfStyles.prototype.toXML = function () {
 	xmlString += "</listOfStyles>\n";
 	return xmlString;
 };
+
 ns.ListOfStyles.fromXML = function (xml) {
 	var listOfStyles = new ns.ListOfStyles();
 
@@ -190,25 +215,32 @@ ns.ListOfStyles.fromXML = function (xml) {
 	}
 	return listOfStyles;
 };
+// ------- END LISTOFSTYLES -------
 
-ns.RenderInformation = function (id, name, backgroundColor, providedProgName, providedProgVersion) {
-	this.id = id; // required, rest is optional
-	this.name = name;
-	this.programName = providedProgName;
-	this.programVersion = providedProgVersion;
-	this.backgroundColor = backgroundColor;
-	this.listOfColorDefinitions = null;
-	this.listOfStyles = null;
+// ------- RENDERINFORMATION -------
+ns.RenderInformation = function (params) {
+	var params = checkParams(params, ['id', 'name', 'programName', 
+		'programVersion', 'backgroundColor', 'listOfColorDefinitions', 'listOfStyles']);
+	this.id 					= params.id; // required, rest is optional
+	this.name 					= params.name;
+	this.programName 			= params.programName;
+	this.programVersion 		= params.programVersion;
+	this.backgroundColor 		= params.backgroundColor;
+	this.listOfColorDefinitions = params.listOfColorDefinitions;
+	this.listOfStyles 			= params.listOfStyles;
 	/*this.listOfColorDefinitions = new renderExtension.ListOfColorDefinitions(renderInfo.colorDef.colorList);
 	this.listOfStyles = new renderExtension.ListOfStyles(renderInfo.styleDef);
 	*/
 };
+
 ns.RenderInformation.prototype.setListOfColorDefinition = function(listOfColorDefinitions) {
 	this.listOfColorDefinitions = listOfColorDefinitions;
 };
+
 ns.RenderInformation.prototype.setListOfStyles = function(listOfStyles) {
 	this.listOfStyles = listOfStyles;
 };
+
 ns.RenderInformation.prototype.toXML = function() {
 	// tag and its attributes
 	var xmlString = "<renderInformation";
@@ -240,14 +272,15 @@ ns.RenderInformation.prototype.toXML = function() {
 	xmlString += "</renderInformation>\n";
 	return xmlString;
 };
+
 // static constructor method
 ns.RenderInformation.fromXML = function (xml) {
 	var renderInformation = new ns.RenderInformation();
-	renderInformation.id = xml.getAttribute('id');
-	renderInformation.name = xml.getAttribute('name');
-	renderInformation.programName = xml.getAttribute('programName');
-	renderInformation.programVersion = xml.getAttribute('programVersion');
-	renderInformation.backgroundColor = xml.getAttribute('backgroundColor');
+	renderInformation.id 				= xml.getAttribute('id');
+	renderInformation.name 				= xml.getAttribute('name');
+	renderInformation.programName 		= xml.getAttribute('programName');
+	renderInformation.programVersion 	= xml.getAttribute('programVersion');
+	renderInformation.backgroundColor 	= xml.getAttribute('backgroundColor');
 
 	var listOfColorDefinitionsXML = xml.getElementsByTagName('listOfColorDefinitions')[0];
 	var listOfStylesXML = xml.getElementsByTagName('listOfStyles')[0];
@@ -260,26 +293,6 @@ ns.RenderInformation.fromXML = function (xml) {
 
 	return renderInformation;
 };
-
-/* probably useless, seems like nobody use this in the extension
-ns.defaultValues = {
-	backgroundColor: null,
-	fontSize: null,
-	fontFamily: null,
-	fontWeight: null,
-	fontStyle: null,
-	textAnchor: null,
-	vtextAnchor: null,
-	fill: null,
-	stroke: null,
-	strokeWidth: null
-};
-
-
-ns.listOfRenderInformation = {
-	defaultValues: {},
-	renderInformationList: []
-}
-*/
+// ------- END RENDERINFORMATION -------
 
 module.exports = ns;
