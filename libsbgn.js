@@ -231,7 +231,7 @@ ns.Extension.fromXML = function (xmlObj) {
 
 // ------- GLYPH -------
 ns.Glyph = function (params) {
-	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports', 'state']);
+	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone']);
 	this.id 			= params.id;
 	this.class_ 		= params.class_;
 	this.compartmentRef = params.compartmentRef;
@@ -240,6 +240,7 @@ ns.Glyph = function (params) {
 	this.label 			= params.label;
 	this.state 			= params.state;
 	this.bbox 			= params.bbox;
+	this.clone 			= params.clone;
 	this.glyphMembers 	= params.glyphMembers || []; // case of complex, can have arbitrary list of nested glyphs
 	this.ports 			= params.ports || [];
 };
@@ -257,6 +258,10 @@ ns.Glyph.prototype.setState = function (state) {
 
 ns.Glyph.prototype.setBbox = function (bbox) {
 	this.bbox = bbox;
+};
+
+ns.Glyph.prototype.setClone = function (clone) {
+	this.clone = clone;
 };
 
 ns.Glyph.prototype.addGlyphMember = function (glyphMember) {
@@ -290,6 +295,9 @@ ns.Glyph.prototype.toXML = function () {
 	}
 	if(this.bbox != null) {
 		xmlString += this.bbox.toXML();
+	}
+	if(this.clone != null) {
+		xmlString += this.clone.toXML();
 	}
 	for(var i=0; i < this.glyphMembers.length; i++) {
 		xmlString += this.glyphMembers[i].toXML();
@@ -325,6 +333,11 @@ ns.Glyph.fromXML = function (xmlObj) {
 	if (bboxXML != null) {
 		var bbox = ns.Bbox.fromXML(bboxXML);
 		glyph.setBbox(bbox);
+	}
+	var cloneXMl = xmlObj.getElementsByTagName('clone')[0];
+	if (cloneXMl != null) {
+		var clone = ns.CloneType.fromXML(cloneXMl);
+		glyph.setClone(clone);
 	}
 	// need special care because of recursion of nested glyph nodes
 	// take only first level glyphs
@@ -448,6 +461,32 @@ ns.StateType.fromXML = function (xmlObj) {
 	return state;
 };
 // ------- END STATE -------
+
+// ------- CLONE -------
+ns.CloneType = function (params) {
+	var params = checkParams(params, ['label']);
+	this.label = params.label;
+};
+
+ns.CloneType.prototype.toXML = function () {
+	var xmlString = "<clone";
+	// attributes
+	if(this.label != null) {
+		xmlString += " label='"+this.label+"'";
+	}
+	xmlString += " />\n";
+	return xmlString;
+};
+
+ns.CloneType.fromXML = function (xmlObj) {
+	if (xmlObj.tagName != 'clone') {
+		throw new Error("Bad XML provided, expected tagName clone, got: " + xmlObj.tagName);
+	}
+	var clone = new ns.CloneType();
+	clone.label = xmlObj.getAttribute('label');
+	return clone;
+};
+// ------- END CLONE -------
 
 // ------- PORT -------
 ns.Port = function (params) {

@@ -291,6 +291,26 @@ describe('libsbgn', function() {
 			state.toXML().should.equal("<state value='some value' variable='variable' />\n");
 		});
 	});
+	describe('clone', function() {
+		it('should parse empty', function() {
+			var clone = sbgnjs.CloneType.fromXML(getXmlObj("<clone />"));
+			clone.should.have.ownProperty('label');
+			should.equal(clone.label, null);
+		});
+		it('should parse complete', function() {
+			var clone = sbgnjs.CloneType.fromXML(getXmlObj("<clone label='some label' />"));
+			should.exist(clone.label);
+			clone.label.should.equal('some label');
+		});
+		it('should write empty', function() {
+			var clone = new sbgnjs.CloneType();
+			clone.toXML().should.equal('<clone />\n');
+		});
+		it('should write complete', function() {
+			var clone = new sbgnjs.CloneType({label: 'some label'});
+			clone.toXML().should.equal("<clone label='some label' />\n");
+		});
+	});
 	describe('port', function() {
 		it('should parse empty', function() {
 			var port = sbgnjs.Port.fromXML(getXmlObj("<port />"));
@@ -407,6 +427,8 @@ describe('libsbgn', function() {
 				should.equal(glyph.label, null);
 				glyph.should.have.ownProperty('bbox');
 				should.equal(glyph.bbox, null);
+				glyph.should.have.ownProperty('clone');
+				should.equal(glyph.clone, null);
 				glyph.should.have.ownProperty('glyphMembers');
 				glyph.glyphMembers.should.have.length(0);
 				glyph.should.have.ownProperty('ports');
@@ -438,6 +460,12 @@ describe('libsbgn', function() {
 				should.exist(glyph.bbox);
 				glyph.bbox.should.be.a('object');
 				glyph.bbox.should.be.instanceOf(sbgnjs.Bbox);
+			});
+			it('should parse clone child', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><clone /></glyph>"));
+				should.exist(glyph.clone);
+				glyph.clone.should.be.a('object');
+				glyph.clone.should.be.instanceOf(sbgnjs.CloneType);
 			});
 			it('should parse nested glyph child', function() {
 				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><glyph></glyph></glyph>"));
@@ -475,12 +503,14 @@ describe('libsbgn', function() {
 				glyph.setLabel(new sbgnjs.Label());
 				glyph.setState(new sbgnjs.StateType());
 				glyph.setBbox(new sbgnjs.Bbox());
+				glyph.setClone(new sbgnjs.CloneType());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
 				glyph.addPort(new sbgnjs.Port());
 				glyph.toXML().should.equal("<glyph id='id' class='a_class' compartmentRef='a_compartment_id'>\n"+
 												"<label />\n"+
 												"<state />\n"+
 												"<bbox />\n"+
+												"<clone />\n"+
 												"<glyph>\n</glyph>\n"+
 												"<port />\n"+
 											"</glyph>\n");
@@ -600,6 +630,7 @@ describe('libsbgn', function() {
 					"<label text='CHT1' />\n"+
 					"<state value='val' variable='var' />\n"+
 					"<bbox y='497.47523294683185' x='300.32877164779546' w='70' h='35' />\n"+
+					"<clone label='clone label' />\n"+
 				"</glyph>\n"+
 
 				"<arc id='id' class='production' source='source' target='target'>\n"+
@@ -661,6 +692,9 @@ describe('libsbgn', function() {
 			glyph2.bbox.x.should.equal(300.32877164779546);
 			glyph2.bbox.w.should.equal(70);
 			glyph2.bbox.h.should.equal(35);
+			should.exist(glyph2.clone);
+			glyph2.clone.should.be.instanceOf(sbgnjs.CloneType);
+			glyph2.clone.label.should.equal('clone label');
 			// arcs
 			sbgn.map.arcs.should.have.lengthOf(2);
 			// arc1
