@@ -2,6 +2,41 @@ require('jsdom-global')();
 var should = require('chai').should();
 var sbgnjs = require('../libsbgn');
 var renderExt = require('../libsbgn-render-ext');
+var checkParams = require('../utilities').checkParams;
+
+describe('utilities', function() {
+	describe('checkParams', function() {
+		it('should return empty object if undefined or null', function() {
+			checkParams(undefined, []).should.deep.equal({});
+			checkParams(null, []).should.deep.equal({});
+		});
+		it('should populate object with given args if undefined or null', function() {
+			checkParams(undefined, ['a', 'b']).should.deep.equal({'a': null, 'b': null});
+			checkParams(null, ['a', 'b']).should.deep.equal({'a': null, 'b': null});
+		});
+		it('should throw error if param is not an object and not undefined or null', function() {
+			var test1 = function(){checkParams('', [])};
+			var test2 = function(){checkParams(0, [])};
+			var test3 = function(){checkParams({}, [])};
+			test1.should.throw(Error);
+			test2.should.throw(Error);
+			test3.should.not.throw(Error);
+		});
+		it('should give back params as they are passed', function() {
+			checkParams({
+				'a': 1,
+				'b': 'test',
+				'c': null,
+				'd': NaN},
+				['a', 'b', 'c', 'd']).should.deep.equal({
+					'a': 1,
+					'b': 'test',
+					'c': null,
+					'd': NaN,
+				});
+		});
+	});
+});
 
 describe('libsbgn', function() {
 	function getSpecificXmlObj(string, name) {
@@ -10,39 +45,6 @@ describe('libsbgn', function() {
 	function getXmlObj(string) {
 		return new window.DOMParser().parseFromString(string, "text/xml").documentElement;
 	};
-	describe('utilities', function() {
-		describe('checkParams', function() {
-			it('should return empty object if undefined or null', function() {
-				sbgnjs.checkParams(undefined, []).should.deep.equal({});
-				sbgnjs.checkParams(null, []).should.deep.equal({});
-			});
-			it('should populate object with given args if undefined or null', function() {
-				sbgnjs.checkParams(undefined, ['a', 'b']).should.deep.equal({'a': null, 'b': null});
-				sbgnjs.checkParams(null, ['a', 'b']).should.deep.equal({'a': null, 'b': null});
-			});
-			it('should throw error if param is not an object and not undefined or null', function() {
-				var test1 = function(){sbgnjs.checkParams('', [])};
-				var test2 = function(){sbgnjs.checkParams(0, [])};
-				var test3 = function(){sbgnjs.checkParams({}, [])};
-				test1.should.throw(Error);
-				test2.should.throw(Error);
-				test3.should.not.throw(Error);
-			});
-			it('should give back params as they are passed', function() {
-				sbgnjs.checkParams({
-					'a': 1,
-					'b': 'test',
-					'c': null,
-					'd': NaN},
-					['a', 'b', 'c', 'd']).should.deep.equal({
-						'a': 1,
-						'b': 'test',
-						'c': null,
-						'd': NaN,
-					});
-			});
-		});
-	});
 
 	describe('sbgn', function() {
 		describe('parse from XML', function() {
@@ -155,28 +157,44 @@ describe('libsbgn', function() {
 				extension.list.should.be.a('object');
 			});
 			it('should parse 2 extensions', function() {
-				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><a></a><b></b></extension>'));
-				extension.list.should.have.ownProperty('a');
-				extension.list.should.have.ownProperty('b');
+				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><renderInformation></renderInformation><b></b></extension>'));
+				extension.list.should.have.ownProperty('renderInformation');
+				extension.unsupportedList.should.have.ownProperty('b');
 			});
 		});
 		describe('test extension functions', function() {
-			it('add new extension', function() {
+			it('add new unknown extension', function() {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension></extension>'));
 				var extA = getSpecificXmlObj('<a></a>', 'a');
 				extension.add(extA);
-				extension.list.should.have.ownProperty('a');
-				extension.list.a.should.equal(extA);
+				extension.list.should.not.have.ownProperty('a');
+				extension.unsupportedList.should.have.ownProperty('a');
+				extension.unsupportedList.a.should.equal(extA);
+			});
+			it('add new renderInformation extension', function() {
+				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension></extension>'));
+				var render = renderExt.RenderInformation.fromXML(getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation'));
+				extension.add(render);
+				extension.list.should.have.ownProperty('renderInformation');
+				extension.list.renderInformation.should.be.instanceOf(renderExt.RenderInformation);
+				extension.list.renderInformation.should.equal(render);
+			});
+			it('add new renderInformation unparsed extension', function() {
+				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension></extension>'));
+				var renderXmlObj = getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation');
+				extension.add(renderXmlObj);
+				extension.list.should.have.ownProperty('renderInformation');
+				extension.list.renderInformation.should.be.instanceOf(renderExt.RenderInformation);
 			});
 			it('get extension', function() {
-				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><a></a></extension>'));
-				extension.get('a').tagName.should.equal('a');
-				should.not.exist(extension.get('b'));
+				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><a></a><renderInformation></renderInformation></extension>'));
+				should.not.exist(extension.get('a'));
+				should.exist(extension.get('renderInformation'));
 			});
 			it('has extension', function() {
-				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><a></a></extension>'));
-				extension.has('a').should.equal(true);
-				extension.has('b').should.equal(false);
+				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><a></a><renderInformation></renderInformation></extension>'));
+				extension.has('a').should.equal(false);
+				extension.has('renderInformation').should.equal(true);
 			});
 		});
 		describe('write to XML', function () {
@@ -192,7 +210,7 @@ describe('libsbgn', function() {
 			});*/
 			it('should write render extension', function() {
 				var extension = new sbgnjs.Extension();
-				extension.add(getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation'));
+				extension.add(renderExt.RenderInformation.fromXML(getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation')));
 				extension.toXML().should.equal("<extension>\n<renderInformation xmlns='"+renderExt.xmlns+"'>\n</renderInformation>\n</extension>\n");
 			});
 		});
@@ -247,6 +265,30 @@ describe('libsbgn', function() {
 		it('should write complete', function() {
 			var bbox = new sbgnjs.Bbox({x: 1, y: 2, w: 3.1416, h: 4});
 			bbox.toXML().should.equal("<bbox x='1' y='2' w='3.1416' h='4' />\n");
+		});
+	});
+	describe('state', function() {
+		it('should parse empty', function() {
+			var state = sbgnjs.StateType.fromXML(getXmlObj("<state />"));
+			state.should.have.ownProperty('value');
+			state.should.have.ownProperty('variable');
+			should.equal(state.value, null);
+			should.equal(state.variable, null);
+		});
+		it('should parse complete', function() {
+			var state = sbgnjs.StateType.fromXML(getXmlObj("<state value='some value' variable='v'/>"));
+			should.exist(state.value);
+			state.value.should.equal('some value');
+			should.exist(state.variable);
+			state.variable.should.equal('v');
+		});
+		it('should write empty', function() {
+			var state = new sbgnjs.StateType();
+			state.toXML().should.equal('<state />\n');
+		});
+		it('should write complete', function() {
+			var state = new sbgnjs.StateType({value: 'some value', variable: 'variable'});
+			state.toXML().should.equal("<state value='some value' variable='variable' />\n");
 		});
 	});
 	describe('port', function() {
@@ -385,6 +427,12 @@ describe('libsbgn', function() {
 				glyph.label.should.be.a('object');
 				glyph.label.should.be.instanceOf(sbgnjs.Label);
 			});
+			it('should parse state child', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><state /></glyph>"));
+				should.exist(glyph.state);
+				glyph.state.should.be.a('object');
+				glyph.state.should.be.instanceOf(sbgnjs.StateType);
+			});
 			it('should parse bbox child', function() {
 				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><bbox></bbox></glyph>"));
 				should.exist(glyph.bbox);
@@ -425,11 +473,13 @@ describe('libsbgn', function() {
 			it('should write complete glyph', function() {
 				var glyph = new sbgnjs.Glyph({id: "id", class_: "a_class", compartmentRef: "a_compartment_id"});
 				glyph.setLabel(new sbgnjs.Label());
+				glyph.setState(new sbgnjs.StateType());
 				glyph.setBbox(new sbgnjs.Bbox());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
 				glyph.addPort(new sbgnjs.Port());
 				glyph.toXML().should.equal("<glyph id='id' class='a_class' compartmentRef='a_compartment_id'>\n"+
 												"<label />\n"+
+												"<state />\n"+
 												"<bbox />\n"+
 												"<glyph>\n</glyph>\n"+
 												"<port />\n"+
@@ -548,6 +598,7 @@ describe('libsbgn', function() {
 				"</glyph>\n"+
 				"<glyph id='_66737d5c-5193-43a2-baa6-094aa1c21654' class='macromolecule' compartmentRef='_82f19e9e-6aa2-42b3-8b5e-8cee17197085' >\n"+
 					"<label text='CHT1' />\n"+
+					"<state value='val' variable='var' />\n"+
 					"<bbox y='497.47523294683185' x='300.32877164779546' w='70' h='35' />\n"+
 				"</glyph>\n"+
 
@@ -600,6 +651,10 @@ describe('libsbgn', function() {
 			should.exist(glyph2.label);
 			glyph2.label.should.be.instanceOf(sbgnjs.Label);
 			glyph2.label.text.should.equal('CHT1');
+			should.exist(glyph2.state);
+			glyph2.state.should.be.instanceOf(sbgnjs.StateType);
+			glyph2.state.value.should.equal('val');
+			glyph2.state.variable.should.equal('var');
 			should.exist(glyph2.bbox);
 			glyph2.bbox.should.be.instanceOf(sbgnjs.Bbox);
 			glyph2.bbox.y.should.equal(497.47523294683185);
@@ -645,6 +700,12 @@ describe('libsbgn', function() {
 			arc2.end.y.should.equal(3);
 			arc2.nexts.should.have.lengthOf(0);
 		});
+	});
+});
+
+describe('libsbgn-render-ext', function() {
+	describe('colorDefinition', function() {
+		
 	});
 });
 
