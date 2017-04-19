@@ -537,6 +537,8 @@ describe('libsbgn', function() {
 				should.equal(arc.end, null);
 				arc.should.have.ownProperty('nexts');
 				arc.nexts.should.have.length(0);
+				arc.should.have.ownProperty('glyphs');
+				arc.glyphs.should.have.length(0);
 			});
 			it('should parse attributes', function() {
 				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc id='id' class='class' source='source' target='target'></arc>"));
@@ -568,8 +570,15 @@ describe('libsbgn', function() {
 				arc.nexts.should.have.lengthOf(1);
 				arc.nexts[0].should.be.instanceOf(sbgnjs.NextType);
 			});
+			it('should parse glyphs child', function() {
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc><glyph></glyph></arc>"));
+				should.exist(arc.glyphs);
+				arc.glyphs.should.be.a('array');
+				arc.glyphs.should.have.lengthOf(1);
+				arc.glyphs[0].should.be.instanceOf(sbgnjs.Glyph);
+			});
 			it('should parse complete', function() {
-				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc id='id' class='class' source='source' target='target'><start /><next /><next /><end /></arc>"));
+				var arc = sbgnjs.Arc.fromXML(getXmlObj("<arc id='id' class='class' source='source' target='target'><start /><next /><next /><end /><glyph></glyph></arc>"));
 				should.exist(arc.id);
 				arc.id.should.equal('id');
 				should.exist(arc.class_);
@@ -589,6 +598,10 @@ describe('libsbgn', function() {
 				should.exist(arc.end);
 				arc.end.should.be.a('object');
 				arc.end.should.be.instanceOf(sbgnjs.EndType);
+				should.exist(arc.glyphs);
+				arc.glyphs.should.be.a('array');
+				arc.glyphs.should.have.lengthOf(1);
+				arc.glyphs[0].should.be.instanceOf(sbgnjs.Glyph);
 			});
 		});
 		describe('write to XML', function() {
@@ -602,7 +615,9 @@ describe('libsbgn', function() {
 				arc.setEnd(new sbgnjs.EndType());
 				arc.addNext(new sbgnjs.NextType());
 				arc.addNext(new sbgnjs.NextType());
+				arc.addGlyph(new sbgnjs.Glyph());
 				arc.toXML().should.equal("<arc id='id' class='a_class' source='source' target='target'>\n"+
+												"<glyph>\n</glyph>\n"+
 												"<start />\n"+
 												"<next />\n"+
 												"<next />\n"+
@@ -642,6 +657,9 @@ describe('libsbgn', function() {
 				"<arc id='id2' class='consumption' source='source2' target='target2'>\n"+
 					"<start y='9' x='8'/>\n"+
 					"<end y='3' x='2'/>\n"+
+					"<glyph id='cardi' class='cardinality' >\n"+
+						"<label text='2' />\n"+
+					"</glyph>\n"+
 				"</arc>\n"+
 				"</map>\n"+
 				"</sbgn>\n"
@@ -733,6 +751,15 @@ describe('libsbgn', function() {
 			arc2.end.x.should.equal(2);
 			arc2.end.y.should.equal(3);
 			arc2.nexts.should.have.lengthOf(0);
+			should.exist(arc2.glyphs);
+			arc2.glyphs.should.be.a('array');
+			arc2.glyphs.should.have.lengthOf(1);
+			arc2.glyphs[0].should.be.instanceOf(sbgnjs.Glyph);
+			arc2.glyphs[0].id.should.equal('cardi');
+			arc2.glyphs[0].class_.should.equal('cardinality');
+			should.exist(arc2.glyphs[0].label);
+			arc2.glyphs[0].label.should.be.instanceOf(sbgnjs.Label);
+			arc2.glyphs[0].label.text.should.equal('2');
 		});
 	});
 });

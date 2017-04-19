@@ -124,7 +124,8 @@ ns.Map.fromXML = function (xmlObj) {
 		var extension = ns.Extension.fromXML(extensionXML);
 		map.setExtension(extension);
 	}
-	var glyphsXML = xmlObj.getElementsByTagName('glyph');
+	// need to be careful here, as there can be glyph in arcs
+	var glyphsXML = xmlObj.querySelectorAll('map > glyph');
 	for (var i=0; i < glyphsXML.length; i++) {
 		var glyph = ns.Glyph.fromXML(glyphsXML[i]);
 		map.addGlyph(glyph);
@@ -529,7 +530,7 @@ ns.Port.fromXML = function (xmlObj) {
 
 // ------- ARC -------
 ns.Arc = function (params) {
-	var params = checkParams(params, ['id', 'class_', 'source', 'target', 'start', 'end', 'nexts']);
+	var params = checkParams(params, ['id', 'class_', 'source', 'target', 'start', 'end', 'nexts', 'glyphs']);
 	this.id 	= params.id;
 	this.class_ = params.class_;
 	this.source = params.source;
@@ -538,6 +539,7 @@ ns.Arc = function (params) {
 	this.start 	= params.start;
 	this.end 	= params.end;
 	this.nexts 	= params.nexts || [];
+	this.glyphs = params.glyphs || [];
 };
 
 ns.Arc.prototype = Object.create(ns.SBGNBase.prototype);
@@ -553,6 +555,10 @@ ns.Arc.prototype.setEnd = function (end) {
 
 ns.Arc.prototype.addNext = function (next) {
 	this.nexts.push(next);
+};
+
+ns.Arc.prototype.addGlyph = function (glyph) {
+	this.glyphs.push(glyph);
 };
 
 ns.Arc.prototype.toXML = function () {
@@ -573,6 +579,9 @@ ns.Arc.prototype.toXML = function () {
 	xmlString += ">\n";
 
 	// children
+	for(var i=0; i < this.glyphs.length; i++) {
+		xmlString += this.glyphs[i].toXML();
+	}
 	if(this.start != null) {
 		xmlString += this.start.toXML();
 	}
@@ -582,7 +591,7 @@ ns.Arc.prototype.toXML = function () {
 	if(this.end != null) {
 		xmlString += this.end.toXML();
 	}
-	
+
 	xmlString += "</arc>\n";
 	return xmlString;
 };
@@ -611,6 +620,11 @@ ns.Arc.fromXML = function (xmlObj) {
 	if (endXML != null) {
 		var end = ns.EndType.fromXML(endXML);
 		arc.setEnd(end);
+	}
+	var glyphsXML = xmlObj.getElementsByTagName('glyph');
+	for (var i=0; i < glyphsXML.length; i++) {
+		var glyph = ns.Glyph.fromXML(glyphsXML[i]);
+		arc.addGlyph(glyph);
 	}
 
 	return arc;
