@@ -24,6 +24,9 @@ ns.ColorDefinition.prototype.toXML = function () {
 };
 
 ns.ColorDefinition.fromXML = function (xml) {
+	if (xml.tagName != 'colorDefinition') {
+		throw new Error("Bad XML provided, expected tagName colorDefinition, got: " + xml.tagName);
+	}
 	var colorDefinition = new ns.ColorDefinition();
 	colorDefinition.id 		= xml.getAttribute('id');
 	colorDefinition.value 	= xml.getAttribute('value');
@@ -33,24 +36,27 @@ ns.ColorDefinition.fromXML = function (xml) {
 
 // ------- LISTOFCOLORDEFINITIONS -------
 ns.ListOfColorDefinitions = function () {
-	this.colorList = [];
+	this.colorDefinitions = [];
 };
 
 ns.ListOfColorDefinitions.prototype.addColorDefinition = function (colorDefinition) {
-	this.colorList.push(colorDefinition);
+	this.colorDefinitions.push(colorDefinition);
 };
 
 ns.ListOfColorDefinitions.prototype.toXML = function () {
 	var xmlString = "<listOfColorDefinitions>\n";
-	for(var i=0; i<this.colorList.length; i++) {
-		var color = this.colorList[i];
-		xmlString += color.toXML();
+	for(var i=0; i<this.colorDefinitions.length; i++) {
+		var colorDefinition = this.colorDefinitions[i];
+		xmlString += colorDefinition.toXML();
 	}
 	xmlString += "</listOfColorDefinitions>\n";
 	return xmlString;
 };
 
 ns.ListOfColorDefinitions.fromXML = function (xml) {
+	if (xml.tagName != 'listOfColorDefinitions') {
+		throw new Error("Bad XML provided, expected tagName listOfColorDefinitions, got: " + xml.tagName);
+	}
 	var listOfColorDefinitions = new ns.ListOfColorDefinitions();
 
 	var colorDefinitions = xml.getElementsByTagName('colorDefinition');
@@ -120,6 +126,9 @@ ns.RenderGroup.prototype.toXML = function () {
 };
 
 ns.RenderGroup.fromXML = function (xml) {
+	if (xml.tagName != 'g') {
+		throw new Error("Bad XML provided, expected tagName g, got: " + xml.tagName);
+	}
 	var renderGroup = new ns.RenderGroup({});
 	renderGroup.id 			= xml.getAttribute('id');
 	renderGroup.fontSize 	= xml.getAttribute('fontSize');
@@ -171,6 +180,9 @@ ns.Style.prototype.toXML = function () {
 };
 
 ns.Style.fromXML = function (xml) {
+	if (xml.tagName != 'style') {
+		throw new Error("Bad XML provided, expected tagName style, got: " + xml.tagName);
+	}
 	var style = new ns.Style();
 	style.id 		= xml.getAttribute('id');
 	style.name 		= xml.getAttribute('name');
@@ -187,17 +199,17 @@ ns.Style.fromXML = function (xml) {
 
 // ------- LISTOFSTYLES -------
 ns.ListOfStyles = function() {
-	this.styleList = [];
+	this.styles = [];
 };
 
 ns.ListOfStyles.prototype.addStyle = function(style) {
-	this.styleList.push(style);
+	this.styles.push(style);
 };
 
 ns.ListOfStyles.prototype.toXML = function () {
 	var xmlString = "<listOfStyles>\n";
-	for(var i=0; i<this.styleList.length; i++) {
-		var style = this.styleList[i];
+	for(var i=0; i<this.styles.length; i++) {
+		var style = this.styles[i];
 		xmlString += style.toXML();
 	}
 	xmlString += "</listOfStyles>\n";
@@ -205,6 +217,9 @@ ns.ListOfStyles.prototype.toXML = function () {
 };
 
 ns.ListOfStyles.fromXML = function (xml) {
+	if (xml.tagName != 'listOfStyles') {
+		throw new Error("Bad XML provided, expected tagName listOfStyles, got: " + xml.tagName);
+	}
 	var listOfStyles = new ns.ListOfStyles();
 
 	var styles = xml.getElementsByTagName('style');
@@ -275,6 +290,9 @@ ns.RenderInformation.prototype.toXML = function() {
 
 // static constructor method
 ns.RenderInformation.fromXML = function (xml) {
+	if (xml.tagName != 'renderInformation') {
+		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + xml.tagName);
+	}
 	var renderInformation = new ns.RenderInformation();
 	renderInformation.id 				= xml.getAttribute('id');
 	renderInformation.name 				= xml.getAttribute('name');
