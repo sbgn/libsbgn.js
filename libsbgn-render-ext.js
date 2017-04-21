@@ -158,6 +158,14 @@ ns.Style.prototype.setRenderGroup = function (renderGroup) {
 	this.renderGroup = renderGroup;
 };
 
+ns.Style.prototype.getIdListAsArray = function () {
+	return this.idList.split(' ');
+}
+
+ns.Style.prototype.setIdListFromArray = function (idArray) {
+	this.idList = idArray.join(' ');
+}
+
 ns.Style.prototype.toXML = function () {
 	var xmlString = "<style";
 	if (this.id != null) {

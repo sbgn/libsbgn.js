@@ -922,6 +922,22 @@ describe('libsbgn-render-ext', function() {
 				style.toXML().should.equal("<style id='id' name='myName' idList='a b c'>\n<g />\n</style>\n");
 			});
 		});
+		describe('test the utility function', function() {
+			it('getIdListAsArray', function() {
+				var style = new renderExt.Style({idList: 'a b c'});
+				var array = style.getIdListAsArray();
+				should.exist(array);
+				array.should.be.a('array');
+				array.should.deep.equal(['a', 'b', 'c']);
+			});
+			it('setIdListFromArray', function() {
+				var style = new renderExt.Style();
+				style.setIdListFromArray(['a', 'b', 'c']);
+				should.exist(style.idList);
+				style.idList.should.be.a('string');
+				style.idList.should.equal('a b c');
+			});
+		});
 	});
 
 	describe('listOfStyles', function() {
