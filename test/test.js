@@ -1,7 +1,7 @@
 require('jsdom-global')();
 var should = require('chai').should();
 var sbgnjs = require('../libsbgn');
-var renderExt = require('../libsbgn-render-ext');
+var renderExt = require('../libsbgn-render');
 var checkParams = require('../utilities').checkParams;
 
 describe('utilities', function() {

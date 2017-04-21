@@ -1,4 +1,4 @@
-var renderExt = require('./libsbgn-render-ext');
+var renderExt = require('./libsbgn-render');
 var checkParams = require('./utilities').checkParams;
 
 var ns = {};
