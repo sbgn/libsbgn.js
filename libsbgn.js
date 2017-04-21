@@ -14,7 +14,7 @@ ns.SBGNBase = function (params) {
 	this.extension 	= params.extension;
 };
 
-ns.SBGNBase.prototype.setExtension = function (extension) {// 							<<<<<-------- todo tests !!!
+ns.SBGNBase.prototype.setExtension = function (extension) {
 	this.extension = extension;
 };
 
@@ -39,7 +39,7 @@ ns.SBGNBase.prototype.baseFromXML = function (xmlObj) {
 	}
 };
 
-ns.SBGNBase.prototype.hasChildren = function () {// 							<<<<<-------- todo tests !!!
+ns.SBGNBase.prototype.hasChildren = function () {
 	var allowedChildren = ['extension'].concat(this.allowedChildren);
 	for(var i=0; i < allowedChildren.length; i++) {
 		var prop = allowedChildren[i];
@@ -55,7 +55,7 @@ ns.SBGNBase.prototype.hasChildren = function () {// 							<<<<<-------- todo te
 // ensure tag is closed correctly when writing XML, if extension
 // or other SBGNBase specific things are present.
 // simple elements might end with /> or </name> 
-ns.SBGNBase.prototype.closeTag = function () {// 							<<<<<-------- todo tests !!!
+ns.SBGNBase.prototype.closeTag = function () {
 	var xmlString = "";
 	if(this.hasChildren()) {
 		xmlString += ">\n";
@@ -270,6 +270,7 @@ ns.Extension.fromXML = function (xmlObj) {
 
 // ------- GLYPH -------
 ns.Glyph = function (params) {
+	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone']);
 	this.id 			= params.id;
 	this.class_ 		= params.class_;
@@ -404,6 +405,7 @@ ns.Glyph.fromXML = function (xmlObj) {
 
 // ------- LABEL -------
 ns.Label = function (params) {
+	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['text']);
 	this.text = params.text;
 
@@ -439,6 +441,7 @@ ns.Label.fromXML = function (xmlObj) {
 
 // ------- BBOX -------
 ns.Bbox = function (params) {
+	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['x', 'y', 'w', 'h']);
 	this.x = parseFloat(params.x);
 	this.y = parseFloat(params.y);
@@ -544,6 +547,7 @@ ns.CloneType.fromXML = function (xmlObj) {
 
 // ------- PORT -------
 ns.Port = function (params) {
+	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'x', 'y']);
 	this.id = params.id;
 	this.x 	= parseFloat(params.x);
@@ -587,6 +591,7 @@ ns.Port.fromXML = function (xmlObj) {
 
 // ------- ARC -------
 ns.Arc = function (params) {
+	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'class_', 'source', 'target', 'start', 'end', 'nexts', 'glyphs']);
 	this.id 	= params.id;
 	this.class_ = params.class_;
