@@ -150,7 +150,7 @@ ns.Style = function(params) {
 	var params = checkParams(params, ['id', 'name', 'idList', 'renderGroup']);
 	this.id 			= params.id;
 	this.name 			= params.name;
-	this.idList 		= params.idList;
+	this.idList 		= params.idList; // TODO add utility functions to manage this (should be array)
 	this.renderGroup 	= params.renderGroup;
 };
 
@@ -167,7 +167,7 @@ ns.Style.prototype.toXML = function () {
 		xmlString += " name='"+this.name+"'";
 	}
 	if (this.idList != null) {
-		xmlString += " idList='"+this.idList.join(' ')+"'";
+		xmlString += " idList='"+this.idList+"'";
 	}
 	xmlString += ">\n";
 
@@ -186,8 +186,7 @@ ns.Style.fromXML = function (xml) {
 	var style = new ns.Style();
 	style.id 		= xml.getAttribute('id');
 	style.name 		= xml.getAttribute('name');
-	var idList 		= xml.getAttribute('idList');
-	style.idList 	= idList != null ? idList.split(' ') : [];
+	style.idList 	= xml.getAttribute('idList');
 
 	var renderGroupXML = xml.getElementsByTagName('g')[0];
 	if (renderGroupXML != null) {
@@ -248,7 +247,7 @@ ns.RenderInformation = function (params) {
 	*/
 };
 
-ns.RenderInformation.prototype.setListOfColorDefinition = function(listOfColorDefinitions) {
+ns.RenderInformation.prototype.setListOfColorDefinitions = function(listOfColorDefinitions) {
 	this.listOfColorDefinitions = listOfColorDefinitions;
 };
 
