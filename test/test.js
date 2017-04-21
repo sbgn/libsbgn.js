@@ -86,6 +86,48 @@ describe('libsbgn', function() {
 				sbgn.toXML().should.equal("<sbgn xmlns='0'>\n<map>\n</map>\n</sbgn>\n");
 			});
 		});
+		describe('check features inherited from SBGNBase', function () {
+			describe('hasChildren', function() {
+				it('should inherit function', function() {
+					var sbgn = new sbgnjs.Sbgn();
+					sbgn.should.have.property('hasChildren');
+					sbgn.hasChildren.should.be.a('function');
+				});
+				it('should return false if no children', function() {
+					var sbgn = new sbgnjs.Sbgn();
+					sbgn.hasChildren().should.equal(false);
+				});
+				it('should return true if sbgn specific child is present', function() {
+					var sbgn = new sbgnjs.Sbgn();
+					sbgn.setMap(new sbgnjs.Map());
+					sbgn.hasChildren().should.equal(true);
+				});
+				it('should return true if inherited child (extension) is present', function() {
+					var sbgn = new sbgnjs.Sbgn();
+					sbgn.setExtension(new sbgnjs.Extension());
+					sbgn.hasChildren().should.equal(true);
+				});
+			});
+
+			describe('extension', function() {
+				it('should parse extension', function(){
+					var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn><map></map><extension><renderInformation></renderInformation></extension></sbgn>"));
+					should.exist(sbgn.extension);
+					sbgn.extension.should.be.a('object');
+					sbgn.extension.should.be.instanceOf(sbgnjs.Extension);
+					sbgn.extension.has('renderInformation').should.equal(true);
+				});
+				it('should write extension', function(){
+					var sbgn = new sbgnjs.Sbgn();
+					sbgn.setExtension(new sbgnjs.Extension());
+					sbgn.extension.add(new renderExt.RenderInformation());
+					sbgn.setMap(new sbgnjs.Map());
+					sbgn.toXML().should.equal("<sbgn>\n<map>\n</map>\n<extension>\n"+
+								"<renderInformation xmlns='http://www.sbml.org/sbml/level3/version1/render/version1'>\n</renderInformation>\n"+
+								"</extension>\n</sbgn>\n");
+				});
+			})
+		})
 	});
 
 	describe('map', function() {
@@ -234,6 +276,18 @@ describe('libsbgn', function() {
 		it('should write complete', function() {
 			var label = new sbgnjs.Label({text: 'some text'});
 			label.toXML().should.equal("<label text='some text' />\n");
+		});
+		it('should parse extension', function() {
+			var label = sbgnjs.Label.fromXML(getXmlObj("<label text='text'><extension></extension></label>"));
+			should.exist(label.text);
+			label.text.should.equal('text');
+			should.exist(label.extension);
+			label.extension.should.be.a('object');
+			label.extension.should.be.instanceOf(sbgnjs.Extension);
+		});
+		it('should write extension', function() {
+			var label = new sbgnjs.Label({text: 'text', extension: new sbgnjs.Extension()});
+			label.toXML().should.equal("<label text='text'>\n<extension>\n</extension>\n</label>\n");
 		});
 	});
 	describe('bbox', function() {
@@ -1034,6 +1088,4 @@ describe('libsbgn-render-ext', function() {
 			});
 		});
 	});
-
 });
-
