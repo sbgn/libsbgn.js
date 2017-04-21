@@ -7,18 +7,77 @@ ns.xmlns = "http://sbgn.org/libsbgn/0.3";
 
 // ------- SBGNBase -------
 /*
-	Every sbgn element inherit from this. Allows to put notes everywhere.
+	Several sbgn elements inherit from this. Allows to put extensions everywhere.
 */
-ns.SBGNBase = function () {
-
+ns.SBGNBase = function (params) {
+	var params = checkParams(params, ['extension']);
+	this.extension 	= params.extension;
 };
+
+ns.SBGNBase.prototype.setExtension = function (extension) {// 							<<<<<-------- todo tests !!!
+	this.extension = extension;
+};
+
+// write the XML of things that are specific to SBGNBase type
+ns.SBGNBase.prototype.baseToXML = function () {
+	var xmlString = "";
+	// children
+	if(this.extension != null) {
+		xmlString += this.extension.toXML();
+	}
+
+	return xmlString;
+};
+
+// parse things specific to SBGNBase type
+ns.SBGNBase.prototype.baseFromXML = function (xmlObj) {
+	// children
+	var extensionXML = xmlObj.getElementsByTagName('extension')[0];
+	if (extensionXML != null) {
+		var extension = ns.Extension.fromXML(extensionXML);
+		this.setExtension(extension);
+	}
+};
+
+ns.SBGNBase.prototype.hasChildren = function () {// 							<<<<<-------- todo tests !!!
+	var allowedChildren = ['extension'].concat(this.allowedChildren);
+	for(var i=0; i < allowedChildren.length; i++) {
+		var prop = allowedChildren[i];
+		if(typeof this[prop] == 'array' && this[prop].length > 0)
+			return true;
+		if(this[prop])
+			return true;
+	}
+	return false;
+}
+
+// for simple elements that have no children, use this function to
+// ensure tag is closed correctly when writing XML, if extension
+// or other SBGNBase specific things are present.
+// simple elements might end with /> or </name> 
+ns.SBGNBase.prototype.closeTag = function () {// 							<<<<<-------- todo tests !!!
+	var xmlString = "";
+	if(this.hasChildren()) {
+		xmlString += ">\n";
+		xmlString += this.baseToXML();
+		xmlString += "</"+this.tagName+">\n";
+	}
+	else {
+		xmlString += " />\n";
+	}
+	return xmlString;
+}
 // ------- END SBGNBase -------
 
 // ------- SBGN -------
 ns.Sbgn = function (params) {
+	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['xmlns', 'map']);
 	this.xmlns 	= params.xmlns;
 	this.map 	= params.map;
+
+	this.allowedChildren = ['map'];
+	this.tagName = 'sbgn';
 };
 
 ns.Sbgn.prototype = Object.create(ns.SBGNBase.prototype);
@@ -38,6 +97,7 @@ ns.Sbgn.prototype.toXML = function () {
 	if (this.map != null) {
 		xmlString += this.map.toXML();
 	}
+	xmlString += this.baseToXML(); // call to parent class
 	xmlString += "</sbgn>\n";
 	return xmlString;
 };
@@ -55,26 +115,26 @@ ns.Sbgn.fromXML = function (xmlObj) {
 		var map = ns.Map.fromXML(mapXML);
 		sbgn.setMap(map);
 	}
+	sbgn.baseFromXML(xmlObj); // call to parent class
 	return sbgn;
 };
 // ------- END SBGN -------
 
 // ------- MAP -------
 ns.Map = function (params) {
-	var params = checkParams(params, ['id', 'language', 'extension', 'glyphs', 'arcs']);
+	ns.SBGNBase.call(this, params);
+	var params = checkParams(params, ['id', 'language', 'glyphs', 'arcs']);
 	this.id 		= params.id;
 	this.language 	= params.language;
-	this.extension 	= params.extension;
 	this.glyphs 	= params.glyphs || [];
 	this.arcs 		= params.arcs || [];
+
+	this.allowedChildren = ['glyphs', 'arcs'];
+	this.tagName = 'map';
 };
 
 ns.Map.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Map.prototype.constructor = ns.Map;
-
-ns.Map.prototype.setExtension = function (extension) {
-	this.extension = extension;
-};
 
 ns.Map.prototype.addGlyph = function (glyph) {
 	this.glyphs.push(glyph);
@@ -96,9 +156,7 @@ ns.Map.prototype.toXML = function () {
 	xmlString += ">\n";
 
 	// children
-	if(this.extension != null) {
-		xmlString += this.extension.toXML();
-	}
+	xmlString += this.baseToXML();
 	for(var i=0; i < this.glyphs.length; i++) {
 		xmlString += this.glyphs[i].toXML();
 	}
@@ -118,12 +176,6 @@ ns.Map.fromXML = function (xmlObj) {
 	map.id = xmlObj.getAttribute('id');
 	map.language = xmlObj.getAttribute('language');
 
-	// children
-	var extensionXML = xmlObj.getElementsByTagName('extension')[0];
-	if (extensionXML != null) {
-		var extension = ns.Extension.fromXML(extensionXML);
-		map.setExtension(extension);
-	}
 	// need to be careful here, as there can be glyph in arcs
 	var glyphsXML = xmlObj.querySelectorAll('map > glyph');
 	for (var i=0; i < glyphsXML.length; i++) {
@@ -136,6 +188,7 @@ ns.Map.fromXML = function (xmlObj) {
 		map.addArc(arc);
 	}
 
+	map.baseFromXML(xmlObj);
 	return map;
 };
 // ------- END MAP -------
@@ -148,21 +201,6 @@ ns.Extension = function () {
 	this.list = {};
 	this.unsupportedList = {};
 };
-
-/*ns.Extension.prototype.add = function (xmlObj) { // add specific extension
-	var extName = xmlObj.tagName;
-	console.log("extName", extName, xmlObj);
-	if (extName == 'renderInformation') {
-		var renderInformation = renderExt.RenderInformation.fromXML(xmlObj);
-		this.list['renderInformation'] = renderInformation;
-	}
-	else if (extName == 'annotations') {
-		this.list['annotations'] = xmlObj; // to be parsed correctly
-	}
-	else { // unsupported extension, we still store the data as is
-		this.list[extName] = xmlObj;
-	}
-};*/
 
 ns.Extension.prototype.add = function (extension) {
 	if (extension instanceof renderExt.RenderInformation) {
@@ -244,6 +282,9 @@ ns.Glyph = function (params) {
 	this.clone 			= params.clone;
 	this.glyphMembers 	= params.glyphMembers || []; // case of complex, can have arbitrary list of nested glyphs
 	this.ports 			= params.ports || [];
+
+	this.allowedChildren = ['label', 'state', 'bbox', 'clone', 'glyphMembers', 'ports'];
+	this.tagName = 'glyph';
 };
 
 ns.Glyph.prototype = Object.create(ns.SBGNBase.prototype);
@@ -306,6 +347,7 @@ ns.Glyph.prototype.toXML = function () {
 	for(var i=0; i < this.ports.length; i++) {
 		xmlString += this.ports[i].toXML();
 	}
+	xmlString += this.baseToXML();
 	xmlString += "</glyph>\n";
 
 	return xmlString;
@@ -355,6 +397,7 @@ ns.Glyph.fromXML = function (xmlObj) {
 		var port = ns.Port.fromXML(portsXML[i]);
 		glyph.addPort(port);
 	}
+	glyph.baseFromXML(xmlObj);
 	return glyph;
 };
 // ------- END GLYPH -------
@@ -363,6 +406,9 @@ ns.Glyph.fromXML = function (xmlObj) {
 ns.Label = function (params) {
 	var params = checkParams(params, ['text']);
 	this.text = params.text;
+
+	this.allowedChildren = [];
+	this.tagName = 'label';
 };
 
 ns.Label.prototype = Object.create(ns.SBGNBase.prototype);
@@ -374,7 +420,9 @@ ns.Label.prototype.toXML = function () {
 	if(this.text != null) {
 		xmlString += " text='"+this.text+"'";
 	}
-	xmlString += " />\n";
+
+	xmlString += this.closeTag();
+
 	return xmlString;
 };
 
@@ -384,6 +432,7 @@ ns.Label.fromXML = function (xmlObj) {
 	}
 	var label = new ns.Label();
 	label.text = xmlObj.getAttribute('text');
+	label.baseFromXML(xmlObj);
 	return label;
 };
 // ------- END LABEL -------
@@ -395,6 +444,9 @@ ns.Bbox = function (params) {
 	this.y = parseFloat(params.y);
 	this.w = parseFloat(params.w);
 	this.h = parseFloat(params.h);
+
+	this.allowedChildren = [];
+	this.tagName = 'bbox';
 };
 
 ns.Bbox.prototype = Object.create(ns.SBGNBase.prototype);
@@ -415,7 +467,7 @@ ns.Bbox.prototype.toXML = function () {
 	if(!isNaN(this.h)) {
 		xmlString += " h='"+this.h+"'";
 	}
-	xmlString += " />\n";
+	xmlString += this.closeTag();
 	return xmlString;
 };
 
@@ -428,6 +480,7 @@ ns.Bbox.fromXML = function (xmlObj) {
 	bbox.y = parseFloat(xmlObj.getAttribute('y'));
 	bbox.w = parseFloat(xmlObj.getAttribute('w'));
 	bbox.h = parseFloat(xmlObj.getAttribute('h'));
+	bbox.baseFromXML(xmlObj);
 	return bbox;
 };
 // ------- END BBOX -------
@@ -495,6 +548,9 @@ ns.Port = function (params) {
 	this.id = params.id;
 	this.x 	= parseFloat(params.x);
 	this.y 	= parseFloat(params.y);
+
+	this.allowedChildren = [];
+	this.tagName = 'port';
 };
 
 ns.Port.prototype = Object.create(ns.SBGNBase.prototype);
@@ -512,7 +568,7 @@ ns.Port.prototype.toXML = function () {
 	if(!isNaN(this.y)) {
 		xmlString += " y='"+this.y+"'";
 	}
-	xmlString += " />\n";
+	xmlString += this.closeTag();
 	return xmlString;
 };
 
@@ -524,6 +580,7 @@ ns.Port.fromXML = function (xmlObj) {
 	port.x 	= parseFloat(xmlObj.getAttribute('x'));
 	port.y 	= parseFloat(xmlObj.getAttribute('y'));
 	port.id = xmlObj.getAttribute('id');
+	port.baseFromXML(xmlObj);
 	return port;
 };
 // ------- END PORT -------
@@ -540,6 +597,9 @@ ns.Arc = function (params) {
 	this.end 	= params.end;
 	this.nexts 	= params.nexts || [];
 	this.glyphs = params.glyphs || [];
+
+	this.allowedChildren = ['start', 'nexts', 'end', 'glyphs'];
+	this.tagName = 'arc';
 };
 
 ns.Arc.prototype = Object.create(ns.SBGNBase.prototype);
@@ -592,6 +652,7 @@ ns.Arc.prototype.toXML = function () {
 		xmlString += this.end.toXML();
 	}
 
+	xmlString += this.baseToXML();
 	xmlString += "</arc>\n";
 	return xmlString;
 };
@@ -627,6 +688,7 @@ ns.Arc.fromXML = function (xmlObj) {
 		arc.addGlyph(glyph);
 	}
 
+	arc.baseFromXML(xmlObj);
 	return arc;
 };
 
