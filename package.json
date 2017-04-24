@@ -1,5 +1,5 @@
 {
-  "name": "libsbgn-js",
+  "name": "libsbgn.js",
   "version": "1.0.0",
   "description": "sbgnml reading and writing in javascript.",
   "main": "libsbgn.js",
@@ -17,5 +17,6 @@
     "chai": "^3.5.0",
     "jsdom": "^9.12.0",
     "jsdom-global": "^2.1.1"
+    //"rdflib": "^0.15.0"
   }
 }
