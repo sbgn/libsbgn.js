@@ -79,6 +79,10 @@ ns.SBGNBase.prototype.closeTag = function () {
 // ------- END SBGNBase -------
 
 // ------- SBGN -------
+/**
+ * sbgn element constructor
+ * @param {Object} params
+ */
 ns.Sbgn = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['xmlns', 'map']);
