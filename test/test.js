@@ -1,8 +1,18 @@
 var should = require('chai').should();
-var sbgnjs = require('../libsbgn');
-var renderExt = require('../libsbgn-render');
-var checkParams = require('../utilities').checkParams;
+var sbgnjs = require('../src/libsbgn');
+var renderExt = require('../src/libsbgn-render');
+var checkParams = require('../src/utilities').checkParams;
 var xmldom = require('xmldom');
+var pkg = require('..');
+
+
+describe('package', function() {
+	it('should expose code correctly', function() {
+		pkg.should.have.ownProperty('Sbgn');
+		pkg.should.have.ownProperty('renderExtension');
+		pkg.renderExtension.should.have.ownProperty('ColorDefinition');
+	});
+});
 
 describe('utilities', function() {
 	describe('checkParams', function() {

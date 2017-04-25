@@ -2,7 +2,7 @@
   "name": "libsbgn.js",
   "version": "1.0.0",
   "description": "sbgnml reading and writing in javascript.",
-  "main": "libsbgn.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
