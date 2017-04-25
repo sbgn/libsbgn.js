@@ -213,7 +213,6 @@ ns.Extension = function () {
 	// store xmlObject if no supported parsing (unrecognized extensions)
 	// else store instance of the extension
 	this.list = {};
-	this.unsupportedList = {};
 };
 
 ns.Extension.prototype.add = function (extension) {
@@ -226,7 +225,9 @@ ns.Extension.prototype.add = function (extension) {
 			var renderInformation = renderExt.RenderInformation.fromXML(extension);
 			this.list['renderInformation'] = renderInformation;
 		}
-		this.unsupportedList[extension.tagName] = extension;
+		else {
+			this.list[extension.tagName] = extension;
+		}
 	}
 };
 
@@ -250,7 +251,12 @@ ns.Extension.prototype.buildXmlObj = function () {
 			extension.appendChild(this.get(extInstance).buildXmlObj());
 		}
 		else {
-			extension.appendChild(this.get(extInstance));
+			// weird hack needed here
+			// xmldom doesn't serialize extension correctly if the extension has more than one unsupported extension
+			// we need to serialize and unserialize it when appending it here
+			var serializeExt = new xmldom.XMLSerializer().serializeToString(this.get(extInstance));
+			var unserializeExt = new xmldom.DOMParser().parseFromString(serializeExt); // fresh new dom element
+			extension.appendChild(unserializeExt);
 		}
 	}
 	return extension;
