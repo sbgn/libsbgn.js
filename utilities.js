@@ -19,4 +19,15 @@ ns.checkParams = function (params, names) {
 	return params;
 }
 
+ns.getFirstLevelGlyphs = function (xmlObj) {
+	var result = [];
+	for(var i=0; i<xmlObj.childNodes.length; i++) {
+		var child = xmlObj.childNodes[i];
+		if (child.tagName && child.tagName == "glyph") {
+			result.push(child);
+		}
+	}
+	return result;
+};
+
 module.exports = ns;
