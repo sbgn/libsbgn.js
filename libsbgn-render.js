@@ -32,8 +32,8 @@ ns.ColorDefinition.fromXML = function (xml) {
 		throw new Error("Bad XML provided, expected tagName colorDefinition, got: " + xml.tagName);
 	}
 	var colorDefinition = new ns.ColorDefinition();
-	colorDefinition.id 		= xml.getAttribute('id');
-	colorDefinition.value 	= xml.getAttribute('value');
+	colorDefinition.id 		= xml.getAttribute('id') || null;
+	colorDefinition.value 	= xml.getAttribute('value') || null;
 	return colorDefinition;
 };
 // ------- END COLORDEFINITION -------
@@ -139,16 +139,16 @@ ns.RenderGroup.fromXML = function (xml) {
 		throw new Error("Bad XML provided, expected tagName g, got: " + xml.tagName);
 	}
 	var renderGroup = new ns.RenderGroup({});
-	renderGroup.id 			= xml.getAttribute('id');
-	renderGroup.fontSize 	= xml.getAttribute('fontSize');
-	renderGroup.fontFamily 	= xml.getAttribute('fontFamily');
-	renderGroup.fontWeight 	= xml.getAttribute('fontWeight');
-	renderGroup.fontStyle 	= xml.getAttribute('fontStyle');
-	renderGroup.textAnchor 	= xml.getAttribute('textAnchor');
-	renderGroup.vtextAnchor = xml.getAttribute('vtextAnchor');
-	renderGroup.stroke 		= xml.getAttribute('stroke');
-	renderGroup.strokeWidth = xml.getAttribute('strokeWidth');
-	renderGroup.fill 		= xml.getAttribute('fill');
+	renderGroup.id 			= xml.getAttribute('id') || null;
+	renderGroup.fontSize 	= xml.getAttribute('fontSize') || null;
+	renderGroup.fontFamily 	= xml.getAttribute('fontFamily') || null;
+	renderGroup.fontWeight 	= xml.getAttribute('fontWeight') || null;
+	renderGroup.fontStyle 	= xml.getAttribute('fontStyle') || null;
+	renderGroup.textAnchor 	= xml.getAttribute('textAnchor') || null;
+	renderGroup.vtextAnchor = xml.getAttribute('vtextAnchor') || null;
+	renderGroup.stroke 		= xml.getAttribute('stroke') || null;
+	renderGroup.strokeWidth = xml.getAttribute('strokeWidth') || null;
+	renderGroup.fill 		= xml.getAttribute('fill') || null;
 	return renderGroup;
 };
 // ------- END RENDERGROUP -------
@@ -202,9 +202,9 @@ ns.Style.fromXML = function (xml) {
 		throw new Error("Bad XML provided, expected tagName style, got: " + xml.tagName);
 	}
 	var style = new ns.Style();
-	style.id 		= xml.getAttribute('id');
-	style.name 		= xml.getAttribute('name');
-	style.idList 	= xml.getAttribute('idList');
+	style.id 		= xml.getAttribute('id') || null;
+	style.name 		= xml.getAttribute('name') || null;
+	style.idList 	= xml.getAttribute('idList') || null;
 
 	var renderGroupXML = xml.getElementsByTagName('g')[0];
 	if (renderGroupXML != null) {
@@ -313,11 +313,11 @@ ns.RenderInformation.fromXML = function (xml) {
 		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + xml.tagName);
 	}
 	var renderInformation = new ns.RenderInformation();
-	renderInformation.id 				= xml.getAttribute('id');
-	renderInformation.name 				= xml.getAttribute('name');
-	renderInformation.programName 		= xml.getAttribute('programName');
-	renderInformation.programVersion 	= xml.getAttribute('programVersion');
-	renderInformation.backgroundColor 	= xml.getAttribute('backgroundColor');
+	renderInformation.id 				= xml.getAttribute('id') || null;
+	renderInformation.name 				= xml.getAttribute('name') || null;
+	renderInformation.programName 		= xml.getAttribute('programName') || null;
+	renderInformation.programVersion 	= xml.getAttribute('programVersion') || null;
+	renderInformation.backgroundColor 	= xml.getAttribute('backgroundColor') || null;
 
 	var listOfColorDefinitionsXML = xml.getElementsByTagName('listOfColorDefinitions')[0];
 	var listOfStylesXML = xml.getElementsByTagName('listOfStyles')[0];

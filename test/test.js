@@ -1,11 +1,8 @@
-// jsdom-global makes the DOM through 'window' object globally available
-// jsdom is required to make the querySelector and querySelectorAll functions available
-// those are not provided by xmldom, but are available in browsers. So we need them for testing purpose.
-require('jsdom-global')();
 var should = require('chai').should();
 var sbgnjs = require('../libsbgn');
 var renderExt = require('../libsbgn-render');
 var checkParams = require('../utilities').checkParams;
+var xmldom = require('xmldom');
 
 describe('utilities', function() {
 	describe('checkParams', function() {
@@ -42,14 +39,10 @@ describe('utilities', function() {
 });
 
 function getXmlObj(string) {
-	return new window.DOMParser().parseFromString(string, "text/xml").documentElement;
+	return new xmldom.DOMParser().parseFromString(string, "text/xml").documentElement;
 };
 
 describe('libsbgn', function() {
-	function getSpecificXmlObj(string, name) {
-		return new window.DOMParser().parseFromString(string, "text/xml").querySelector(name);
-	};
-
 	describe('sbgn', function() {
 		describe('parse from XML', function() {
 			it('should parse empty', function() {
@@ -205,21 +198,20 @@ describe('libsbgn', function() {
 			it('should parse 2 extensions', function() {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><renderInformation></renderInformation><b></b></extension>'));
 				extension.list.should.have.ownProperty('renderInformation');
-				extension.unsupportedList.should.have.ownProperty('b');
+				extension.list.should.have.ownProperty('b');
 			});
 		});
 		describe('test extension functions', function() {
 			it('add new unknown extension', function() {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension></extension>'));
-				var extA = getSpecificXmlObj('<a></a>', 'a');
+				var extA = getXmlObj('<a></a>');
 				extension.add(extA);
-				extension.list.should.not.have.ownProperty('a');
-				extension.unsupportedList.should.have.ownProperty('a');
-				extension.unsupportedList.a.should.equal(extA);
+				extension.list.should.have.ownProperty('a');
+				extension.list.a.should.equal(extA);
 			});
 			it('add new renderInformation extension', function() {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension></extension>'));
-				var render = renderExt.RenderInformation.fromXML(getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation'));
+				var render = renderExt.RenderInformation.fromXML(getXmlObj('<renderInformation></renderInformation>'));
 				extension.add(render);
 				extension.list.should.have.ownProperty('renderInformation');
 				extension.list.renderInformation.should.be.instanceOf(renderExt.RenderInformation);
@@ -227,19 +219,19 @@ describe('libsbgn', function() {
 			});
 			it('add new renderInformation unparsed extension', function() {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension></extension>'));
-				var renderXmlObj = getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation');
+				var renderXmlObj = getXmlObj('<renderInformation></renderInformation>');
 				extension.add(renderXmlObj);
 				extension.list.should.have.ownProperty('renderInformation');
 				extension.list.renderInformation.should.be.instanceOf(renderExt.RenderInformation);
 			});
 			it('get extension', function() {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><a></a><renderInformation></renderInformation></extension>'));
-				should.not.exist(extension.get('a'));
+				should.exist(extension.get('a'));
 				should.exist(extension.get('renderInformation'));
 			});
 			it('has extension', function() {
 				var extension = sbgnjs.Extension.fromXML(getXmlObj('<extension><a></a><renderInformation></renderInformation></extension>'));
-				extension.has('a').should.equal(false);
+				extension.has('a').should.equal(true);
 				extension.has('renderInformation').should.equal(true);
 			});
 		});
@@ -248,15 +240,34 @@ describe('libsbgn', function() {
 				var extension = new sbgnjs.Extension();
 				extension.toXML().should.equal("<extension/>");
 			});
-			// cannot be tested, due to XMLSerializer (used for unknown extensions) not existing outside browsers
-			/*it('should write multiple extensions', function () {
+			it('should write multiple extensions', function () {
 				var extension = new sbgnjs.Extension();
-				extension.add(getSpecificXmlObj('<a></a>', 'a'));
-				extension.toXML().should.equal("<extension>\n<a>\n</a>\n</extension>\n");
-			});*/
+				extension.add(getXmlObj('<x></x>'));
+				extension.add(getXmlObj('<c></c>'));
+				extension.toXML().should.equal("<extension><x/><c/></extension>");
+			});
+			it('should write supported and unsupported extensions', function () {
+				var extension = new sbgnjs.Extension();
+				extension.add(getXmlObj('<x></x>'));
+				extension.add(getXmlObj('<c></c>'));
+				extension.add(getXmlObj('<renderInformation></renderInformation>', 'renderInformation'));
+				extension.toXML().should.equal('<extension><x/><c/><renderInformation xmlns="'+renderExt.xmlns+'"/></extension>');
+			});
+			it('should overwrite extension if same tag provided twice', function () {
+				var extension = new sbgnjs.Extension();
+				extension.add(new xmldom.DOMParser().parseFromString('<x attr="test1"></x>', "text/xml").documentElement);
+				extension.add(getXmlObj('<c></c>'));
+				extension.add(new xmldom.DOMParser().parseFromString('<x attr="test2"></x>', "text/xml").documentElement);
+				extension.toXML().should.equal('<extension><x attr="test2"/><c/></extension>');
+			});
+			it('should keep unsupported extensions as is', function () {
+				var extension = new sbgnjs.Extension();
+				extension.add(new xmldom.DOMParser().parseFromString('<x attr="test1"><nested><evenmorenested/></nested></x>', "text/xml").documentElement);
+				extension.toXML().should.equal('<extension><x attr="test1"><nested><evenmorenested/></nested></x></extension>');
+			});
 			it('should write render extension', function() {
 				var extension = new sbgnjs.Extension();
-				extension.add(renderExt.RenderInformation.fromXML(getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation')));
+				extension.add(renderExt.RenderInformation.fromXML(getXmlObj('<renderInformation></renderInformation>')));
 				extension.toXML().should.equal('<extension><renderInformation xmlns="'+renderExt.xmlns+'"/></extension>');
 			});
 		});
