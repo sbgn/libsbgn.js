@@ -1,5 +1,5 @@
 var renderExt = require('./libsbgn-render');
-var annotExt = require('./libsbgn-annotations');
+//var annotExt = require('./libsbgn-annotations');
 var checkParams = require('./utilities').checkParams;
 var xmldom = require('xmldom');
 
@@ -827,5 +827,5 @@ ns.NextType.fromXML = function (xmlObj) {
 // ------- END NEXTTYPE -------
 
 ns.renderExtension = renderExt;
-ns.annotationsExtension = annotExt;
+//ns.annotationsExtension = annotExt;
 module.exports = ns;
