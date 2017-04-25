@@ -1,3 +1,6 @@
+// jsdom-global makes the DOM through 'window' object globally available
+// jsdom is required to make the querySelector and querySelectorAll functions available
+// those are not provided by xmldom, but are available in browsers. So we need them for testing purpose.
 require('jsdom-global')();
 var should = require('chai').should();
 var sbgnjs = require('../libsbgn');
