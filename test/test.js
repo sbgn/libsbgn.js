@@ -1,3 +1,6 @@
+// jsdom-global makes the DOM through 'window' object globally available
+// jsdom is required to make the querySelector and querySelectorAll functions available
+// those are not provided by xmldom, but are available in browsers. So we need them for testing purpose.
 require('jsdom-global')();
 var should = require('chai').should();
 var sbgnjs = require('../libsbgn');
@@ -73,17 +76,17 @@ describe('libsbgn', function() {
 				var sbgn = new sbgnjs.Sbgn();
 				should.equal(sbgn.xmlns, null);
 				should.equal(sbgn.map, null);
-				sbgn.toXML().should.equal("<sbgn>\n</sbgn>\n");
+				sbgn.toXML().should.equal("<sbgn/>");
 			});
 			it('should write complete sbgn with empty map', function() {
 				var sbgn = new sbgnjs.Sbgn({'xmlns': "a"});
 				sbgn.setMap(new sbgnjs.Map());
-				sbgn.toXML().should.equal("<sbgn xmlns='a'>\n<map>\n</map>\n</sbgn>\n");
+				sbgn.toXML().should.equal('<sbgn xmlns="a"><map/></sbgn>');
 			});
 			it('edge case should consider xmlns of 0', function() {
 				var sbgn = new sbgnjs.Sbgn({'xmlns': 0});
 				sbgn.setMap(new sbgnjs.Map());
-				sbgn.toXML().should.equal("<sbgn xmlns='0'>\n<map>\n</map>\n</sbgn>\n");
+				sbgn.toXML().should.equal('<sbgn xmlns="0"><map/></sbgn>');
 			});
 		});
 		describe('check features inherited from SBGNBase', function () {
@@ -122,9 +125,9 @@ describe('libsbgn', function() {
 					sbgn.setExtension(new sbgnjs.Extension());
 					sbgn.extension.add(new renderExt.RenderInformation());
 					sbgn.setMap(new sbgnjs.Map());
-					sbgn.toXML().should.equal("<sbgn>\n<map>\n</map>\n<extension>\n"+
-								"<renderInformation xmlns='http://www.sbml.org/sbml/level3/version1/render/version1'>\n</renderInformation>\n"+
-								"</extension>\n</sbgn>\n");
+					sbgn.toXML().should.equal("<sbgn><extension>"+
+								'<renderInformation xmlns="http://www.sbml.org/sbml/level3/version1/render/version1"/>'+
+								"</extension><map/></sbgn>");
 				});
 			})
 		})
@@ -181,14 +184,14 @@ describe('libsbgn', function() {
 		describe('write to XML', function() {
 			it('should write empty map', function() {
 				var map = new sbgnjs.Map();
-				map.toXML().should.equal("<map>\n</map>\n");
+				map.toXML().should.equal("<map/>");
 			});
 			it('should write complete map with empty stuff', function() {
 				var map = new sbgnjs.Map({id: "id", language: "language"});
 				map.setExtension(new sbgnjs.Extension());
 				map.addGlyph(new sbgnjs.Glyph());
 				map.addArc(new sbgnjs.Arc());
-				map.toXML().should.equal("<map id='id' language='language'>\n<extension>\n</extension>\n<glyph>\n</glyph>\n<arc>\n</arc>\n</map>\n");
+				map.toXML().should.equal('<map id="id" language="language"><extension/><glyph/><arc/></map>');
 			});
 		});
 	});
@@ -243,7 +246,7 @@ describe('libsbgn', function() {
 		describe('write to XML', function () {
 			it('should write empty extension', function () {
 				var extension = new sbgnjs.Extension();
-				extension.toXML().should.equal("<extension>\n</extension>\n");
+				extension.toXML().should.equal("<extension/>");
 			});
 			// cannot be tested, due to XMLSerializer (used for unknown extensions) not existing outside browsers
 			/*it('should write multiple extensions', function () {
@@ -254,31 +257,31 @@ describe('libsbgn', function() {
 			it('should write render extension', function() {
 				var extension = new sbgnjs.Extension();
 				extension.add(renderExt.RenderInformation.fromXML(getSpecificXmlObj('<renderInformation></renderInformation>', 'renderInformation')));
-				extension.toXML().should.equal("<extension>\n<renderInformation xmlns='"+renderExt.xmlns+"'>\n</renderInformation>\n</extension>\n");
+				extension.toXML().should.equal('<extension><renderInformation xmlns="'+renderExt.xmlns+'"/></extension>');
 			});
 		});
 	});
 	describe('label', function() {
 		it('should parse empty', function() {
-			var label = sbgnjs.Label.fromXML(getXmlObj("<label />"));
+			var label = sbgnjs.Label.fromXML(getXmlObj("<label/>"));
 			label.should.have.ownProperty('text');
 			should.equal(label.text, null);
 		});
 		it('should parse complete', function() {
-			var label = sbgnjs.Label.fromXML(getXmlObj("<label text='some text' />"));
+			var label = sbgnjs.Label.fromXML(getXmlObj('<label text="some text"/>'));
 			should.exist(label.text);
 			label.text.should.equal('some text');
 		});
 		it('should write empty', function() {
 			var label = new sbgnjs.Label();
-			label.toXML().should.equal('<label />\n');
+			label.toXML().should.equal('<label/>');
 		});
 		it('should write complete', function() {
 			var label = new sbgnjs.Label({text: 'some text'});
-			label.toXML().should.equal("<label text='some text' />\n");
+			label.toXML().should.equal('<label text="some text"/>');
 		});
 		it('should parse extension', function() {
-			var label = sbgnjs.Label.fromXML(getXmlObj("<label text='text'><extension></extension></label>"));
+			var label = sbgnjs.Label.fromXML(getXmlObj("<label text='text'><extension/></label>"));
 			should.exist(label.text);
 			label.text.should.equal('text');
 			should.exist(label.extension);
@@ -287,12 +290,12 @@ describe('libsbgn', function() {
 		});
 		it('should write extension', function() {
 			var label = new sbgnjs.Label({text: 'text', extension: new sbgnjs.Extension()});
-			label.toXML().should.equal("<label text='text'>\n<extension>\n</extension>\n</label>\n");
+			label.toXML().should.equal('<label text="text"><extension/></label>');
 		});
 	});
 	describe('bbox', function() {
 		it('should parse empty', function() {
-			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox />"));
+			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox/>"));
 			bbox.should.have.ownProperty('x');
 			bbox.x.should.be.NaN;
 			bbox.should.have.ownProperty('y');
@@ -303,7 +306,7 @@ describe('libsbgn', function() {
 			bbox.h.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var bbox = sbgnjs.Bbox.fromXML(getXmlObj("<bbox x='1' y='2' w='3.1416' h='4' />"));
+			var bbox = sbgnjs.Bbox.fromXML(getXmlObj('<bbox x="1" y="2" w="3.1416" h="4"/>'));
 			should.exist(bbox.x);
 			bbox.x.should.equal(1);
 			should.exist(bbox.y);
@@ -315,23 +318,23 @@ describe('libsbgn', function() {
 		});
 		it('should write empty', function() {
 			var bbox = new sbgnjs.Bbox();
-			bbox.toXML().should.equal('<bbox />\n');
+			bbox.toXML().should.equal('<bbox/>');
 		});
 		it('should write complete', function() {
 			var bbox = new sbgnjs.Bbox({x: 1, y: 2, w: 3.1416, h: 4});
-			bbox.toXML().should.equal("<bbox x='1' y='2' w='3.1416' h='4' />\n");
+			bbox.toXML().should.equal('<bbox x="1" y="2" w="3.1416" h="4"/>');
 		});
 	});
 	describe('state', function() {
 		it('should parse empty', function() {
-			var state = sbgnjs.StateType.fromXML(getXmlObj("<state />"));
+			var state = sbgnjs.StateType.fromXML(getXmlObj("<state/>"));
 			state.should.have.ownProperty('value');
 			state.should.have.ownProperty('variable');
 			should.equal(state.value, null);
 			should.equal(state.variable, null);
 		});
 		it('should parse complete', function() {
-			var state = sbgnjs.StateType.fromXML(getXmlObj("<state value='some value' variable='v'/>"));
+			var state = sbgnjs.StateType.fromXML(getXmlObj('<state value="some value" variable="v"/>'));
 			should.exist(state.value);
 			state.value.should.equal('some value');
 			should.exist(state.variable);
@@ -339,36 +342,36 @@ describe('libsbgn', function() {
 		});
 		it('should write empty', function() {
 			var state = new sbgnjs.StateType();
-			state.toXML().should.equal('<state />\n');
+			state.toXML().should.equal('<state/>');
 		});
 		it('should write complete', function() {
 			var state = new sbgnjs.StateType({value: 'some value', variable: 'variable'});
-			state.toXML().should.equal("<state value='some value' variable='variable' />\n");
+			state.toXML().should.equal('<state value="some value" variable="variable"/>');
 		});
 	});
 	describe('clone', function() {
 		it('should parse empty', function() {
-			var clone = sbgnjs.CloneType.fromXML(getXmlObj("<clone />"));
+			var clone = sbgnjs.CloneType.fromXML(getXmlObj("<clone/>"));
 			clone.should.have.ownProperty('label');
 			should.equal(clone.label, null);
 		});
 		it('should parse complete', function() {
-			var clone = sbgnjs.CloneType.fromXML(getXmlObj("<clone label='some label' />"));
+			var clone = sbgnjs.CloneType.fromXML(getXmlObj('<clone label="some label"/>'));
 			should.exist(clone.label);
 			clone.label.should.equal('some label');
 		});
 		it('should write empty', function() {
 			var clone = new sbgnjs.CloneType();
-			clone.toXML().should.equal('<clone />\n');
+			clone.toXML().should.equal('<clone/>');
 		});
 		it('should write complete', function() {
 			var clone = new sbgnjs.CloneType({label: 'some label'});
-			clone.toXML().should.equal("<clone label='some label' />\n");
+			clone.toXML().should.equal('<clone label="some label"/>');
 		});
 	});
 	describe('port', function() {
 		it('should parse empty', function() {
-			var port = sbgnjs.Port.fromXML(getXmlObj("<port />"));
+			var port = sbgnjs.Port.fromXML(getXmlObj("<port/>"));
 			port.should.have.ownProperty('id');
 			should.equal(port.id, null);
 			port.should.have.ownProperty('x');
@@ -377,7 +380,7 @@ describe('libsbgn', function() {
 			port.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var port = sbgnjs.Port.fromXML(getXmlObj("<port id='id' x='1.25' y='2' />"));
+			var port = sbgnjs.Port.fromXML(getXmlObj('<port id="id" x="1.25" y="2"/>'));
 			should.exist(port.id);
 			port.id.should.equal('id');
 			should.exist(port.x);
@@ -387,23 +390,23 @@ describe('libsbgn', function() {
 		});
 		it('should write empty', function() {
 			var port = new sbgnjs.Port();
-			port.toXML().should.equal('<port />\n');
+			port.toXML().should.equal('<port/>');
 		});
 		it('should write complete', function() {
 			var port = new sbgnjs.Port({id: 'id', x: 2, y: 3.1416});
-			port.toXML().should.equal("<port id='id' x='2' y='3.1416' />\n");
+			port.toXML().should.equal('<port id="id" x="2" y="3.1416"/>');
 		});
 	});
 	describe('start type', function() {
 		it('should parse empty', function() {
-			var start = sbgnjs.StartType.fromXML(getXmlObj("<start />"));
+			var start = sbgnjs.StartType.fromXML(getXmlObj("<start/>"));
 			start.should.have.ownProperty('x');
 			start.x.should.be.NaN;
 			start.should.have.ownProperty('y');
 			start.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var start = sbgnjs.StartType.fromXML(getXmlObj("<start x='1' y='2' />"));
+			var start = sbgnjs.StartType.fromXML(getXmlObj('<start x="1" y="2"/>'));
 			should.exist(start.x);
 			start.x.should.equal(1);
 			should.exist(start.y);
@@ -411,23 +414,23 @@ describe('libsbgn', function() {
 		});
 		it('should write empty', function() {
 			var start = new sbgnjs.StartType();
-			start.toXML().should.equal('<start />\n');
+			start.toXML().should.equal('<start/>');
 		});
 		it('should write complete', function() {
 			var start = new sbgnjs.StartType({x: 1, y: 2});
-			start.toXML().should.equal("<start x='1' y='2' />\n");
+			start.toXML().should.equal('<start x="1" y="2"/>');
 		});
 	});
 	describe('end type', function() {
 		it('should parse empty', function() {
-			var end = sbgnjs.EndType.fromXML(getXmlObj("<end />"));
+			var end = sbgnjs.EndType.fromXML(getXmlObj("<end/>"));
 			end.should.have.ownProperty('x');
 			end.x.should.be.NaN;
 			end.should.have.ownProperty('y');
 			end.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var end = sbgnjs.EndType.fromXML(getXmlObj("<end x='1' y='2' />"));
+			var end = sbgnjs.EndType.fromXML(getXmlObj('<end x="1" y="2"/>'));
 			should.exist(end.x);
 			end.x.should.equal(1);
 			should.exist(end.y);
@@ -435,23 +438,23 @@ describe('libsbgn', function() {
 		});
 		it('should write empty', function() {
 			var end = new sbgnjs.EndType();
-			end.toXML().should.equal('<end />\n');
+			end.toXML().should.equal('<end/>');
 		});
 		it('should write complete', function() {
 			var end = new sbgnjs.EndType({x: 1, y: 2});
-			end.toXML().should.equal("<end x='1' y='2' />\n");
+			end.toXML().should.equal('<end x="1" y="2"/>');
 		});
 	});
 	describe('next type', function() {
 		it('should parse empty', function() {
-			var next = sbgnjs.NextType.fromXML(getXmlObj("<next />"));
+			var next = sbgnjs.NextType.fromXML(getXmlObj("<next/>"));
 			next.should.have.ownProperty('x');
 			next.x.should.be.NaN;
 			next.should.have.ownProperty('y');
 			next.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
-			var next = sbgnjs.NextType.fromXML(getXmlObj("<next x='1' y='2' />"));
+			var next = sbgnjs.NextType.fromXML(getXmlObj('<next x="1" y="2"/>'));
 			should.exist(next.x);
 			next.x.should.equal(1);
 			should.exist(next.y);
@@ -459,11 +462,11 @@ describe('libsbgn', function() {
 		});
 		it('should write empty', function() {
 			var next = new sbgnjs.NextType();
-			next.toXML().should.equal('<next />\n');
+			next.toXML().should.equal('<next/>');
 		});
 		it('should write complete', function() {
 			var next = new sbgnjs.NextType({x: 1, y: 2});
-			next.toXML().should.equal("<next x='1' y='2' />\n");
+			next.toXML().should.equal('<next x="1" y="2"/>');
 		});
 	});
 
@@ -551,7 +554,7 @@ describe('libsbgn', function() {
 		describe('write to XML', function() {
 			it('should write empty glyph', function() {
 				var glyph = new sbgnjs.Glyph();
-				glyph.toXML().should.equal("<glyph>\n</glyph>\n");
+				glyph.toXML().should.equal("<glyph/>");
 			});
 			it('should write complete glyph', function() {
 				var glyph = new sbgnjs.Glyph({id: "id", class_: "a_class", compartmentRef: "a_compartment_id"});
@@ -561,14 +564,14 @@ describe('libsbgn', function() {
 				glyph.setClone(new sbgnjs.CloneType());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
 				glyph.addPort(new sbgnjs.Port());
-				glyph.toXML().should.equal("<glyph id='id' class='a_class' compartmentRef='a_compartment_id'>\n"+
-												"<label />\n"+
-												"<state />\n"+
-												"<bbox />\n"+
-												"<clone />\n"+
-												"<glyph>\n</glyph>\n"+
-												"<port />\n"+
-											"</glyph>\n");
+				glyph.toXML().should.equal('<glyph id="id" class="a_class" compartmentRef="a_compartment_id">'+
+												"<label/>"+
+												"<state/>"+
+												"<bbox/>"+
+												"<clone/>"+
+												"<glyph/>"+
+												"<port/>"+
+											"</glyph>");
 			});
 		});
 	});
@@ -662,7 +665,7 @@ describe('libsbgn', function() {
 		describe('write to XML', function() {
 			it('should write empty arc', function() {
 				var arc = new sbgnjs.Arc();
-				arc.toXML().should.equal("<arc>\n</arc>\n");
+				arc.toXML().should.equal("<arc/>");
 			});
 			it('should write complete arc', function() {
 				var arc = new sbgnjs.Arc({id: "id", class_: "a_class", source: "source", target: "target"});
@@ -671,13 +674,13 @@ describe('libsbgn', function() {
 				arc.addNext(new sbgnjs.NextType());
 				arc.addNext(new sbgnjs.NextType());
 				arc.addGlyph(new sbgnjs.Glyph());
-				arc.toXML().should.equal("<arc id='id' class='a_class' source='source' target='target'>\n"+
-												"<glyph>\n</glyph>\n"+
-												"<start />\n"+
-												"<next />\n"+
-												"<next />\n"+
-												"<end />\n"+
-											"</arc>\n");
+				arc.toXML().should.equal('<arc id="id" class="a_class" source="source" target="target">'+
+												"<glyph/>"+
+												"<start/>"+
+												"<next/>"+
+												"<next/>"+
+												"<end/>"+
+											"</arc>");
 			});
 		});
 	});
@@ -837,11 +840,11 @@ describe('libsbgn-render-ext', function() {
 		});
 		it('should write empty', function() {
 			var colordef = new renderExt.ColorDefinition();
-			colordef.toXML().should.equal('<colorDefinition />\n');
+			colordef.toXML().should.equal('<colorDefinition/>');
 		});
 		it('should write complete', function() {
 			var colordef = new renderExt.ColorDefinition({id: 'blue', value: '#123456'});
-			colordef.toXML().should.equal("<colorDefinition id='blue' value='#123456' />\n");
+			colordef.toXML().should.equal('<colorDefinition id="blue" value="#123456"/>');
 		});
 	});
 
@@ -865,13 +868,13 @@ describe('libsbgn-render-ext', function() {
 		describe('write to XML', function() {
 			it('should write empty listOfColorDefinitions', function() {
 				var listof = new renderExt.ListOfColorDefinitions();
-				listof.toXML().should.equal("<listOfColorDefinitions>\n</listOfColorDefinitions>\n");
+				listof.toXML().should.equal("<listOfColorDefinitions/>");
 			});
 			it('should write complete list with empty colorDefinitions', function() {
 				var listof = new renderExt.ListOfColorDefinitions();
 				listof.addColorDefinition(new renderExt.ColorDefinition());
 				listof.addColorDefinition(new renderExt.ColorDefinition());
-				listof.toXML().should.equal("<listOfColorDefinitions>\n<colorDefinition />\n<colorDefinition />\n</listOfColorDefinitions>\n");
+				listof.toXML().should.equal("<listOfColorDefinitions><colorDefinition/><colorDefinition/></listOfColorDefinitions>");
 			});
 		});
 	});
@@ -927,15 +930,15 @@ describe('libsbgn-render-ext', function() {
 		});
 		it('should write empty', function() {
 			var g = new renderExt.RenderGroup();
-			g.toXML().should.equal('<g />\n');
+			g.toXML().should.equal('<g/>');
 		});
 		it('should write complete', function() {
 			var g = new renderExt.RenderGroup({	id: 'id', fontSize: '12', fontFamily: 'Comic', fontWeight: 'not bold',
 												fontStyle:'style', textAnchor: 'on top of the top', vtextAnchor: 'left', 
 												fill: '#123456', stroke: 'blue', strokeWidth: '2'});
-			g.toXML().should.equal(	"<g id='id' fontSize='12' fontFamily='Comic' fontWeight='not bold'"+
-									" fontStyle='style' textAnchor='on top of the top' vtextAnchor='left'"+
-									" stroke='blue' strokeWidth='2' fill='#123456' />\n");
+			g.toXML().should.equal(	'<g id="id" fontSize="12" fontFamily="Comic" fontWeight="not bold"'+
+									' fontStyle="style" textAnchor="on top of the top" vtextAnchor="left"'+
+									' stroke="blue" strokeWidth="2" fill="#123456"/>');
 		});
 	});
 
@@ -968,12 +971,12 @@ describe('libsbgn-render-ext', function() {
 		describe('write to XML', function() {
 			it('should write empty style', function() {
 				var style = new renderExt.Style();
-				style.toXML().should.equal("<style>\n</style>\n");
+				style.toXML().should.equal("<style/>");
 			});
 			it('should write complete style with empty renderGroup', function() {
 				var style = new renderExt.Style({id: 'id', name: 'myName', idList:'a b c'});
 				style.setRenderGroup(new renderExt.RenderGroup());
-				style.toXML().should.equal("<style id='id' name='myName' idList='a b c'>\n<g />\n</style>\n");
+				style.toXML().should.equal('<style id="id" name="myName" idList="a b c"><g/></style>');
 			});
 		});
 		describe('test the utility function', function() {
@@ -1014,13 +1017,13 @@ describe('libsbgn-render-ext', function() {
 		describe('write to XML', function() {
 			it('should write empty listOfStyles', function() {
 				var listof = new renderExt.ListOfStyles();
-				listof.toXML().should.equal("<listOfStyles>\n</listOfStyles>\n");
+				listof.toXML().should.equal("<listOfStyles/>");
 			});
 			it('should write complete list with empty colorDefinitions', function() {
 				var listof = new renderExt.ListOfStyles();
 				listof.addStyle(new renderExt.Style());
 				listof.addStyle(new renderExt.Style());
-				listof.toXML().should.equal("<listOfStyles>\n<style>\n</style>\n<style>\n</style>\n</listOfStyles>\n");
+				listof.toXML().should.equal("<listOfStyles><style/><style/></listOfStyles>");
 			});
 		});
 	});
@@ -1073,18 +1076,18 @@ describe('libsbgn-render-ext', function() {
 		describe('write to XML', function() {
 			it('should write empty renderInfo', function() {
 				var renderInfo = new renderExt.RenderInformation();
-				renderInfo.toXML().should.equal("<renderInformation xmlns='http://www.sbml.org/sbml/level3/version1/render/version1'>\n</renderInformation>\n");
+				renderInfo.toXML().should.equal('<renderInformation xmlns="http://www.sbml.org/sbml/level3/version1/render/version1"/>');
 			});
 			it('should write complete renderInformation with empty children', function() {
 				var renderInfo = new renderExt.RenderInformation({id: 'id', name: 'name', programName: 'prog',
 																	programVersion: '0.0.0', backgroundColor: 'blue'});
 				renderInfo.setListOfColorDefinitions(new renderExt.ListOfColorDefinitions());
 				renderInfo.setListOfStyles(new renderExt.ListOfStyles());
-				renderInfo.toXML().should.equal("<renderInformation id='id' name='name' programName='prog' programVersion='0.0.0'"+
-												" backgroundColor='blue' xmlns='http://www.sbml.org/sbml/level3/version1/render/version1'>\n"+
-												"<listOfColorDefinitions>\n</listOfColorDefinitions>\n"+
-												"<listOfStyles>\n</listOfStyles>\n"+
-												"</renderInformation>\n");
+				renderInfo.toXML().should.equal('<renderInformation xmlns="http://www.sbml.org/sbml/level3/version1/render/version1"'+
+												' id="id" name="name" programName="prog" programVersion="0.0.0" backgroundColor="blue">'+
+												"<listOfColorDefinitions/>"+
+												"<listOfStyles/>"+
+												"</renderInformation>");
 			});
 		});
 	});

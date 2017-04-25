@@ -1,5 +1,7 @@
 var renderExt = require('./libsbgn-render');
+var annotExt = require('./libsbgn-annotations');
 var checkParams = require('./utilities').checkParams;
+var xmldom = require('xmldom');
 
 var ns = {};
 
@@ -27,6 +29,12 @@ ns.SBGNBase.prototype.baseToXML = function () {
 	}
 
 	return xmlString;
+};
+
+ns.SBGNBase.prototype.baseToXmlObj = function (xmlObj) {
+	if(this.extension != null) {
+		xmlObj.appendChild(this.extension.buildXmlObj());
+	}
 };
 
 // parse things specific to SBGNBase type
@@ -87,19 +95,25 @@ ns.Sbgn.prototype.setMap = function (map) {
 	this.map = map;
 };
 
-ns.Sbgn.prototype.toXML = function () {
-	var xmlString = "<sbgn";
+ns.Sbgn.prototype.buildXmlObj = function () {
+	var sbgn = new xmldom.DOMImplementation().createDocument().createElement('sbgn');
+	// attributes
 	if(this.xmlns != null) {
-		xmlString += " xmlns='"+this.xmlns+"'";
+		sbgn.setAttribute('xmlns', this.xmlns);
 	}
-	xmlString += ">\n";
-
+	if(this.language != null) {
+		sbgn.setAttribute('language', this.language);
+	}
+	// children
+	this.baseToXmlObj(sbgn);
 	if (this.map != null) {
-		xmlString += this.map.toXML();
+		sbgn.appendChild(this.map.buildXmlObj());
 	}
-	xmlString += this.baseToXML(); // call to parent class
-	xmlString += "</sbgn>\n";
-	return xmlString;
+	return sbgn;
+};
+
+ns.Sbgn.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Sbgn.fromXML = function (xmlObj) {
@@ -144,28 +158,28 @@ ns.Map.prototype.addArc = function (arc) {
 	this.arcs.push(arc);
 };
 
-ns.Map.prototype.toXML = function () {
-	var xmlString = "<map";
+ns.Map.prototype.buildXmlObj = function () {
+	var map = new xmldom.DOMImplementation().createDocument().createElement('map');
 	// attributes
 	if(this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		map.setAttribute('id', this.id);
 	}
 	if(this.language != null) {
-		xmlString += " language='"+this.language+"'";
+		map.setAttribute('language', this.language);
 	}
-	xmlString += ">\n";
-
 	// children
-	xmlString += this.baseToXML();
+	this.baseToXmlObj(map);
 	for(var i=0; i < this.glyphs.length; i++) {
-		xmlString += this.glyphs[i].toXML();
+		map.appendChild(this.glyphs[i].buildXmlObj());
 	}
 	for(var i=0; i < this.arcs.length; i++) {
-		xmlString += this.arcs[i].toXML();
+		map.appendChild(this.arcs[i].buildXmlObj());
 	}
-	xmlString += "</map>\n";
+	return map;
+};
 
-	return xmlString;
+ns.Map.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Map.fromXML = function (xmlObj) {
@@ -229,18 +243,21 @@ ns.Extension.prototype.get = function (extensionName) {
 	}
 };
 
-ns.Extension.prototype.toXML = function () {
-	var xmlString = "<extension>\n";
+ns.Extension.prototype.buildXmlObj = function () {
+	var extension = new xmldom.DOMImplementation().createDocument().createElement('extension');
 	for (var extInstance in this.list) {
 		if (extInstance == "renderInformation") {
-			xmlString += this.get(extInstance).toXML();
+			extension.appendChild(this.get(extInstance).buildXmlObj());
 		}
 		else {
-			xmlString += new XMLSerializer().serializeToString(this.get(extInstance));
+			extension.appendChild(this.get(extInstance));
 		}
 	}
-	xmlString += "</extension>\n";
-	return xmlString;
+	return extension;
+};
+
+ns.Extension.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Extension.fromXML = function (xmlObj) {
@@ -315,43 +332,43 @@ ns.Glyph.prototype.addPort = function (port) {
 	this.ports.push(port);
 };
 
-ns.Glyph.prototype.toXML = function () {
-	var xmlString = "<glyph";
+ns.Glyph.prototype.buildXmlObj = function () {
+	var glyph = new xmldom.DOMImplementation().createDocument().createElement('glyph');
 	// attributes
 	if(this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		glyph.setAttribute('id', this.id);
 	}
 	if(this.class_ != null) {
-		xmlString += " class='"+this.class_+"'";
+		glyph.setAttribute('class', this.class_);
 	}
 	if(this.compartmentRef != null) {
-		xmlString += " compartmentRef='"+this.compartmentRef+"'";
+		glyph.setAttribute('compartmentRef', this.compartmentRef);
 	}
-	xmlString += ">\n";
-
 	// children
 	if(this.label != null) {
-		xmlString += this.label.toXML();
+		glyph.appendChild(this.label.buildXmlObj());
 	}
 	if(this.state != null) {
-		xmlString += this.state.toXML();
+		glyph.appendChild(this.state.buildXmlObj());
 	}
 	if(this.bbox != null) {
-		xmlString += this.bbox.toXML();
+		glyph.appendChild(this.bbox.buildXmlObj());
 	}
 	if(this.clone != null) {
-		xmlString += this.clone.toXML();
+		glyph.appendChild(this.clone.buildXmlObj());
 	}
 	for(var i=0; i < this.glyphMembers.length; i++) {
-		xmlString += this.glyphMembers[i].toXML();
+		glyph.appendChild(this.glyphMembers[i].buildXmlObj());
 	}
 	for(var i=0; i < this.ports.length; i++) {
-		xmlString += this.ports[i].toXML();
+		glyph.appendChild(this.ports[i].buildXmlObj());
 	}
-	xmlString += this.baseToXML();
-	xmlString += "</glyph>\n";
+	this.baseToXmlObj(glyph);
+	return glyph;
+};
 
-	return xmlString;
+ns.Glyph.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Glyph.fromXML = function (xmlObj) {
@@ -416,16 +433,17 @@ ns.Label = function (params) {
 ns.Label.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Label.prototype.constructor = ns.Label;
 
-ns.Label.prototype.toXML = function () {
-	var xmlString = "<label";
-	// attributes
+ns.Label.prototype.buildXmlObj = function () {
+	var label = new xmldom.DOMImplementation().createDocument().createElement('label');
 	if(this.text != null) {
-		xmlString += " text='"+this.text+"'";
+		label.setAttribute('text', this.text);
 	}
+	this.baseToXmlObj(label);
+	return label;
+};
 
-	xmlString += this.closeTag();
-
-	return xmlString;
+ns.Label.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Label.fromXML = function (xmlObj) {
@@ -455,23 +473,26 @@ ns.Bbox = function (params) {
 ns.Bbox.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Bbox.prototype.constructor = ns.Bbox;
 
-ns.Bbox.prototype.toXML = function () {
-	var xmlString = "<bbox";
-	// attributes
+ns.Bbox.prototype.buildXmlObj = function () {
+	var bbox = new xmldom.DOMImplementation().createDocument().createElement('bbox');
 	if(!isNaN(this.x)) {
-		xmlString += " x='"+this.x+"'";
+		bbox.setAttribute('x', this.x);
 	}
 	if(!isNaN(this.y)) {
-		xmlString += " y='"+this.y+"'";
+		bbox.setAttribute('y', this.y);
 	}
 	if(!isNaN(this.w)) {
-		xmlString += " w='"+this.w+"'";
+		bbox.setAttribute('w', this.w);
 	}
 	if(!isNaN(this.h)) {
-		xmlString += " h='"+this.h+"'";
+		bbox.setAttribute('h', this.h);
 	}
-	xmlString += this.closeTag();
-	return xmlString;
+	this.baseToXmlObj(bbox);
+	return bbox;
+}
+
+ns.Bbox.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Bbox.fromXML = function (xmlObj) {
@@ -495,17 +516,19 @@ ns.StateType = function (params) {
 	this.variable = params.variable;
 };
 
-ns.StateType.prototype.toXML = function () {
-	var xmlString = "<state";
-	// attributes
+ns.StateType.prototype.buildXmlObj = function () {
+	var state = new xmldom.DOMImplementation().createDocument().createElement('state');
 	if(this.value != null) {
-		xmlString += " value='"+this.value+"'";
+		state.setAttribute('value', this.value);
 	}
 	if(this.variable != null) {
-		xmlString += " variable='"+this.variable+"'";
+		state.setAttribute('variable', this.variable);
 	}
-	xmlString += " />\n";
-	return xmlString;
+	return state;
+};
+
+ns.StateType.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.StateType.fromXML = function (xmlObj) {
@@ -525,14 +548,16 @@ ns.CloneType = function (params) {
 	this.label = params.label;
 };
 
-ns.CloneType.prototype.toXML = function () {
-	var xmlString = "<clone";
-	// attributes
+ns.CloneType.prototype.buildXmlObj = function () {
+	var clone = new xmldom.DOMImplementation().createDocument().createElement('clone');
 	if(this.label != null) {
-		xmlString += " label='"+this.label+"'";
+		clone.setAttribute('label', this.label);
 	}
-	xmlString += " />\n";
-	return xmlString;
+	return clone;
+};
+
+ns.CloneType.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.CloneType.fromXML = function (xmlObj) {
@@ -560,20 +585,23 @@ ns.Port = function (params) {
 ns.Port.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Port.prototype.constructor = ns.Port;
 
-ns.Port.prototype.toXML = function () {
-	var xmlString = "<port";
-	// attributes
+ns.Port.prototype.buildXmlObj = function () {
+	var port = new xmldom.DOMImplementation().createDocument().createElement('port');
 	if(this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		port.setAttribute('id', this.id);
 	}
 	if(!isNaN(this.x)) {
-		xmlString += " x='"+this.x+"'";
+		port.setAttribute('x', this.x);
 	}
 	if(!isNaN(this.y)) {
-		xmlString += " y='"+this.y+"'";
+		port.setAttribute('y', this.y);
 	}
-	xmlString += this.closeTag();
-	return xmlString;
+	this.baseToXmlObj(port);
+	return port;
+};
+
+ns.Port.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Port.fromXML = function (xmlObj) {
@@ -626,40 +654,40 @@ ns.Arc.prototype.addGlyph = function (glyph) {
 	this.glyphs.push(glyph);
 };
 
-ns.Arc.prototype.toXML = function () {
-	var xmlString = "<arc";
+ns.Arc.prototype.buildXmlObj = function () {
+	var arc = new xmldom.DOMImplementation().createDocument().createElement('arc');
 	// attributes
 	if(this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		arc.setAttribute('id', this.id);
 	}
 	if(this.class_ != null) {
-		xmlString += " class='"+this.class_+"'";
+		arc.setAttribute('class', this.class_);
 	}
 	if(this.source != null) {
-		xmlString += " source='"+this.source+"'";
+		arc.setAttribute('source', this.source);
 	}
 	if(this.target != null) {
-		xmlString += " target='"+this.target+"'";
+		arc.setAttribute('target', this.target);
 	}
-	xmlString += ">\n";
-
 	// children
 	for(var i=0; i < this.glyphs.length; i++) {
-		xmlString += this.glyphs[i].toXML();
+		arc.appendChild(this.glyphs[i].buildXmlObj());
 	}
 	if(this.start != null) {
-		xmlString += this.start.toXML();
+		arc.appendChild(this.start.buildXmlObj());
 	}
 	for(var i=0; i < this.nexts.length; i++) {
-		xmlString += this.nexts[i].toXML();
+		arc.appendChild(this.nexts[i].buildXmlObj());
 	}
 	if(this.end != null) {
-		xmlString += this.end.toXML();
+		arc.appendChild(this.end.buildXmlObj());
 	}
+	this.baseToXmlObj(arc);
+	return arc;
+};
 
-	xmlString += this.baseToXML();
-	xmlString += "</arc>\n";
-	return xmlString;
+ns.Arc.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Arc.fromXML = function (xmlObj) {
@@ -706,17 +734,19 @@ ns.StartType = function (params) {
 	this.y = parseFloat(params.y);
 };
 
-ns.StartType.prototype.toXML = function () {
-	var xmlString = "<start";
-	// attributes
+ns.StartType.prototype.buildXmlObj = function () {
+	var start = new xmldom.DOMImplementation().createDocument().createElement('start');
 	if(!isNaN(this.x)) {
-		xmlString += " x='"+this.x+"'";
+		start.setAttribute('x', this.x);
 	}
 	if(!isNaN(this.y)) {
-		xmlString += " y='"+this.y+"'";
+		start.setAttribute('y', this.y);
 	}
-	xmlString += " />\n";
-	return xmlString;
+	return start;
+};
+
+ns.StartType.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.StartType.fromXML = function (xmlObj) {
@@ -737,17 +767,19 @@ ns.EndType = function (params) {
 	this.y = parseFloat(params.y);
 };
 
-ns.EndType.prototype.toXML = function () {
-	var xmlString = "<end";
-	// attributes
+ns.EndType.prototype.buildXmlObj = function () {
+	var end = new xmldom.DOMImplementation().createDocument().createElement('end');
 	if(!isNaN(this.x)) {
-		xmlString += " x='"+this.x+"'";
+		end.setAttribute('x', this.x);
 	}
 	if(!isNaN(this.y)) {
-		xmlString += " y='"+this.y+"'";
+		end.setAttribute('y', this.y);
 	}
-	xmlString += " />\n";
-	return xmlString;
+	return end;
+};
+
+ns.EndType.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.EndType.fromXML = function (xmlObj) {
@@ -768,17 +800,19 @@ ns.NextType = function (params) {
 	this.y = parseFloat(params.y);
 };
 
-ns.NextType.prototype.toXML = function () {
-	var xmlString = "<next";
-	// attributes
+ns.NextType.prototype.buildXmlObj = function () {
+	var next = new xmldom.DOMImplementation().createDocument().createElement('next');
 	if(!isNaN(this.x)) {
-		xmlString += " x='"+this.x+"'";
+		next.setAttribute('x', this.x);
 	}
 	if(!isNaN(this.y)) {
-		xmlString += " y='"+this.y+"'";
+		next.setAttribute('y', this.y);
 	}
-	xmlString += " />\n";
-	return xmlString;
+	return next;
+};
+
+ns.NextType.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.NextType.fromXML = function (xmlObj) {
@@ -793,4 +827,5 @@ ns.NextType.fromXML = function (xmlObj) {
 // ------- END NEXTTYPE -------
 
 ns.renderExtension = renderExt;
+ns.annotationsExtension = annotExt;
 module.exports = ns;

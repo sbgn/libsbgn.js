@@ -1,4 +1,5 @@
 var checkParams = require('./utilities').checkParams;
+var xmldom = require('xmldom');
 
 var ns = {};
 
@@ -11,16 +12,19 @@ ns.ColorDefinition = function(params) {
 	this.value 	= params.value;
 };
 
-ns.ColorDefinition.prototype.toXML = function () {
-	var xmlString = "<colorDefinition";
+ns.ColorDefinition.prototype.buildXmlObj = function () {
+	var colorDefinition = new xmldom.DOMImplementation().createDocument().createElement('colorDefinition');
 	if (this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		colorDefinition.setAttribute('id', this.id);
 	}
 	if (this.value != null) {
-		xmlString += " value='"+this.value+"'";
+		colorDefinition.setAttribute('value', this.value);
 	}
-	xmlString += " />\n";
-	return xmlString;
+	return colorDefinition;
+};
+
+ns.ColorDefinition.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.ColorDefinition.fromXML = function (xml) {
@@ -43,14 +47,16 @@ ns.ListOfColorDefinitions.prototype.addColorDefinition = function (colorDefiniti
 	this.colorDefinitions.push(colorDefinition);
 };
 
-ns.ListOfColorDefinitions.prototype.toXML = function () {
-	var xmlString = "<listOfColorDefinitions>\n";
+ns.ListOfColorDefinitions.prototype.buildXmlObj = function () {
+	var listOfColorDefinitions = new xmldom.DOMImplementation().createDocument().createElement('listOfColorDefinitions');
 	for(var i=0; i<this.colorDefinitions.length; i++) {
-		var colorDefinition = this.colorDefinitions[i];
-		xmlString += colorDefinition.toXML();
+		listOfColorDefinitions.appendChild(this.colorDefinitions[i].buildXmlObj());
 	}
-	xmlString += "</listOfColorDefinitions>\n";
-	return xmlString;
+	return listOfColorDefinitions;
+};
+
+ns.ListOfColorDefinitions.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.ListOfColorDefinitions.fromXML = function (xml) {
@@ -89,40 +95,43 @@ ns.RenderGroup = function (params) {
 	this.strokeWidth 	= params.strokeWidth;
 };
 
-ns.RenderGroup.prototype.toXML = function () {
-	var xmlString = "<g";
+ns.RenderGroup.prototype.buildXmlObj = function () {
+	var renderGroup = new xmldom.DOMImplementation().createDocument().createElement('g');
 	if (this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		renderGroup.setAttribute('id', this.id);
 	}
 	if (this.fontSize != null) {
-		xmlString += " fontSize='"+this.fontSize+"'";
+		renderGroup.setAttribute('fontSize', this.fontSize);
 	}
 	if (this.fontFamily != null) {
-		xmlString += " fontFamily='"+this.fontFamily+"'";
+		renderGroup.setAttribute('fontFamily', this.fontFamily);
 	}
 	if (this.fontWeight != null) {
-		xmlString += " fontWeight='"+this.fontWeight+"'";
+		renderGroup.setAttribute('fontWeight', this.fontWeight);
 	}
 	if (this.fontStyle != null) {
-		xmlString += " fontStyle='"+this.fontStyle+"'";
+		renderGroup.setAttribute('fontStyle', this.fontStyle);
 	}
 	if (this.textAnchor != null) {
-		xmlString += " textAnchor='"+this.textAnchor+"'";
+		renderGroup.setAttribute('textAnchor', this.textAnchor);
 	}
 	if (this.vtextAnchor != null) {
-		xmlString += " vtextAnchor='"+this.vtextAnchor+"'";
+		renderGroup.setAttribute('vtextAnchor', this.vtextAnchor);
 	}
 	if (this.stroke != null) {
-		xmlString += " stroke='"+this.stroke+"'";
+		renderGroup.setAttribute('stroke', this.stroke);
 	}
 	if (this.strokeWidth != null) {
-		xmlString += " strokeWidth='"+this.strokeWidth+"'";
+		renderGroup.setAttribute('strokeWidth', this.strokeWidth);
 	}
 	if (this.fill != null) {
-		xmlString += " fill='"+this.fill+"'";
+		renderGroup.setAttribute('fill', this.fill);
 	}
-	xmlString += " />\n";
-	return xmlString;
+	return renderGroup;
+};
+
+ns.RenderGroup.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.RenderGroup.fromXML = function (xml) {
@@ -166,25 +175,26 @@ ns.Style.prototype.setIdListFromArray = function (idArray) {
 	this.idList = idArray.join(' ');
 }
 
-ns.Style.prototype.toXML = function () {
-	var xmlString = "<style";
+ns.Style.prototype.buildXmlObj = function () {
+	var style = new xmldom.DOMImplementation().createDocument().createElement('style');
 	if (this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		style.setAttribute('id', this.id);
 	}
 	if (this.name != null) {
-		xmlString += " name='"+this.name+"'";
+		style.setAttribute('name', this.name);
 	}
 	if (this.idList != null) {
-		xmlString += " idList='"+this.idList+"'";
+		style.setAttribute('idList', this.idList);
 	}
-	xmlString += ">\n";
 
 	if (this.renderGroup) {
-		xmlString += this.renderGroup.toXML();
+		style.appendChild(this.renderGroup.buildXmlObj());
 	}
+	return style;
+};
 
-	xmlString += "</style>\n";
-	return xmlString;
+ns.Style.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.Style.fromXML = function (xml) {
@@ -213,14 +223,16 @@ ns.ListOfStyles.prototype.addStyle = function(style) {
 	this.styles.push(style);
 };
 
-ns.ListOfStyles.prototype.toXML = function () {
-	var xmlString = "<listOfStyles>\n";
+ns.ListOfStyles.prototype.buildXmlObj = function () {
+	var listOfStyles = new xmldom.DOMImplementation().createDocument().createElement('listOfStyles');
 	for(var i=0; i<this.styles.length; i++) {
-		var style = this.styles[i];
-		xmlString += style.toXML();
+		listOfStyles.appendChild(this.styles[i].buildXmlObj());
 	}
-	xmlString += "</listOfStyles>\n";
-	return xmlString;
+	return listOfStyles;
+};
+
+ns.ListOfStyles.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 ns.ListOfStyles.fromXML = function (xml) {
@@ -263,36 +275,36 @@ ns.RenderInformation.prototype.setListOfStyles = function(listOfStyles) {
 	this.listOfStyles = listOfStyles;
 };
 
-ns.RenderInformation.prototype.toXML = function() {
-	// tag and its attributes
-	var xmlString = "<renderInformation";
+ns.RenderInformation.prototype.buildXmlObj = function () {
+	var renderInformation = new xmldom.DOMImplementation().createDocument().createElement('renderInformation');
+	renderInformation.setAttribute('xmlns', ns.xmlns);
 	if (this.id != null) {
-		xmlString += " id='"+this.id+"'";
+		renderInformation.setAttribute('id', this.id);
 	}
 	if (this.name != null) {
-		xmlString += " name='"+this.name+"'";
+		renderInformation.setAttribute('name', this.name);
 	}
 	if (this.programName != null) {
-		xmlString += " programName='"+this.programName+"'";
+		renderInformation.setAttribute('programName', this.programName);
 	}
 	if (this.programVersion != null) {
-		xmlString += " programVersion='"+this.programVersion+"'";
+		renderInformation.setAttribute('programVersion', this.programVersion);
 	}
 	if (this.backgroundColor != null) {
-		xmlString += " backgroundColor='"+this.backgroundColor+"'";
+		renderInformation.setAttribute('backgroundColor', this.backgroundColor);
 	}
-	xmlString += " xmlns='"+ns.xmlns+"'>\n";
 
-	// child elements
 	if (this.listOfColorDefinitions) {
-		xmlString += this.listOfColorDefinitions.toXML();
+		renderInformation.appendChild(this.listOfColorDefinitions.buildXmlObj());
 	}
 	if (this.listOfStyles) {
-		xmlString += this.listOfStyles.toXML();
+		renderInformation.appendChild(this.listOfStyles.buildXmlObj());
 	}
+	return renderInformation;
+};
 
-	xmlString += "</renderInformation>\n";
-	return xmlString;
+ns.RenderInformation.prototype.toXML = function() {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
 // static constructor method
