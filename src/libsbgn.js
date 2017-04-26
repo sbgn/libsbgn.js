@@ -63,7 +63,7 @@ ns.SBGNBase.prototype.baseFromXML = function (xmlObj) {
  * @name Sbgn
  * @extends SBGNBase
  * @param {Object} params
- * @param {string=} params.xmlns will use "http://sbgn.org/libsbgn/0.3" if not specified
+ * @param {string=} params.xmlns
  * @param {Map=} params.map
  */
 ns.Sbgn = function (params) {
