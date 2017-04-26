@@ -9,36 +9,42 @@ var ns = {};
 ns.xmlns = "http://sbgn.org/libsbgn/0.3";
 
 // ------- SBGNBase -------
-/*
-	Several sbgn elements inherit from this. Allows to put extensions everywhere.
-*/
+/**
+ * Parent class for several sbgn elements. Used to provide extension element.
+ * End users don't need to interact with it. It can be safely ignored.
+ * @class
+ * @name SBGNBase
+ * @param {Object} params
+ * @param {Extension=} params.extension
+ */
 ns.SBGNBase = function (params) {
 	var params = checkParams(params, ['extension']);
 	this.extension 	= params.extension;
 };
 
+/**
+ * @memberof SBGNBase.prototype
+ * @param {Extension} extension
+ */
 ns.SBGNBase.prototype.setExtension = function (extension) {
 	this.extension = extension;
 };
 
-// write the XML of things that are specific to SBGNBase type
-ns.SBGNBase.prototype.baseToXML = function () {
-	var xmlString = "";
-	// children
-	if(this.extension != null) {
-		xmlString += this.extension.toXML();
-	}
-
-	return xmlString;
-};
-
+/**
+ * @memberof SBGNBase.prototype
+ * @param {Element} xmlObj
+ */
 ns.SBGNBase.prototype.baseToXmlObj = function (xmlObj) {
 	if(this.extension != null) {
 		xmlObj.appendChild(this.extension.buildXmlObj());
 	}
 };
 
-// parse things specific to SBGNBase type
+/**
+ * parse things specific to SBGNBase type
+ * @memberof SBGNBase.prototype
+ * @param {Element} xmlObj
+ */
 ns.SBGNBase.prototype.baseFromXML = function (xmlObj) {
 	// children
 	var extensionXML = xmlObj.getElementsByTagName('extension')[0];
@@ -47,35 +53,6 @@ ns.SBGNBase.prototype.baseFromXML = function (xmlObj) {
 		this.setExtension(extension);
 	}
 };
-
-ns.SBGNBase.prototype.hasChildren = function () {
-	var allowedChildren = ['extension'].concat(this.allowedChildren);
-	for(var i=0; i < allowedChildren.length; i++) {
-		var prop = allowedChildren[i];
-		if(typeof this[prop] == 'array' && this[prop].length > 0)
-			return true;
-		if(this[prop])
-			return true;
-	}
-	return false;
-}
-
-// for simple elements that have no children, use this function to
-// ensure tag is closed correctly when writing XML, if extension
-// or other SBGNBase specific things are present.
-// simple elements might end with /> or </name> 
-ns.SBGNBase.prototype.closeTag = function () {
-	var xmlString = "";
-	if(this.hasChildren()) {
-		xmlString += ">\n";
-		xmlString += this.baseToXML();
-		xmlString += "</"+this.tagName+">\n";
-	}
-	else {
-		xmlString += " />\n";
-	}
-	return xmlString;
-}
 // ------- END SBGNBase -------
 
 // ------- SBGN -------
