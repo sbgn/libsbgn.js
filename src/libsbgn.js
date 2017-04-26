@@ -23,6 +23,7 @@ ns.SBGNBase = function (params) {
 };
 
 /**
+ * Allows inheriting objects to get an extension element.
  * @memberof SBGNBase.prototype
  * @param {Extension} extension
  */
@@ -32,7 +33,7 @@ ns.SBGNBase.prototype.setExtension = function (extension) {
 
 /**
  * @memberof SBGNBase.prototype
- * @param {Element} xmlObj
+ * @param {Element} xmlObj the xml object being built from 'this'
  */
 ns.SBGNBase.prototype.baseToXmlObj = function (xmlObj) {
 	if(this.extension != null) {
@@ -43,7 +44,7 @@ ns.SBGNBase.prototype.baseToXmlObj = function (xmlObj) {
 /**
  * parse things specific to SBGNBase type
  * @memberof SBGNBase.prototype
- * @param {Element} xmlObj
+ * @param {Element} xmlObj the xml object being parsed
  */
 ns.SBGNBase.prototype.baseFromXML = function (xmlObj) {
 	// children
@@ -57,7 +58,7 @@ ns.SBGNBase.prototype.baseFromXML = function (xmlObj) {
 
 // ------- SBGN -------
 /**
- * sbgn element constructor
+ * Represents the <code>&lt;sbgn&gt;</code> element.
  * @class
  * @name Sbgn
  * @extends SBGNBase
@@ -140,7 +141,7 @@ ns.Sbgn.fromXML = function (xmlObj) {
 
 // ------- MAP -------
 /**
- * map element constructor
+ * Represents the <code>&lt;map&gt;</code> element.
  * @class
  * @name Map
  * @extends SBGNBase
@@ -246,7 +247,7 @@ ns.Map.fromXML = function (xmlObj) {
 
 // ------- EXTENSIONS -------
 /**
- * extension element constructor
+  * Represents the <code>&lt;extension&gt;</code> element.
  * @class
  * @name Extension
  */
@@ -365,7 +366,7 @@ ns.Extension.fromXML = function (xmlObj) {
 
 // ------- GLYPH -------
 /**
- * glyph element constructor
+ * Represents the <code>&lt;glyph&gt;</code> element.
  * @class Glyph
  * @name Glyph
  * @extends SBGNBase
@@ -552,6 +553,14 @@ ns.Glyph.fromXML = function (xmlObj) {
 // ------- END GLYPH -------
 
 // ------- LABEL -------
+/**
+ * Represents the <code>&lt;label&gt;</code> element.
+ * @class Label
+ * @name Label
+ * @extends SBGNBase
+ * @param {Object} params
+ * @param {string=} params.text
+ */
 ns.Label = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['text']);
@@ -564,6 +573,10 @@ ns.Label = function (params) {
 ns.Label.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Label.prototype.constructor = ns.Label;
 
+/**
+ * @memberof Label.prototype
+ * @return {Element}
+ */
 ns.Label.prototype.buildXmlObj = function () {
 	var label = new xmldom.DOMImplementation().createDocument().createElement('label');
 	if(this.text != null) {
@@ -573,10 +586,19 @@ ns.Label.prototype.buildXmlObj = function () {
 	return label;
 };
 
+/**
+ * @memberof Label.prototype
+ * @return {string}
+ */
 ns.Label.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Label
+ * @param {Element} xmlObj
+ * @return {Label}
+ */
 ns.Label.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'label') {
 		throw new Error("Bad XML provided, expected tagName label, got: " + xmlObj.tagName);
@@ -589,6 +611,17 @@ ns.Label.fromXML = function (xmlObj) {
 // ------- END LABEL -------
 
 // ------- BBOX -------
+/**
+ * Represents the <code>&lt;bbox&gt;</code> element.
+ * @class Bbox
+ * @name Bbox
+ * @extends SBGNBase
+ * @param {Object} params
+ * @param {string|number=} params.x
+ * @param {string|number=} params.y
+ * @param {string|number=} params.w
+ * @param {string|number=} params.h
+ */
 ns.Bbox = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['x', 'y', 'w', 'h']);
@@ -604,6 +637,10 @@ ns.Bbox = function (params) {
 ns.Bbox.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Bbox.prototype.constructor = ns.Bbox;
 
+/**
+ * @memberof Bbox.prototype
+ * @return {Element}
+ */
 ns.Bbox.prototype.buildXmlObj = function () {
 	var bbox = new xmldom.DOMImplementation().createDocument().createElement('bbox');
 	if(!isNaN(this.x)) {
@@ -622,10 +659,19 @@ ns.Bbox.prototype.buildXmlObj = function () {
 	return bbox;
 }
 
+/**
+ * @memberof Bbox.prototype
+ * @return {string}
+ */
 ns.Bbox.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Bbox
+ * @param {Element} xmlObj
+ * @return {Bbox}
+ */
 ns.Bbox.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'bbox') {
 		throw new Error("Bad XML provided, expected tagName bbox, got: " + xmlObj.tagName);
@@ -641,12 +687,24 @@ ns.Bbox.fromXML = function (xmlObj) {
 // ------- END BBOX -------
 
 // ------- STATE -------
+/**
+ * Represents the <code>&lt;state&gt;</code> element.
+ * @class StateType
+ * @name StateType
+ * @param {Object} params
+ * @param {string=} params.value
+ * @param {string=} params.variable
+ */
 ns.StateType = function (params) {
 	var params = checkParams(params, ['value', 'variable']);
 	this.value = params.value;
 	this.variable = params.variable;
 };
 
+/**
+ * @memberof StateType.prototype
+ * @return {Element}
+ */
 ns.StateType.prototype.buildXmlObj = function () {
 	var state = new xmldom.DOMImplementation().createDocument().createElement('state');
 	if(this.value != null) {
@@ -658,10 +716,19 @@ ns.StateType.prototype.buildXmlObj = function () {
 	return state;
 };
 
+/**
+ * @memberof StateType.prototype
+ * @return {string}
+ */
 ns.StateType.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof StateType
+ * @param {Element} xmlObj
+ * @return {StateType}
+ */
 ns.StateType.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'state') {
 		throw new Error("Bad XML provided, expected tagName state, got: " + xmlObj.tagName);
@@ -674,11 +741,22 @@ ns.StateType.fromXML = function (xmlObj) {
 // ------- END STATE -------
 
 // ------- CLONE -------
+/**
+ * Represents the <code>&lt;clone&gt;</code> element.
+ * @class CloneType
+ * @name CloneType
+ * @param {Object} params
+ * @param {string=} params.label
+ */
 ns.CloneType = function (params) {
 	var params = checkParams(params, ['label']);
 	this.label = params.label;
 };
 
+/**
+ * @memberof CloneType.prototype
+ * @return {Element}
+ */
 ns.CloneType.prototype.buildXmlObj = function () {
 	var clone = new xmldom.DOMImplementation().createDocument().createElement('clone');
 	if(this.label != null) {
@@ -687,10 +765,19 @@ ns.CloneType.prototype.buildXmlObj = function () {
 	return clone;
 };
 
+/**
+ * @memberof CloneType.prototype
+ * @return {string}
+ */
 ns.CloneType.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof CloneType
+ * @param {Element} xmlObj
+ * @return {CloneType}
+ */
 ns.CloneType.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'clone') {
 		throw new Error("Bad XML provided, expected tagName clone, got: " + xmlObj.tagName);
@@ -702,6 +789,15 @@ ns.CloneType.fromXML = function (xmlObj) {
 // ------- END CLONE -------
 
 // ------- PORT -------
+/**
+ * Represents the <code>&lt;port&gt;</code> element.
+ * @class Port
+ * @name Port
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string|number=} params.x
+ * @param {string|number=} params.y
+ */
 ns.Port = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'x', 'y']);
@@ -716,6 +812,10 @@ ns.Port = function (params) {
 ns.Port.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Port.prototype.constructor = ns.Port;
 
+/**
+ * @memberof Port.prototype
+ * @return {Element}
+ */
 ns.Port.prototype.buildXmlObj = function () {
 	var port = new xmldom.DOMImplementation().createDocument().createElement('port');
 	if(this.id != null) {
@@ -731,10 +831,19 @@ ns.Port.prototype.buildXmlObj = function () {
 	return port;
 };
 
+/**
+ * @memberof Port.prototype
+ * @return {string}
+ */
 ns.Port.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Port
+ * @param {Element} xmlObj
+ * @return {Port}
+ */
 ns.Port.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'port') {
 		throw new Error("Bad XML provided, expected tagName port, got: " + xmlObj.tagName);
@@ -749,6 +858,20 @@ ns.Port.fromXML = function (xmlObj) {
 // ------- END PORT -------
 
 // ------- ARC -------
+/**
+ * Represents the <code>&lt;arc&gt;</code> element.
+ * @class Arc
+ * @name Arc
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string=} params.class_
+ * @param {string=} params.source
+ * @param {string=} params.target
+ * @param {StartType=} params.start
+ * @param {EndType=} params.end
+ * @param {NextType=} params.nexts
+ * @param {Glyph[]=} params.glyphs The arc's cardinality. Possibility to have more than one glyph is left open.
+ */
 ns.Arc = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'class_', 'source', 'target', 'start', 'end', 'nexts', 'glyphs']);
@@ -769,22 +892,42 @@ ns.Arc = function (params) {
 ns.Arc.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Arc.prototype.constructor = ns.Arc;
 
+/**
+ * @memberof Arc.prototype
+ * @param {StartType} start
+ */
 ns.Arc.prototype.setStart = function (start) {
 	this.start = start;
 };
 
+/**
+ * @memberof Arc.prototype
+ * @param {EndType} end
+ */
 ns.Arc.prototype.setEnd = function (end) {
 	this.end = end;
 };
 
+/**
+ * @memberof Arc.prototype
+ * @param {NextType} next
+ */
 ns.Arc.prototype.addNext = function (next) {
 	this.nexts.push(next);
 };
 
+/**
+ * @memberof Arc.prototype
+ * @param {Glyph} glyph
+ */
 ns.Arc.prototype.addGlyph = function (glyph) {
 	this.glyphs.push(glyph);
 };
 
+/**
+ * @memberof Arc.prototype
+ * @return {Element}
+ */
 ns.Arc.prototype.buildXmlObj = function () {
 	var arc = new xmldom.DOMImplementation().createDocument().createElement('arc');
 	// attributes
@@ -817,10 +960,19 @@ ns.Arc.prototype.buildXmlObj = function () {
 	return arc;
 };
 
+/**
+ * @memberof Arc.prototype
+ * @return {string}
+ */
 ns.Arc.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Arc
+ * @param {Element} xmlObj
+ * @return {Arc}
+ */
 ns.Arc.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'arc') {
 		throw new Error("Bad XML provided, expected tagName arc, got: " + xmlObj.tagName);
@@ -859,12 +1011,24 @@ ns.Arc.fromXML = function (xmlObj) {
 // ------- END ARC -------
 
 // ------- STARTTYPE -------
+/**
+ * Represents the <code>&lt;start&gt;</code> element.
+ * @class StartType
+ * @name StartType
+ * @param {Object} params
+ * @param {string|number=} params.x
+ * @param {string|number=} params.y
+ */
 ns.StartType = function (params) {
 	var params = checkParams(params, ['x', 'y']);
 	this.x = parseFloat(params.x);
 	this.y = parseFloat(params.y);
 };
 
+/**
+ * @memberof StartType.prototype
+ * @return {Element}
+ */
 ns.StartType.prototype.buildXmlObj = function () {
 	var start = new xmldom.DOMImplementation().createDocument().createElement('start');
 	if(!isNaN(this.x)) {
@@ -876,10 +1040,19 @@ ns.StartType.prototype.buildXmlObj = function () {
 	return start;
 };
 
+/**
+ * @memberof StartType.prototype
+ * @return {string}
+ */
 ns.StartType.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof StartType
+ * @param {Element} xmlObj
+ * @return {StartType}
+ */
 ns.StartType.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'start') {
 		throw new Error("Bad XML provided, expected tagName start, got: " + xmlObj.tagName);
@@ -892,12 +1065,24 @@ ns.StartType.fromXML = function (xmlObj) {
 // ------- END STARTTYPE -------
 
 // ------- ENDTYPE -------
+/**
+ * Represents the <code>&lt;end&gt;</code> element.
+ * @class EndType
+ * @name EndType
+ * @param {Object} params
+ * @param {string|number=} params.x
+ * @param {string|number=} params.y
+ */
 ns.EndType = function (params) {
 	var params = checkParams(params, ['x', 'y']);
 	this.x = parseFloat(params.x);
 	this.y = parseFloat(params.y);
 };
 
+/**
+ * @memberof EndType.prototype
+ * @return {Element}
+ */
 ns.EndType.prototype.buildXmlObj = function () {
 	var end = new xmldom.DOMImplementation().createDocument().createElement('end');
 	if(!isNaN(this.x)) {
@@ -909,10 +1094,19 @@ ns.EndType.prototype.buildXmlObj = function () {
 	return end;
 };
 
+/**
+ * @memberof EndType.prototype
+ * @return {string}
+ */
 ns.EndType.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof EndType
+ * @param {Element} xmlObj
+ * @return {EndType}
+ */
 ns.EndType.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'end') {
 		throw new Error("Bad XML provided, expected tagName end, got: " + xmlObj.tagName);
@@ -925,12 +1119,24 @@ ns.EndType.fromXML = function (xmlObj) {
 // ------- END ENDTYPE -------
 
 // ------- NEXTTYPE -------
+/**
+ * Represents the <code>&lt;next&gt;</code> element.
+ * @class NextType
+ * @name NextType
+ * @param {Object} params
+ * @param {string|number=} params.x
+ * @param {string|number=} params.y
+ */
 ns.NextType = function (params) {
 	var params = checkParams(params, ['x', 'y']);
 	this.x = parseFloat(params.x);
 	this.y = parseFloat(params.y);
 };
 
+/**
+ * @memberof NextType.prototype
+ * @return {Element}
+ */
 ns.NextType.prototype.buildXmlObj = function () {
 	var next = new xmldom.DOMImplementation().createDocument().createElement('next');
 	if(!isNaN(this.x)) {
@@ -942,10 +1148,19 @@ ns.NextType.prototype.buildXmlObj = function () {
 	return next;
 };
 
+/**
+ * @memberof NextType.prototype
+ * @return {string}
+ */
 ns.NextType.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof NextType
+ * @param {Element} xmlObj
+ * @return {NextType}
+ */
 ns.NextType.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'next') {
 		throw new Error("Bad XML provided, expected tagName next, got: " + xmlObj.tagName);
