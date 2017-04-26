@@ -19,7 +19,18 @@ gulp.task('doc-API', function () {
 
 gulp.task('readmeToHtml', function() {
 	return gulp.src('README.md')
-        .pipe(markdown())
+        .pipe(markdown({
+			highlight: function (code, lang, callback) {
+				require('pygmentize-bundled')({
+						lang: lang,
+						format: 'html'
+					},
+					code,
+					function (err, result) {
+						callback(err, result.toString());
+					}
+				)}
+			}))
         .pipe(gulp.dest('docs/'));
 });
 

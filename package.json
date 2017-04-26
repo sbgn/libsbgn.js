@@ -21,7 +21,8 @@
     "gulp-markdown": "^1.2.0",
     "gulp-concat": "^2.6.1",
     "run-sequence": "^1.2.2",
-    "del": "^2.2.2"
+    "del": "^2.2.2",
+    "pygmentize-bundled": "^2.3.0"
   },
   "dependencies": {
     "xmldom": "^0.1.27"
