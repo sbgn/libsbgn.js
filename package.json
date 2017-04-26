@@ -17,7 +17,11 @@
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "documentation": "^4.0.0-rc.0",
-    "gulp-documentation": "^3.2.0"
+    "gulp-documentation": "^3.2.0",
+    "gulp-markdown": "^1.2.0",
+    "gulp-concat": "^2.6.1",
+    "run-sequence": "^1.2.2",
+    "del": "^2.2.2"
   },
   "dependencies": {
     "xmldom": "^0.1.27"
