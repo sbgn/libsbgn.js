@@ -2,4 +2,4 @@
 
 Under construction.
 
-API doc is located [here](API/index.html).
+API doc is located [here](https://eisbm.github.io/libsbgn.js/API/index.html).
