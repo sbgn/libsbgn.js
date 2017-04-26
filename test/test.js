@@ -93,28 +93,6 @@ describe('libsbgn', function() {
 			});
 		});
 		describe('check features inherited from SBGNBase', function () {
-			describe('hasChildren', function() {
-				it('should inherit function', function() {
-					var sbgn = new sbgnjs.Sbgn();
-					sbgn.should.have.property('hasChildren');
-					sbgn.hasChildren.should.be.a('function');
-				});
-				it('should return false if no children', function() {
-					var sbgn = new sbgnjs.Sbgn();
-					sbgn.hasChildren().should.equal(false);
-				});
-				it('should return true if sbgn specific child is present', function() {
-					var sbgn = new sbgnjs.Sbgn();
-					sbgn.setMap(new sbgnjs.Map());
-					sbgn.hasChildren().should.equal(true);
-				});
-				it('should return true if inherited child (extension) is present', function() {
-					var sbgn = new sbgnjs.Sbgn();
-					sbgn.setExtension(new sbgnjs.Extension());
-					sbgn.hasChildren().should.equal(true);
-				});
-			});
-
 			describe('extension', function() {
 				it('should parse extension', function(){
 					var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj("<sbgn><map></map><extension><renderInformation></renderInformation></extension></sbgn>"));
@@ -300,6 +278,12 @@ describe('libsbgn', function() {
 		it('should write complete', function() {
 			var label = new sbgnjs.Label({text: 'some text'});
 			label.toXML().should.equal('<label text="some text"/>');
+		});
+		it('should read and write newline in attributes', function() {
+			var label = new sbgnjs.Label({text: 'some \ntext'});
+			label.toXML().should.equal('<label text="some \ntext"/>');
+			var label2 = sbgnjs.Label.fromXML(getXmlObj(label.toXML()));
+			label2.toXML().should.equal('<label text="some \ntext"/>');
 		});
 		it('should parse extension', function() {
 			var label = sbgnjs.Label.fromXML(getXmlObj("<label text='text'><extension/></label>"));
