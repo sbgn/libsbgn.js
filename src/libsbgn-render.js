@@ -33,10 +33,17 @@ ColorDefinition.prototype.buildXmlObj = function () {
 	return colorDefinition;
 };
 
+/**
+ * @return {string}
+ */
 ColorDefinition.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @param {Element} xml
+ * @return {ColorDefinition}
+ */
 ColorDefinition.fromXML = function (xml) {
 	if (xml.tagName != 'colorDefinition') {
 		throw new Error("Bad XML provided, expected tagName colorDefinition, got: " + xml.tagName);
@@ -50,14 +57,24 @@ ns.ColorDefinition = ColorDefinition;
 // ------- END COLORDEFINITION -------
 
 // ------- LISTOFCOLORDEFINITIONS -------
+/**
+ * Represents the <code>&lt;listOfColorDefinitions&gt;</code> element.
+ * @class
+ */
 var ListOfColorDefinitions = function () {
 	this.colorDefinitions = [];
 };
 
+/**
+ * @param {ColorDefinition} colorDefinition
+ */
 ListOfColorDefinitions.prototype.addColorDefinition = function (colorDefinition) {
 	this.colorDefinitions.push(colorDefinition);
 };
 
+/**
+ * @return {Element}
+ */
 ListOfColorDefinitions.prototype.buildXmlObj = function () {
 	var listOfColorDefinitions = new xmldom.DOMImplementation().createDocument().createElement('listOfColorDefinitions');
 	for(var i=0; i<this.colorDefinitions.length; i++) {
@@ -66,10 +83,17 @@ ListOfColorDefinitions.prototype.buildXmlObj = function () {
 	return listOfColorDefinitions;
 };
 
+/**
+ * @return {string}
+ */
 ListOfColorDefinitions.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @param {Element} xml
+ * @return {ListOfColorDefinitions}
+ */
 ListOfColorDefinitions.fromXML = function (xml) {
 	if (xml.tagName != 'listOfColorDefinitions') {
 		throw new Error("Bad XML provided, expected tagName listOfColorDefinitions, got: " + xml.tagName);
@@ -88,6 +112,21 @@ ns.ListOfColorDefinitions = ListOfColorDefinitions;
 // ------- END LISTOFCOLORDEFINITIONS -------
 
 // ------- RENDERGROUP -------
+/**
+ * Represents the <code>&lt;g&gt;</code> element.
+ * @class
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string=} params.fontSize
+ * @param {string=} params.fontFamily
+ * @param {string=} params.fontWeight
+ * @param {string=} params.fontStyle
+ * @param {string=} params.textAnchor
+ * @param {string=} params.vtextAnchor
+ * @param {string=} params.fill The element's background color
+ * @param {string=} params.stroke Border color for glyphs, line color for arcs.
+ * @param {string=} params.strokeWidth
+ */
 var RenderGroup = function (params) {
 	// each of those are optional, so test if it is defined is mandatory
 	var params = checkParams(params, ['fontSize', 'fontFamily', 'fontWeight', 
@@ -107,6 +146,9 @@ var RenderGroup = function (params) {
 	this.strokeWidth 	= params.strokeWidth;
 };
 
+/**
+ * @return {Element}
+ */
 RenderGroup.prototype.buildXmlObj = function () {
 	var renderGroup = new xmldom.DOMImplementation().createDocument().createElement('g');
 	if (this.id != null) {
@@ -142,10 +184,17 @@ RenderGroup.prototype.buildXmlObj = function () {
 	return renderGroup;
 };
 
+/**
+ * @return {string}
+ */
 RenderGroup.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @param {Element} xml
+ * @return {RenderGroup}
+ */
 RenderGroup.fromXML = function (xml) {
 	if (xml.tagName != 'g') {
 		throw new Error("Bad XML provided, expected tagName g, got: " + xml.tagName);
@@ -167,7 +216,15 @@ ns.RenderGroup = RenderGroup;
 // ------- END RENDERGROUP -------
 
 // ------- STYLE -------
-// localStyle from specs
+/**
+ * Represents the <code>&lt;style&gt;</code> element.
+ * @class
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string=} params.name
+ * @param {string=} params.idList
+ * @param {RenderGroup=} params.renderGroup
+ */
 var Style = function(params) {
 	var params = checkParams(params, ['id', 'name', 'idList', 'renderGroup']);
 	this.id 			= params.id;
@@ -176,18 +233,30 @@ var Style = function(params) {
 	this.renderGroup 	= params.renderGroup;
 };
 
+/**
+ * @param {RenderGroup} renderGroup
+ */
 Style.prototype.setRenderGroup = function (renderGroup) {
 	this.renderGroup = renderGroup;
 };
 
+/**
+ * @return {string[]}
+ */
 Style.prototype.getIdListAsArray = function () {
 	return this.idList.split(' ');
 }
 
+/**
+ * @param {string[]} idArray
+ */
 Style.prototype.setIdListFromArray = function (idArray) {
 	this.idList = idArray.join(' ');
 }
 
+/**
+ * @return {Element}
+ */
 Style.prototype.buildXmlObj = function () {
 	var style = new xmldom.DOMImplementation().createDocument().createElement('style');
 	if (this.id != null) {
@@ -206,10 +275,17 @@ Style.prototype.buildXmlObj = function () {
 	return style;
 };
 
+/**
+ * @return {string}
+ */
 Style.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @param {Element} xml
+ * @return {Style}
+ */
 Style.fromXML = function (xml) {
 	if (xml.tagName != 'style') {
 		throw new Error("Bad XML provided, expected tagName style, got: " + xml.tagName);
@@ -229,14 +305,24 @@ ns.Style = Style;
 // ------- END STYLE -------
 
 // ------- LISTOFSTYLES -------
+/**
+ * Represents the <code>&lt;listOfStyles&gt;</code> element.
+ * @class
+ */
 var ListOfStyles = function() {
 	this.styles = [];
 };
 
+/**
+ * @param {Style} style
+ */
 ListOfStyles.prototype.addStyle = function(style) {
 	this.styles.push(style);
 };
 
+/**
+ * @return {Element}
+ */
 ListOfStyles.prototype.buildXmlObj = function () {
 	var listOfStyles = new xmldom.DOMImplementation().createDocument().createElement('listOfStyles');
 	for(var i=0; i<this.styles.length; i++) {
@@ -245,10 +331,17 @@ ListOfStyles.prototype.buildXmlObj = function () {
 	return listOfStyles;
 };
 
+/**
+ * @return {string}
+ */
 ListOfStyles.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @param {Element} xml
+ * @return {ListOfStyles}
+ */
 ListOfStyles.fromXML = function (xml) {
 	if (xml.tagName != 'listOfStyles') {
 		throw new Error("Bad XML provided, expected tagName listOfStyles, got: " + xml.tagName);
@@ -267,6 +360,18 @@ ns.ListOfStyles = ListOfStyles;
 // ------- END LISTOFSTYLES -------
 
 // ------- RENDERINFORMATION -------
+/**
+ * Represents the <code>&lt;renderInformation&gt;</code> element.
+ * @class
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string=} params.name
+ * @param {string=} params.programName
+ * @param {string=} params.programVersion
+ * @param {string=} params.backgroundColor
+ * @param {ListOfColorDefinitions=} params.listOfColorDefinitions
+ * @param {ListOfStyles=} params.listOfStyles
+ */
 var RenderInformation = function (params) {
 	var params = checkParams(params, ['id', 'name', 'programName', 
 		'programVersion', 'backgroundColor', 'listOfColorDefinitions', 'listOfStyles']);
@@ -282,14 +387,23 @@ var RenderInformation = function (params) {
 	*/
 };
 
+/**
+ * @param {ListOfColorDefinitions} listOfColorDefinitions
+ */
 RenderInformation.prototype.setListOfColorDefinitions = function(listOfColorDefinitions) {
 	this.listOfColorDefinitions = listOfColorDefinitions;
 };
 
+/**
+ * @param {ListOfStyles} listOfStyles
+ */
 RenderInformation.prototype.setListOfStyles = function(listOfStyles) {
 	this.listOfStyles = listOfStyles;
 };
 
+/**
+ * @return {Element}
+ */
 RenderInformation.prototype.buildXmlObj = function () {
 	var renderInformation = new xmldom.DOMImplementation().createDocument().createElement('renderInformation');
 	renderInformation.setAttribute('xmlns', ns.xmlns);
@@ -318,11 +432,17 @@ RenderInformation.prototype.buildXmlObj = function () {
 	return renderInformation;
 };
 
+/**
+ * @return {string}
+ */
 RenderInformation.prototype.toXML = function() {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
-// static constructor method
+/**
+ * @param {Element} xml
+ * @return {RenderInformation}
+ */
 RenderInformation.fromXML = function (xml) {
 	if (xml.tagName != 'renderInformation') {
 		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + xml.tagName);

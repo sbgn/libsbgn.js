@@ -6,7 +6,7 @@ var runSequence = require('run-sequence');
 var del = require('del');
 
 gulp.task('doc-md', function () {
-  return gulp.src('./src/libsbgn.js')
+  return gulp.src(['./src/libsbgn.js', './src/libsbgn-render.js'])
     .pipe(gulpDocumentation('md'))
     .pipe(gulp.dest('docs/API'));
 });
