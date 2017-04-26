@@ -81,7 +81,12 @@ ns.SBGNBase.prototype.closeTag = function () {
 // ------- SBGN -------
 /**
  * sbgn element constructor
+ * @class
+ * @name Sbgn
+ * @extends SBGNBase
  * @param {Object} params
+ * @param {string=} params.xmlns will use "http://sbgn.org/libsbgn/0.3" if not specified
+ * @param {Map=} params.map
  */
 ns.Sbgn = function (params) {
 	ns.SBGNBase.call(this, params);
@@ -96,10 +101,18 @@ ns.Sbgn = function (params) {
 ns.Sbgn.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Sbgn.prototype.constructor = ns.Sbgn;
 
+/**
+ * @memberof Sbgn.prototype
+ * @param {Map} map
+ */
 ns.Sbgn.prototype.setMap = function (map) {
 	this.map = map;
 };
 
+/**
+ * @memberof Sbgn.prototype
+ * @return {Element}
+ */
 ns.Sbgn.prototype.buildXmlObj = function () {
 	var sbgn = new xmldom.DOMImplementation().createDocument().createElement('sbgn');
 	// attributes
@@ -117,10 +130,19 @@ ns.Sbgn.prototype.buildXmlObj = function () {
 	return sbgn;
 };
 
+/**
+ * @memberof Sbgn.prototype
+ * @return {string}
+ */
 ns.Sbgn.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Sbgn
+ * @param {Element} xmlObj
+ * @return {Sbgn}
+ */
 ns.Sbgn.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'sbgn') {
 		throw new Error("Bad XML provided, expected tagName sbgn, got: " + xmlObj.tagName);
@@ -140,6 +162,17 @@ ns.Sbgn.fromXML = function (xmlObj) {
 // ------- END SBGN -------
 
 // ------- MAP -------
+/**
+ * map element constructor
+ * @class
+ * @name Map
+ * @extends SBGNBase
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string=} params.language
+ * @param {Glyph[]=} params.glyphs
+ * @param {Arc[]=} params.arcs
+ */
 ns.Map = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'language', 'glyphs', 'arcs']);
@@ -155,14 +188,26 @@ ns.Map = function (params) {
 ns.Map.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Map.prototype.constructor = ns.Map;
 
+/**
+ * @memberof Map.prototype
+ * @param {Glyph} glyph
+ */
 ns.Map.prototype.addGlyph = function (glyph) {
 	this.glyphs.push(glyph);
 };
 
+/**
+ * @memberof Map.prototype
+ * @param {Arc} arc
+ */
 ns.Map.prototype.addArc = function (arc) {
 	this.arcs.push(arc);
 };
 
+/**
+ * @memberof Map.prototype
+ * @return {Element}
+ */
 ns.Map.prototype.buildXmlObj = function () {
 	var map = new xmldom.DOMImplementation().createDocument().createElement('map');
 	// attributes
@@ -183,10 +228,19 @@ ns.Map.prototype.buildXmlObj = function () {
 	return map;
 };
 
+/**
+ * @memberof Map.prototype
+ * @return {string}
+ */
 ns.Map.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Map
+ * @param {Element} xmlObj
+ * @return {Map}
+ */
 ns.Map.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'map') {
 		throw new Error("Bad XML provided, expected tagName map, got: " + xmlObj.tagName);
@@ -214,6 +268,11 @@ ns.Map.fromXML = function (xmlObj) {
 // ------- END MAP -------
 
 // ------- EXTENSIONS -------
+/**
+ * extension element constructor
+ * @class
+ * @name Extension
+ */
 ns.Extension = function () {
 	// consider first order children, add them with their tagname as property of this object
 	// store xmlObject if no supported parsing (unrecognized extensions)
@@ -221,6 +280,10 @@ ns.Extension = function () {
 	this.list = {};
 };
 
+/**
+ * @memberof Extension.prototype
+ * @param {Element|renderExtension.RenderInformation} extension
+ */
 ns.Extension.prototype.add = function (extension) {
 	if (extension instanceof renderExt.RenderInformation) {
 		this.list['renderInformation'] = extension;
@@ -237,10 +300,20 @@ ns.Extension.prototype.add = function (extension) {
 	}
 };
 
+/**
+ * @memberof Extension.prototype
+ * @param {string} extensionName
+ * @return {boolean}
+ */
 ns.Extension.prototype.has = function (extensionName) {
 	return this.list.hasOwnProperty(extensionName);
 };
 
+/**
+ * @memberof Extension.prototype
+ * @param {string} extensionName
+ * @return {Element|renderExtension.RenderInformation}
+ */
 ns.Extension.prototype.get = function (extensionName) {
 	if (this.has(extensionName)) {
 		return this.list[extensionName];
@@ -250,6 +323,10 @@ ns.Extension.prototype.get = function (extensionName) {
 	}
 };
 
+/**
+ * @memberof Extension.prototype
+ * @return {Element}
+ */
 ns.Extension.prototype.buildXmlObj = function () {
 	var extension = new xmldom.DOMImplementation().createDocument().createElement('extension');
 	for (var extInstance in this.list) {
@@ -268,10 +345,19 @@ ns.Extension.prototype.buildXmlObj = function () {
 	return extension;
 };
 
+/**
+ * @memberof Extension.prototype
+ * @return {string}
+ */
 ns.Extension.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Extension
+ * @param {Element} xmlObj
+ * @return {Extension}
+ */
 ns.Extension.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'extension') {
 		throw new Error("Bad XML provided, expected tagName extension, got: " + xmlObj.tagName);
@@ -301,6 +387,22 @@ ns.Extension.fromXML = function (xmlObj) {
 // ------- END EXTENSIONS -------
 
 // ------- GLYPH -------
+/**
+ * glyph element constructor
+ * @class Glyph
+ * @name Glyph
+ * @extends SBGNBase
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string=} params.class_
+ * @param {string=} params.compartmentRef
+ * @param {Label=} params.label
+ * @param {Bbox=} params.bbox
+ * @param {StateType=} params.state
+ * @param {CloneType=} params.clone
+ * @param {Glyph[]=} params.glyphMembers
+ * @param {Port[]=} params.ports
+ */
 ns.Glyph = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone']);
@@ -323,30 +425,58 @@ ns.Glyph = function (params) {
 ns.Glyph.prototype = Object.create(ns.SBGNBase.prototype);
 ns.Glyph.prototype.constructor = ns.Glyph;
 
+/**
+ * @memberof Glyph.prototype
+ * @param {Label} label
+ */
 ns.Glyph.prototype.setLabel = function (label) {
 	this.label = label;
 };
 
+/**
+ * @memberof Glyph.prototype
+ * @param {StateType} state
+ */
 ns.Glyph.prototype.setState = function (state) {
 	this.state = state;
 };
 
+/**
+ * @memberof Glyph.prototype
+ * @param {Bbox} bbox
+ */
 ns.Glyph.prototype.setBbox = function (bbox) {
 	this.bbox = bbox;
 };
 
+/**
+ * @memberof Glyph.prototype
+ * @param {CloneType} clone
+ */
 ns.Glyph.prototype.setClone = function (clone) {
 	this.clone = clone;
 };
 
+/**
+ * @memberof Glyph.prototype
+ * @param {Glyph} glyphMember
+ */
 ns.Glyph.prototype.addGlyphMember = function (glyphMember) {
 	this.glyphMembers.push(glyphMember);
 };
 
+/**
+ * @memberof Glyph.prototype
+ * @param {Port} port
+ */
 ns.Glyph.prototype.addPort = function (port) {
 	this.ports.push(port);
 };
 
+/**
+ * @memberof Glyph.prototype
+ * @return {Element}
+ */
 ns.Glyph.prototype.buildXmlObj = function () {
 	var glyph = new xmldom.DOMImplementation().createDocument().createElement('glyph');
 	// attributes
@@ -382,10 +512,19 @@ ns.Glyph.prototype.buildXmlObj = function () {
 	return glyph;
 };
 
+/**
+ * @memberof Glyph.prototype
+ * @return {string}
+ */
 ns.Glyph.prototype.toXML = function () {
 	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
 };
 
+/**
+ * @memberof Glyph
+ * @param {Element} xmlObj
+ * @return {Glyph}
+ */
 ns.Glyph.fromXML = function (xmlObj) {
 	if (xmlObj.tagName != 'glyph') {
 		throw new Error("Bad XML provided, expected tagName glyph, got: " + xmlObj.tagName);
