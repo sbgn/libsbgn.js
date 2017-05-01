@@ -1,5 +1,5 @@
 var renderExt = require('./libsbgn-render');
-//var annotExt = require('./libsbgn-annotations');
+var annotExt = require('./libsbgn-annotations');
 var checkParams = require('./utilities').checkParams;
 var getFirstLevelGlyphs = require('./utilities').getFirstLevelGlyphs;
 var xmldom = require('xmldom');
@@ -1114,5 +1114,5 @@ ns.NextType = NextType;
 // ------- END NEXTTYPE -------
 
 ns.renderExtension = renderExt;
-//ns.annotationsExtension = annotExt;
+ns.annotationsExtension = annotExt;
 module.exports = ns;

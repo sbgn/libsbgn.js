@@ -25,6 +25,9 @@
     "pygmentize-bundled": "^2.3.0"
   },
   "dependencies": {
-    "xmldom": "^0.1.27"
+    "xmldom": "https://github.com/royludo/xmldom",
+    "rdflib": "https://github.com/royludo/rdflib.js",
+    "rdfstore": "^0.9.17",
+    "deasync": "^0.1.9"
   }
 }
