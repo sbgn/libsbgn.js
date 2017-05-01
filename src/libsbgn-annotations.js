@@ -2,7 +2,7 @@ var checkParams = require('./utilities').checkParams;
 var $rdf = require('rdflib');
 var xmldom = require('xmldom');
 var rdfstore = require('rdfstore');
-var deasync = require('deasync');
+//var deasync = require('deasync');
 
 var ns = {};
 
@@ -133,7 +133,7 @@ RdfElement.prototype.toXML = function() {
 	  console.log("inside", graph);
 	  done = true;
 	});
-	deasync.loopWhile(function(){return !done;});
+	//deasync.loopWhile(function(){return !done;});
 	console.log("first serialize", stringNT);
 
 	var graph = $rdf.graph();
@@ -261,7 +261,7 @@ RdfElement.fromXML = function (xml) {
 		});
 		finalStore = store;
 	});
-	deasync.loopWhile(function(){return !done;});
+	//deasync.loopWhile(function(){return !done;});
 	rdfElement.graph = finalStore;
 
 	return rdfElement;
