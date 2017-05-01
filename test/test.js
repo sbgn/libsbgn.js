@@ -281,9 +281,17 @@ describe('libsbgn', function() {
 		});
 		it('should read and write newline in attributes', function() {
 			var label = new sbgnjs.Label({text: 'some \ntext'});
-			label.toXML().should.equal('<label text="some \ntext"/>');
+			label.toXML().should.equal('<label text="some &#10;text"/>');
 			var label2 = sbgnjs.Label.fromXML(getXmlObj(label.toXML()));
-			label2.toXML().should.equal('<label text="some \ntext"/>');
+			label2.text.should.equal('some \ntext');
+			label2.toXML().should.equal('<label text="some &#10;text"/>');
+		});
+		it('should read and write UTF8 characters', function() {
+			var label = new sbgnjs.Label({text: 'some têxt Ʃ ڝ ஹ.'});
+			label.toXML().should.equal('<label text="some têxt Ʃ ڝ ஹ."/>');
+			var label2 = sbgnjs.Label.fromXML(getXmlObj(label.toXML()));
+			label2.text.should.equal('some têxt Ʃ ڝ ஹ.');
+			label2.toXML().should.equal('<label text="some têxt Ʃ ڝ ஹ."/>');
 		});
 		it('should parse extension', function() {
 			var label = sbgnjs.Label.fromXML(getXmlObj("<label text='text'><extension/></label>"));
@@ -1162,3 +1170,44 @@ describe('usage examples', function() {
 		return xmlString;
 	}
 });
+
+/*describe('libsbgn-annotations-ext', function() {
+	it('test', function() {
+		var annot = require('../src/libsbgn-annotations');
+		// SIO has property !!  "http://semanticscience.org/resource/SIO_000223"
+		// SIO name SIO_000116 + rdf:value
+		var input = '<annotation><rdf:RDF '+
+		'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" '+
+	    'xmlns:bqmodel="http://biomodels.net/model-qualifiers/" '+
+	    'xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" '+
+	    'xmlns:sio="http://semanticscience.org/resource/"> '+
+		'<rdf:Description rdf:about="anID000001">  '+
+		'	<bqmodel:is> '+
+		'		<rdf:Bag> '+
+		'			<rdf:li rdf:resource="http://identifiers.org/biomodels.db/BIOMD0000000004" /> '+
+		'		</rdf:Bag> '+
+		'	</bqmodel:is> '+
+
+'			<bqmodel:isDescribedBy> '+
+'				<rdf:Bag> '+
+'					<rdf:li rdf:resource="http://identifiers.org/pubmed/1833774" /> '+
+'			</rdf:Bag> '+
+'			</bqmodel:isDescribedBy> '+
+
+'			<sio:SIO_000223> '+
+	'			<rdf:Bag> '+
+	'					<rdf:li sio:SIO_000116="data" rdf:value="42" /> '+
+	'					<rdf:li sio:SIO_000116="data2" rdf:value="1.23" /> '+
+'				</rdf:Bag> '+
+'			</sio:SIO_000223> '+
+
+'		</rdf:Description> '+
+'	</rdf:RDF></annotation>';
+		//console.log(input);
+		var annotation = annot.Annotation.fromXML(getXmlObj(input));
+		//console.log(annotation.toXML());
+		var rdf = annotation.rdfElements[0];
+		console.log(rdf.toXML());
+		//rdf.test();
+	});
+});*/
