@@ -27,7 +27,6 @@
   "dependencies": {
     "xmldom": "https://github.com/royludo/xmldom",
     "rdflib": "https://github.com/royludo/rdflib.js",
-    "rdfstore": "^0.9.17",
-    "deasync": "^0.1.9"
+    "n3": "^0.10.0"
   }
 }

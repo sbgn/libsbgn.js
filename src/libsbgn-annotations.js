@@ -1,8 +1,7 @@
 var checkParams = require('./utilities').checkParams;
 var $rdf = require('rdflib');
 var xmldom = require('xmldom');
-var rdfstore = require('rdfstore');
-//var deasync = require('deasync');
+var N3 = require('n3');
 
 var ns = {};
 
@@ -66,7 +65,7 @@ Annotation.prototype.buildXmlObj = function () {
 	var annotation = new xmldom.DOMImplementation().createDocument().createElement('annotation');
 	for (var i=0; i<this.rdfElements.length; i++) {
 		var rdf = this.rdfElements[i];
-		console.log(rdf.toXML());
+		//console.log(rdf.toXML());
 
 	}
 	return annotation;
@@ -110,8 +109,14 @@ ns.Annotation = Annotation;
 var RdfElement = function (params) {
 	var params = checkParams(params, ['graph']);
 	this.graph = params.graph;
-	this.uri = 'http://www.eisbm.org/';
 };
+
+RdfElement.uri = 'http://www.eisbm.org/';
+RdfElement.prefixes = {	rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+					    bqmodel: "http://biomodels.net/model-qualifiers/",
+					    bqbiol: "http://biomodels.net/biology-qualifiers/",
+					    sio: "http://semanticscience.org/resource/",
+					    eisbm: "http://www.eisbm.org/"};
 
 /**
  * @return {Element}
@@ -124,41 +129,55 @@ RdfElement.prototype.buildXmlObj = function () {
  * @return {string}
  */
 RdfElement.prototype.toXML = function() {
+	/*
+		Add some functions to the writer object of N3
+		Those functions will allow us to serialize triples synchronously.
+		Without it, we would be forced to use the asynchronous functions.
+	*/
+	function addSimpleWrite (writer) {
+		// replicates the writer._write function but returns a string
+		writer.simpleWriteTriple = function (subject, predicate, object, graph) {
+			return this._encodeIriOrBlankNode(subject) + ' ' +
+                  this._encodeIriOrBlankNode(predicate) + ' ' +
+                  this._encodeObject(object) +
+			(graph ? ' ' + this._encodeIriOrBlankNode(graph) + '.\n' : '.\n')
+		};
+		// allows to provide an array of triples and concatenate their serialized strings
+		writer.simpleWriteTriples = function (array) {
+			var stringN3 = '';
+			for (var i=0; i<array.length; i++) {
+				var triple = array[i];
+				stringN3 += this.simpleWriteTriple(triple.subject, triple.predicate, triple.object, triple.graph);
+			}
+			return stringN3;
+		};
+	}
 
-	var stringNT;
-	var done = false;
-	console.log("init graph", this.graph);
-	this.graph.graph(function(err, graph){
-	  stringNT = graph.toNT();
-	  console.log("inside", graph);
-	  done = true;
-	});
-	//deasync.loopWhile(function(){return !done;});
-	console.log("first serialize", stringNT);
+	// serialize the stored graph to N3
+	var writer = N3.Writer({ prefixes: RdfElement.prefixes, format: 'N-Triples' });
+	addSimpleWrite(writer); // add our custom methods to the writer
+	var stringN3 = writer.simpleWriteTriples(this.graph.getTriples()); // use custom method to serialize triples
 
+	// read N3 format
 	var graph = $rdf.graph();
 	try {
-	    $rdf.parse(stringNT, graph, this.uri, 'text/n3');
+	    $rdf.parse(stringN3, graph, RdfElement.uri, 'text/n3');
 	} catch (err) {
 	    console.log(err);
 	}
-	//console.log("intermediate graph", graph);
+	/*
+		The namespace prefixes are lost in the n3 format, so rdflib will guess them on its own.
+		The result gives weird wrong prefixes. Here we provide the original names. Aesthetic purpose only.
+	*/
+	graph.namespaces = RdfElement.prefixes;
 
-
-	var serialize = $rdf.serialize($rdf.sym(this.uri), graph, undefined, 'application/rdf+xml');
-	console.log("final serialize", serialize);
-	// serialize1 has modified output !!! need to correct it
-
-	function replaceItem(string) {
-		// regexp will capture key and value
-		// $1 gets the namespace prefix
-		// $2 gets the key attribute value
-		// $3 gets the value attribute value
-		var regexpItem = /<(\w+?):item( rdf:parseType="Resource")?>[\s\S]*?<\w+?:key>(\S*)<\/\w+?:key>[\s\S]*?<\w+?:value>(\S*)<\/\w+?:value>[\s\S]*?<\/\w+?:item>/g;
-		var result = string.replace(regexpItem, '<$1:item $1:key="$3" $1:value="$4"/>');
-
-		return result;
-	}
+	/*
+		serialize to RDF+XML 
+		problem, the output differs from the original XML. rdflib expands collections like Bag, and 
+		elements with only atributes. It also makes things less readable.
+		We need to replace several things to keep output the same as input. 
+	*/
+	var serialize = $rdf.serialize($rdf.sym(RdfElement.uri), graph, undefined, 'application/rdf+xml');
 
 	function replaceLi(string) {
 		var regexpLi = /<rdf:li( rdf:parseType="Resource")?>[\s\S]*?<(\w+):SIO_000116>([\s\S]*?)<\/\2:SIO_000116>[\s\S]*?<rdf:value>([\s\S]*?)<\/rdf:value>[\s\S]*?<\/rdf:li>/g;
@@ -168,12 +187,10 @@ RdfElement.prototype.toXML = function() {
 
 	function replaceBag(string) {
 		// regexp will spot a transformed bag and capture its content
-		//var regexpBag = / rdf:parseType="Resource">[\s\S]*?(<rdf:Description>([\s\S]*?)<rdf:type rdf:resource="http:\/\/www\.w3\.org\/1999\/02\/22-rdf-syntax-ns#Bag"\/>[\s\S]*?<\/rdf:Description>)/g;
 		var regexpBag = /(<rdf:Description>([\s\S]*?)<rdf:type rdf:resource="http:\/\/www\.w3\.org\/1999\/02\/22-rdf-syntax-ns#Bag"\/>[\s\S]*?<\/rdf:Description>)/g;
 		var result1 = string.replace(regexpBag, '<rdf:Bag>$2</rdf:Bag>');
-		//console.log('INTERMEDIATE RESULT\n', result1);
-		var result = replaceLi(result1);
-		return result;
+		var result2 = result1.replace(/    <\/rdf:Bag>/g, '</rdf:Bag>');
+		return result2;
 	}
 
 	function replaceParseType(string) {
@@ -181,53 +198,19 @@ RdfElement.prototype.toXML = function() {
 		return string.replace(regexp, '');
 	}
 	
-	var result = replaceParseType(replaceBag(serialize));
+	var result = replaceParseType(replaceLi(replaceBag(serialize)));
 	
 	return result;
 };
 
 RdfElement.prototype.test = function() {
-	console.log(this.graph);
+	//console.log(this.graph);
 	var RDF = $rdf.Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 	var BQMODEL = $rdf.Namespace("http://biomodels.net/model-qualifiers/");
 	var BQBIOL = $rdf.Namespace("http://biomodels.net/biology-qualifiers/");
 	var SIO = $rdf.Namespace("http://semanticscience.org/resource/");
-	console.log("test1", this.graph.statementsMatching(undefined, undefined, $rdf.literal("42")));
-	var query = $rdf.SPARQLToQuery("PREFIX sio:  <http://semanticscience.org/resource/>\n"+
-		"SELECT ?res \n"+
-		"WHERE {\n"+
-		'    ?res sio:SIO_000116 "data2" .\n'+
-		//'    ?res rdfs:member ?tmp .\n'+
-		//"    ?person foaf:mbox ?email .\n"+
-		"}", true, this.graph);
-	this.graph.fetcher = null;
-
-	function endf(res) {
-		console.log("END", res);
-	}
-	this.graph.query(query, function(result) {
-        console.log('query ran');
-        var res = result['?res'].value;
-        console.log(res);
-        endf(res);
-    });
-
-    console.log("execute", store.execute('PREFIX sio: <http://semanticscience.org/resource/>\n'+
-				'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> '+
-				'SELECT * '+
-				'WHERE { '+
-				'?res sio:SIO_000116 "data2". '+
-				'?bag ?a ?res.'+
-				'?end sio:SIO_000223 ?bag.'+
-				//'?a ?res ?b '+
-				//'?a ?c ?b '+
-				//'?cities ?prop ?s. FILTER (strstarts(str(?s), str(rdf:_)))'+
-				'}', function(err, results){
-					if(!err) {
-						// process results
-						console.log("execute", results);
-					}
-				}));
+	
+	console.log(this.graph.getTriples("http://local/anID000001", null, null));
 
 }
 
@@ -245,24 +228,19 @@ RdfElement.fromXML = function (xml) {
 	// rdflib only accepts string as input, not xml elements
 	var stringXml = new xmldom.XMLSerializer().serializeToString(xml);
 	try {
-	    $rdf.parse(stringXml, graph, rdfElement.uri, 'application/rdf+xml');
+	    $rdf.parse(stringXml, graph, RdfElement.uri, 'application/rdf+xml');
 	} catch (err) {
 	    console.log(err);
 	}
 	
-	// convert to turtle to feed to rdfstore
-	var turtle = $rdf.serialize($rdf.sym(rdfElement.uri), graph, undefined, 'text/turtle');
+	// convert to turtle to feed to N3
+	var turtle = $rdf.serialize($rdf.sym(RdfElement.uri), graph, undefined, 'text/turtle');
 
-	var done = false;
-	var finalStore;
-	rdfstore.create(function(err, store) {
-		store.load("text/turtle", turtle, function(err, results) {
-			done = true;
-		});
-		finalStore = store;
-	});
-	//deasync.loopWhile(function(){return !done;});
-	rdfElement.graph = finalStore;
+	var parser = N3.Parser();
+	var store = N3.Store();
+	store.addTriples(parser.parse(turtle));
+	
+	rdfElement.graph = store;
 
 	return rdfElement;
 };
