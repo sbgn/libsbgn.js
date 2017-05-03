@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>  | Documentation</title>
+  <title>libsbgn.js  | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -13,7 +13,7 @@
     <div class='clearfix md-mxn2'>
       <div class='fixed xs-hide fix-3 overflow-auto max-height-100'>
         <div class='py1 px2'>
-          <h3 class='mb0 no-anchor'></h3>
+          <h3 class='mb0 no-anchor'>libsbgn.js</h3>
           <div class='mb1'><code></code></div>
           <input
             placeholder='Filter'
@@ -25,48 +25,29 @@
               
                 
                 <li><a
-                  href='#sbgnbase'
-                  class=" toggle-sibling">
-                  SBGNBase
-                  <span class='icon'>▸</span>
+                  href='#standard-sbgn'
+                  class="h5 bold black caps">
+                  Standard SBGN
+                  
                 </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#SBGNBase#setExtension'
-                        class='regular pre-open'>
-                        #setExtension
-                      </a></li>
-                      
-                      <li><a
-                        href='#SBGNBase#baseToXmlObj'
-                        class='regular pre-open'>
-                        #baseToXmlObj
-                      </a></li>
-                      
-                      <li><a
-                        href='#SBGNBase#baseFromXML'
-                        class='regular pre-open'>
-                        #baseFromXML
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                </div>
                 
                 </li>
               
                 
                 <li><a
-                  href='#sbgn'
+                  href='#libsbgn'
+                  class="">
+                  libsbgn
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#arc'
                   class=" toggle-sibling">
-                  Sbgn
+                  Arc
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -76,7 +57,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#Sbgn.fromXML'
+                        href='#Arc.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -88,19 +69,37 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Sbgn#setMap'
+                        href='#Arc#setStart'
                         class='regular pre-open'>
-                        #setMap
+                        #setStart
                       </a></li>
                       
                       <li><a
-                        href='#Sbgn#buildXmlObj'
+                        href='#Arc#setEnd'
+                        class='regular pre-open'>
+                        #setEnd
+                      </a></li>
+                      
+                      <li><a
+                        href='#Arc#addNext'
+                        class='regular pre-open'>
+                        #addNext
+                      </a></li>
+                      
+                      <li><a
+                        href='#Arc#addGlyph'
+                        class='regular pre-open'>
+                        #addGlyph
+                      </a></li>
+                      
+                      <li><a
+                        href='#Arc#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#Sbgn#toXML'
+                        href='#Arc#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -114,9 +113,9 @@
               
                 
                 <li><a
-                  href='#map'
+                  href='#bbox'
                   class=" toggle-sibling">
-                  Map
+                  Bbox
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -126,7 +125,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#Map.fromXML'
+                        href='#Bbox.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -138,25 +137,101 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Map#addGlyph'
-                        class='regular pre-open'>
-                        #addGlyph
-                      </a></li>
-                      
-                      <li><a
-                        href='#Map#addArc'
-                        class='regular pre-open'>
-                        #addArc
-                      </a></li>
-                      
-                      <li><a
-                        href='#Map#buildXmlObj'
+                        href='#Bbox#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#Map#toXML'
+                        href='#Bbox#toXML'
+                        class='regular pre-open'>
+                        #toXML
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#clonetype'
+                  class=" toggle-sibling">
+                  CloneType
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#CloneType.fromXML'
+                        class='regular pre-open'>
+                        .fromXML
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#CloneType#buildXmlObj'
+                        class='regular pre-open'>
+                        #buildXmlObj
+                      </a></li>
+                      
+                      <li><a
+                        href='#CloneType#toXML'
+                        class='regular pre-open'>
+                        #toXML
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#endtype'
+                  class=" toggle-sibling">
+                  EndType
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#EndType.fromXML'
+                        class='regular pre-open'>
+                        .fromXML
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#EndType#buildXmlObj'
+                        class='regular pre-open'>
+                        #buildXmlObj
+                      </a></li>
+                      
+                      <li><a
+                        href='#EndType#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -356,9 +431,9 @@
               
                 
                 <li><a
-                  href='#bbox'
+                  href='#map'
                   class=" toggle-sibling">
-                  Bbox
+                  Map
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -368,7 +443,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#Bbox.fromXML'
+                        href='#Map.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -380,13 +455,25 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Bbox#buildXmlObj'
+                        href='#Map#addGlyph'
+                        class='regular pre-open'>
+                        #addGlyph
+                      </a></li>
+                      
+                      <li><a
+                        href='#Map#addArc'
+                        class='regular pre-open'>
+                        #addArc
+                      </a></li>
+                      
+                      <li><a
+                        href='#Map#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#Bbox#toXML'
+                        href='#Map#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -400,9 +487,9 @@
               
                 
                 <li><a
-                  href='#statetype'
+                  href='#nexttype'
                   class=" toggle-sibling">
-                  StateType
+                  NextType
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -412,7 +499,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#StateType.fromXML'
+                        href='#NextType.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -424,57 +511,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#StateType#buildXmlObj'
+                        href='#NextType#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#StateType#toXML'
-                        class='regular pre-open'>
-                        #toXML
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#clonetype'
-                  class=" toggle-sibling">
-                  CloneType
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  <ul class='list-reset py1-ul pl1'>
-                    <li class='h5'><span>Static members</span></li>
-                    
-                      <li><a
-                        href='#CloneType.fromXML'
-                        class='regular pre-open'>
-                        .fromXML
-                      </a></li>
-                    
-                    </ul>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#CloneType#buildXmlObj'
-                        class='regular pre-open'>
-                        #buildXmlObj
-                      </a></li>
-                      
-                      <li><a
-                        href='#CloneType#toXML'
+                        href='#NextType#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -532,9 +575,9 @@
               
                 
                 <li><a
-                  href='#arc'
+                  href='#sbgn'
                   class=" toggle-sibling">
-                  Arc
+                  Sbgn
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -544,7 +587,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#Arc.fromXML'
+                        href='#Sbgn.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -556,39 +599,60 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Arc#setStart'
+                        href='#Sbgn#setMap'
                         class='regular pre-open'>
-                        #setStart
+                        #setMap
                       </a></li>
                       
                       <li><a
-                        href='#Arc#setEnd'
-                        class='regular pre-open'>
-                        #setEnd
-                      </a></li>
-                      
-                      <li><a
-                        href='#Arc#addNext'
-                        class='regular pre-open'>
-                        #addNext
-                      </a></li>
-                      
-                      <li><a
-                        href='#Arc#addGlyph'
-                        class='regular pre-open'>
-                        #addGlyph
-                      </a></li>
-                      
-                      <li><a
-                        href='#Arc#buildXmlObj'
+                        href='#Sbgn#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#Arc#toXML'
+                        href='#Sbgn#toXML'
                         class='regular pre-open'>
                         #toXML
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#sbgnbase'
+                  class=" toggle-sibling">
+                  SBGNBase
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#SBGNBase#setExtension'
+                        class='regular pre-open'>
+                        #setExtension
+                      </a></li>
+                      
+                      <li><a
+                        href='#SBGNBase#baseToXmlObj'
+                        class='regular pre-open'>
+                        #baseToXmlObj
+                      </a></li>
+                      
+                      <li><a
+                        href='#SBGNBase#baseFromXML'
+                        class='regular pre-open'>
+                        #baseFromXML
                       </a></li>
                       
                     </ul>
@@ -644,9 +708,9 @@
               
                 
                 <li><a
-                  href='#endtype'
+                  href='#statetype'
                   class=" toggle-sibling">
-                  EndType
+                  StateType
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -656,7 +720,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#EndType.fromXML'
+                        href='#StateType.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -668,13 +732,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#EndType#buildXmlObj'
+                        href='#StateType#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#EndType#toXML'
+                        href='#StateType#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -688,45 +752,21 @@
               
                 
                 <li><a
-                  href='#nexttype'
-                  class=" toggle-sibling">
-                  NextType
-                  <span class='icon'>▸</span>
+                  href='#render-extension'
+                  class="h5 bold black caps">
+                  Render extension
+                  
                 </a>
                 
-                <div class='toggle-target display-none'>
+                </li>
+              
+                
+                <li><a
+                  href='#libsbgnrender'
+                  class="">
+                  libsbgn.render
                   
-                  <ul class='list-reset py1-ul pl1'>
-                    <li class='h5'><span>Static members</span></li>
-                    
-                      <li><a
-                        href='#NextType.fromXML'
-                        class='regular pre-open'>
-                        .fromXML
-                      </a></li>
-                    
-                    </ul>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#NextType#buildXmlObj'
-                        class='regular pre-open'>
-                        #buildXmlObj
-                      </a></li>
-                      
-                      <li><a
-                        href='#NextType#toXML'
-                        class='regular pre-open'>
-                        #toXML
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                </div>
+                </a>
                 
                 </li>
               
@@ -826,6 +866,56 @@
               
                 
                 <li><a
+                  href='#listofstyles'
+                  class=" toggle-sibling">
+                  ListOfStyles
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#ListOfStyles.fromXML'
+                        class='regular pre-open'>
+                        .fromXML
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#ListOfStyles#addStyle'
+                        class='regular pre-open'>
+                        #addStyle
+                      </a></li>
+                      
+                      <li><a
+                        href='#ListOfStyles#buildXmlObj'
+                        class='regular pre-open'>
+                        #buildXmlObj
+                      </a></li>
+                      
+                      <li><a
+                        href='#ListOfStyles#toXML'
+                        class='regular pre-open'>
+                        #toXML
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#rendergroup'
                   class=" toggle-sibling">
                   RenderGroup
@@ -857,6 +947,62 @@
                       
                       <li><a
                         href='#RenderGroup#toXML'
+                        class='regular pre-open'>
+                        #toXML
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#renderinformation'
+                  class=" toggle-sibling">
+                  RenderInformation
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#RenderInformation.fromXML'
+                        class='regular pre-open'>
+                        .fromXML
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#RenderInformation#setListOfColorDefinitions'
+                        class='regular pre-open'>
+                        #setListOfColorDefinitions
+                      </a></li>
+                      
+                      <li><a
+                        href='#RenderInformation#setListOfStyles'
+                        class='regular pre-open'>
+                        #setListOfStyles
+                      </a></li>
+                      
+                      <li><a
+                        href='#RenderInformation#buildXmlObj'
+                        class='regular pre-open'>
+                        #buildXmlObj
+                      </a></li>
+                      
+                      <li><a
+                        href='#RenderInformation#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -932,9 +1078,29 @@
               
                 
                 <li><a
-                  href='#listofstyles'
+                  href='#annotation-extension'
+                  class="h5 bold black caps">
+                  Annotation extension
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#libsbgnannot'
+                  class="">
+                  libsbgn.annot
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#annotation'
                   class=" toggle-sibling">
-                  ListOfStyles
+                  Annotation
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -944,7 +1110,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#ListOfStyles.fromXML'
+                        href='#Annotation.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -956,19 +1122,19 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#ListOfStyles#addStyle'
+                        href='#Annotation#addRDF'
                         class='regular pre-open'>
-                        #addStyle
+                        #addRDF
                       </a></li>
                       
                       <li><a
-                        href='#ListOfStyles#buildXmlObj'
+                        href='#Annotation#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#ListOfStyles#toXML'
+                        href='#Annotation#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -982,9 +1148,9 @@
               
                 
                 <li><a
-                  href='#renderinformation'
+                  href='#rdfelement'
                   class=" toggle-sibling">
-                  RenderInformation
+                  RdfElement
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -994,7 +1160,7 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#RenderInformation.fromXML'
+                        href='#RdfElement.fromXML'
                         class='regular pre-open'>
                         .fromXML
                       </a></li>
@@ -1006,25 +1172,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#RenderInformation#setListOfColorDefinitions'
-                        class='regular pre-open'>
-                        #setListOfColorDefinitions
-                      </a></li>
-                      
-                      <li><a
-                        href='#RenderInformation#setListOfStyles'
-                        class='regular pre-open'>
-                        #setListOfStyles
-                      </a></li>
-                      
-                      <li><a
-                        href='#RenderInformation#buildXmlObj'
+                        href='#RdfElement#buildXmlObj'
                         class='regular pre-open'>
                         #buildXmlObj
                       </a></li>
                       
                       <li><a
-                        href='#RenderInformation#toXML'
+                        href='#RdfElement#toXML'
                         class='regular pre-open'>
                         #toXML
                       </a></li>
@@ -1033,6 +1187,26 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addproperty'
+                  class="">
+                  addProperty
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addhasproperty'
+                  class="">
+                  addHasProperty
+                  
+                </a>
                 
                 </li>
               
@@ -1046,68 +1220,42 @@
       <div class='fix-margin-3'>
         
           
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='Standard SBGN' class='mt0'>
+    Standard SBGN
+  </h2>
+
+  
+</section>
+</div>
+          
+        
+          
             <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='sbgnbase'>
-      SBGNBase
+    <h3 class='fl m0' id='libsbgn'>
+      libsbgn
     </h3>
     
     
   </div>
   
 
-  <p>Parent class for several sbgn elements. Used to provide extension element.
-End users don't need to interact with it. It can be safely ignored.</p>
+  <p>The API contains two other submodules: <a href="#libsbgnrender">libsbgn.render</a> and <a href="#libsbgnannot">libsbgn.annot</a></p>
 
 
-  <div class='pre p1 fill-light mt0'>new SBGNBase(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
-  
-  
-
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>libsbgn</div>
   
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.extension</span> <code class='quiet'><a href="#extension">Extension</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
+  
+  
+  
   
 
   
@@ -1121,185 +1269,6 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='SBGNBase#setExtension'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setExtension(extension)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Allows inheriting objects to get an extension element.</p>
-
-
-  <div class='pre p1 fill-light mt0'>setExtension(extension: <a href="#extension">Extension</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>extension</span> <code class='quiet'>(<a href="#extension">Extension</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='SBGNBase#baseToXmlObj'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>baseToXmlObj(xmlObj)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>baseToXmlObj(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
-	    the xml object being built from 'this'
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='SBGNBase#baseFromXML'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>baseFromXML(xmlObj)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>parse things specific to SBGNBase type</p>
-
-
-  <div class='pre p1 fill-light mt0'>baseFromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
-	    the xml object being parsed
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
 
   
 
@@ -1314,26 +1283,19 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='sbgn'>
-      Sbgn
+    <h3 class='fl m0' id='arc'>
+      Arc
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;sbgn></code> element.</p>
+  <p>Represents the <code>&#x3C;arc></code> element.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new Sbgn(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  <div class='pre p1 fill-light mt0'>new Arc(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
   
-  
-    <p>
-      Extends
-      
-        <a href="#sbgnbase">SBGNBase</a>
-      
-    </p>
   
 
   
@@ -1366,15 +1328,52 @@ End users don't need to interact with it. It can be safely ignored.</p>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.xmlns</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  <td class='break-word'><span class='code bold'>params.id</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.map</span> <code class='quiet'><a href="#map">Map</a>?</code>
+                  <td class='break-word'><span class='code bold'>params.class_</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
                   </td>
                   <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.source</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.target</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.start</span> <code class='quiet'><a href="#starttype">StartType</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.end</span> <code class='quiet'><a href="#endtype">EndType</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.nexts</span> <code class='quiet'><a href="#nexttype">NextType</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.glyphs</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#glyph">Glyph</a>>?</code>
+                  </td>
+                  <td class='break-word'><span>The arc's cardinality. Possibility to have more than one glyph is left open.
+</span></td>
                 </tr>
               
             </tbody>
@@ -1397,7 +1396,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Sbgn.fromXML'>
+    <div class='border-bottom' id='Arc.fromXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1411,7 +1410,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#sbgn">Sbgn</a></div>
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#arc">Arc</a></div>
   
   
 
@@ -1441,7 +1440,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#sbgn">Sbgn</a></code>:
+      <code><a href="#arc">Arc</a></code>:
         
 
       
@@ -1470,11 +1469,11 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Sbgn#setMap'>
+    <div class='border-bottom' id='Arc#setStart'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setMap(map)</span>
+            <span class='code strong strong truncate'>setStart(start)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -1484,7 +1483,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>setMap(map: <a href="#map">Map</a>)</div>
+  <div class='pre p1 fill-light mt0'>setStart(start: <a href="#starttype">StartType</a>)</div>
   
   
 
@@ -1500,7 +1499,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>map</span> <code class='quiet'>(<a href="#map">Map</a>)</code>
+            <span class='code bold'>start</span> <code class='quiet'>(<a href="#starttype">StartType</a>)</code>
 	    
           </div>
           
@@ -1527,7 +1526,178 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Sbgn#buildXmlObj'>
+    <div class='border-bottom' id='Arc#setEnd'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setEnd(end)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>setEnd(end: <a href="#endtype">EndType</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>end</span> <code class='quiet'>(<a href="#endtype">EndType</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Arc#addNext'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addNext(next)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>addNext(next: <a href="#nexttype">NextType</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>next</span> <code class='quiet'>(<a href="#nexttype">NextType</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Arc#addGlyph'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addGlyph(glyph)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>addGlyph(glyph: <a href="#glyph">Glyph</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>glyph</span> <code class='quiet'>(<a href="#glyph">Glyph</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Arc#buildXmlObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1579,7 +1749,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Sbgn#toXML'>
+    <div class='border-bottom' id='Arc#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1646,18 +1816,18 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='map'>
-      Map
+    <h3 class='fl m0' id='bbox'>
+      Bbox
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;map></code> element.</p>
+  <p>Represents the <code>&#x3C;bbox></code> element.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new Map(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  <div class='pre p1 fill-light mt0'>new Bbox(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
   
   
     <p>
@@ -1698,25 +1868,25 @@ End users don't need to interact with it. It can be safely ignored.</p>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.id</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  <td class='break-word'><span class='code bold'>params.x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.language</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  <td class='break-word'><span class='code bold'>params.y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.glyphs</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#glyph">Glyph</a>>?</code>
+                  <td class='break-word'><span class='code bold'>params.w</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.arcs</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#arc">Arc</a>>?</code>
+                  <td class='break-word'><span class='code bold'>params.h</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -1741,7 +1911,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Map.fromXML'>
+    <div class='border-bottom' id='Bbox.fromXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1755,7 +1925,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#map">Map</a></div>
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#bbox">Bbox</a></div>
   
   
 
@@ -1785,7 +1955,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#map">Map</a></code>:
+      <code><a href="#bbox">Bbox</a></code>:
         
 
       
@@ -1814,121 +1984,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Map#addGlyph'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addGlyph(glyph)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>addGlyph(glyph: <a href="#glyph">Glyph</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>glyph</span> <code class='quiet'>(<a href="#glyph">Glyph</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='Map#addArc'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addArc(arc)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>addArc(arc: <a href="#arc">Arc</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>arc</span> <code class='quiet'>(<a href="#arc">Arc</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='Map#buildXmlObj'>
+    <div class='border-bottom' id='Bbox#buildXmlObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1980,7 +2036,537 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Map#toXML'>
+    <div class='border-bottom' id='Bbox#toXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toXML()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='clonetype'>
+      CloneType
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Represents the <code>&#x3C;clone></code> element.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new CloneType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.label</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='CloneType.fromXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromXML(xmlObj)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#clonetype">CloneType</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#clonetype">CloneType</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='CloneType#buildXmlObj'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>buildXmlObj()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='CloneType#toXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toXML()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='endtype'>
+      EndType
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Represents the <code>&#x3C;end></code> element.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new EndType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='EndType.fromXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromXML(xmlObj)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#endtype">EndType</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#endtype">EndType</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='EndType#buildXmlObj'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>buildXmlObj()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='EndType#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -2169,7 +2755,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>add(extension: (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | renderExtension.RenderInformation))</div>
+  <div class='pre p1 fill-light mt0'>add(extension: (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | render.RenderInformation))</div>
   
   
 
@@ -2185,7 +2771,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>extension</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | renderExtension.RenderInformation))</code>
+            <span class='code bold'>extension</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | render.RenderInformation))</code>
 	    
           </div>
           
@@ -2291,7 +2877,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>get(extensionName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | renderExtension.RenderInformation)</div>
+  <div class='pre p1 fill-light mt0'>get(extensionName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | render.RenderInformation)</div>
   
   
 
@@ -2321,7 +2907,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | renderExtension.RenderInformation)</code>:
+      <code>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a> | render.RenderInformation)</code>:
         
 
       
@@ -3389,18 +3975,18 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='bbox'>
-      Bbox
+    <h3 class='fl m0' id='map'>
+      Map
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;bbox></code> element.</p>
+  <p>Represents the <code>&#x3C;map></code> element.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new Bbox(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  <div class='pre p1 fill-light mt0'>new Map(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
   
   
     <p>
@@ -3409,6 +3995,400 @@ End users don't need to interact with it. It can be safely ignored.</p>
         <a href="#sbgnbase">SBGNBase</a>
       
     </p>
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.id</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.language</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.glyphs</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#glyph">Glyph</a>>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.arcs</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#arc">Arc</a>>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='Map.fromXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromXML(xmlObj)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#map">Map</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#map">Map</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='Map#addGlyph'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addGlyph(glyph)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>addGlyph(glyph: <a href="#glyph">Glyph</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>glyph</span> <code class='quiet'>(<a href="#glyph">Glyph</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Map#addArc'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addArc(arc)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>addArc(arc: <a href="#arc">Arc</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>arc</span> <code class='quiet'>(<a href="#arc">Arc</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Map#buildXmlObj'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>buildXmlObj()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Map#toXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toXML()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='nexttype'>
+      NextType
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Represents the <code>&#x3C;next></code> element.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new NextType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
   
 
   
@@ -3452,18 +4432,6 @@ End users don't need to interact with it. It can be safely ignored.</p>
                   <td class='break-word'><span></span></td>
                 </tr>
               
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.w</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.h</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
             </tbody>
           </table>
           
@@ -3484,7 +4452,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Bbox.fromXML'>
+    <div class='border-bottom' id='NextType.fromXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3498,7 +4466,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#bbox">Bbox</a></div>
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#nexttype">NextType</a></div>
   
   
 
@@ -3528,7 +4496,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#bbox">Bbox</a></code>:
+      <code><a href="#nexttype">NextType</a></code>:
         
 
       
@@ -3557,7 +4525,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Bbox#buildXmlObj'>
+    <div class='border-bottom' id='NextType#buildXmlObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -3609,537 +4577,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Bbox#toXML'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>toXML()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='statetype'>
-      StateType
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Represents the <code>&#x3C;state></code> element.</p>
-
-
-  <div class='pre p1 fill-light mt0'>new StateType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.value</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.variable</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Static Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='StateType.fromXML'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromXML(xmlObj)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#statetype">StateType</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#statetype">StateType</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='StateType#buildXmlObj'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>buildXmlObj()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='StateType#toXML'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>toXML()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='clonetype'>
-      CloneType
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Represents the <code>&#x3C;clone></code> element.</p>
-
-
-  <div class='pre p1 fill-light mt0'>new CloneType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.label</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Static Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='CloneType.fromXML'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromXML(xmlObj)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#clonetype">CloneType</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#clonetype">CloneType</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='CloneType#buildXmlObj'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>buildXmlObj()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='CloneType#toXML'>
+    <div class='border-bottom' id='NextType#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4480,19 +4918,26 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='arc'>
-      Arc
+    <h3 class='fl m0' id='sbgn'>
+      Sbgn
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;arc></code> element.</p>
+  <p>Represents the <code>&#x3C;sbgn></code> element.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new Arc(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  <div class='pre p1 fill-light mt0'>new Sbgn(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
   
+  
+    <p>
+      Extends
+      
+        <a href="#sbgnbase">SBGNBase</a>
+      
+    </p>
   
 
   
@@ -4525,52 +4970,15 @@ End users don't need to interact with it. It can be safely ignored.</p>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.id</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  <td class='break-word'><span class='code bold'>params.xmlns</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.class_</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  <td class='break-word'><span class='code bold'>params.map</span> <code class='quiet'><a href="#map">Map</a>?</code>
                   </td>
                   <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.source</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.target</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.start</span> <code class='quiet'><a href="#starttype">StartType</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.end</span> <code class='quiet'><a href="#endtype">EndType</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.nexts</span> <code class='quiet'><a href="#nexttype">NextType</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.glyphs</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#glyph">Glyph</a>>?</code>
-                  </td>
-                  <td class='break-word'><span>The arc's cardinality. Possibility to have more than one glyph is left open.
-</span></td>
                 </tr>
               
             </tbody>
@@ -4593,7 +5001,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Arc.fromXML'>
+    <div class='border-bottom' id='Sbgn.fromXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4607,7 +5015,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#arc">Arc</a></div>
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#sbgn">Sbgn</a></div>
   
   
 
@@ -4637,7 +5045,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#arc">Arc</a></code>:
+      <code><a href="#sbgn">Sbgn</a></code>:
         
 
       
@@ -4666,11 +5074,11 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Arc#setStart'>
+    <div class='border-bottom' id='Sbgn#setMap'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setStart(start)</span>
+            <span class='code strong strong truncate'>setMap(map)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4680,7 +5088,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>setStart(start: <a href="#starttype">StartType</a>)</div>
+  <div class='pre p1 fill-light mt0'>setMap(map: <a href="#map">Map</a>)</div>
   
   
 
@@ -4696,7 +5104,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>start</span> <code class='quiet'>(<a href="#starttype">StartType</a>)</code>
+            <span class='code bold'>map</span> <code class='quiet'>(<a href="#map">Map</a>)</code>
 	    
           </div>
           
@@ -4723,178 +5131,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Arc#setEnd'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setEnd(end)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>setEnd(end: <a href="#endtype">EndType</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>end</span> <code class='quiet'>(<a href="#endtype">EndType</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='Arc#addNext'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addNext(next)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>addNext(next: <a href="#nexttype">NextType</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>next</span> <code class='quiet'>(<a href="#nexttype">NextType</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='Arc#addGlyph'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addGlyph(glyph)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>addGlyph(glyph: <a href="#glyph">Glyph</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>glyph</span> <code class='quiet'>(<a href="#glyph">Glyph</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='Arc#buildXmlObj'>
+    <div class='border-bottom' id='Sbgn#buildXmlObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4946,7 +5183,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Arc#toXML'>
+    <div class='border-bottom' id='Sbgn#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -4982,6 +5219,269 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='sbgnbase'>
+      SBGNBase
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Parent class for several sbgn elements. Used to provide extension element.
+End users don't need to interact with it. It can be safely ignored.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new SBGNBase(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.extension</span> <code class='quiet'><a href="#extension">Extension</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='SBGNBase#setExtension'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setExtension(extension)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Allows inheriting objects to get an extension element.</p>
+
+
+  <div class='pre p1 fill-light mt0'>setExtension(extension: <a href="#extension">Extension</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>extension</span> <code class='quiet'>(<a href="#extension">Extension</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='SBGNBase#baseToXmlObj'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>baseToXmlObj(xmlObj)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>baseToXmlObj(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
+	    the xml object being built from 'this'
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='SBGNBase#baseFromXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>baseFromXML(xmlObj)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>parse things specific to SBGNBase type</p>
+
+
+  <div class='pre p1 fill-light mt0'>baseFromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
+	    the xml object being parsed
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   
@@ -5281,18 +5781,18 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='endtype'>
-      EndType
+    <h3 class='fl m0' id='statetype'>
+      StateType
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;end></code> element.</p>
+  <p>Represents the <code>&#x3C;state></code> element.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new EndType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  <div class='pre p1 fill-light mt0'>new StateType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
   
   
 
@@ -5326,13 +5826,13 @@ End users don't need to interact with it. It can be safely ignored.</p>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
+                  <td class='break-word'><span class='code bold'>params.value</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>params.y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
+                  <td class='break-word'><span class='code bold'>params.variable</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -5357,7 +5857,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='EndType.fromXML'>
+    <div class='border-bottom' id='StateType.fromXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5371,7 +5871,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#endtype">EndType</a></div>
+  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#statetype">StateType</a></div>
   
   
 
@@ -5401,7 +5901,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#endtype">EndType</a></code>:
+      <code><a href="#statetype">StateType</a></code>:
         
 
       
@@ -5430,7 +5930,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='EndType#buildXmlObj'>
+    <div class='border-bottom' id='StateType#buildXmlObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5482,7 +5982,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='EndType#toXML'>
+    <div class='border-bottom' id='StateType#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -5541,6 +6041,18 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
 </section>
 
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='Render extension' class='mt0'>
+    Render extension
+  </h2>
+
+  
+</section>
+</div>
           
         
           
@@ -5549,170 +6061,24 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='nexttype'>
-      NextType
+    <h3 class='fl m0' id='libsbgnrender'>
+      libsbgn.render
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;next></code> element.</p>
+  <p>This submodule contains the classes to manage the render extension's xml and some utility functions.
+It adds the ability to save the styles and colors used in an SBGN map, as features like background-color,
+border thickness or font properties are not part of the SBGN standard.</p>
+<p>It is loosely based on the <a href="http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/render">render extension of the SBML format</a>.
+A subset of this specification has been adapted for SBGN-ML integration.</p>
+<p>See <a href="#extension">Extension</a> for more general information on extensions in the SBGN-ML format.</p>
+<p>You can access the following classes like this: <code>libsbgn.render.ColorDefinition<code></p>
 
 
-  <div class='pre p1 fill-light mt0'>new NextType(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Static Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='NextType.fromXML'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromXML(xmlObj)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>fromXML(xmlObj: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#nexttype">NextType</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>xmlObj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#nexttype">NextType</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='NextType#buildXmlObj'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>buildXmlObj()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
+  <div class='pre p1 fill-light mt0'>libsbgn.render</div>
   
   
 
@@ -5727,82 +6093,12 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
 
   
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
-        
-
-      
-    
-  
 
   
 
   
 
   
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='NextType#toXML'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>toXML()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
 
   
 
@@ -6369,6 +6665,290 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='listofstyles'>
+      ListOfStyles
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Represents the <code>&#x3C;listOfStyles></code> element.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new ListOfStyles()</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='ListOfStyles.fromXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromXML(xml)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromXML(xml: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#listofstyles">ListOfStyles</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xml</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#listofstyles">ListOfStyles</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='ListOfStyles#addStyle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addStyle(style)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>addStyle(style: <a href="#style">Style</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>style</span> <code class='quiet'>(<a href="#style">Style</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ListOfStyles#buildXmlObj'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>buildXmlObj()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ListOfStyles#toXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toXML()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='rendergroup'>
       RenderGroup
     </h3>
@@ -6621,6 +7201,418 @@ End users don't need to interact with it. It can be safely ignored.</p>
     </div>
   
     <div class='border-bottom' id='RenderGroup#toXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toXML()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>toXML(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='renderinformation'>
+      RenderInformation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Represents the <code>&#x3C;renderInformation></code> element.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new RenderInformation(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.id</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.name</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.programName</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.programVersion</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.backgroundColor</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.listOfColorDefinitions</span> <code class='quiet'><a href="#listofcolordefinitions">ListOfColorDefinitions</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.listOfStyles</span> <code class='quiet'><a href="#listofstyles">ListOfStyles</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='RenderInformation.fromXML'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromXML(xml)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromXML(xml: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#renderinformation">RenderInformation</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xml</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#renderinformation">RenderInformation</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='RenderInformation#setListOfColorDefinitions'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setListOfColorDefinitions(listOfColorDefinitions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>setListOfColorDefinitions(listOfColorDefinitions: <a href="#listofcolordefinitions">ListOfColorDefinitions</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>listOfColorDefinitions</span> <code class='quiet'>(<a href="#listofcolordefinitions">ListOfColorDefinitions</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='RenderInformation#setListOfStyles'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setListOfStyles(listOfStyles)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>setListOfStyles(listOfStyles: <a href="#listofstyles">ListOfStyles</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>listOfStyles</span> <code class='quiet'>(<a href="#listofstyles">ListOfStyles</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='RenderInformation#buildXmlObj'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>buildXmlObj()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='RenderInformation#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7128,32 +8120,102 @@ End users don't need to interact with it. It can be safely ignored.</p>
           
         
           
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='Annotation extension' class='mt0'>
+    Annotation extension
+  </h2>
+
+  
+</section>
+</div>
+          
+        
+          
             <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='listofstyles'>
-      ListOfStyles
+    <h3 class='fl m0' id='libsbgnannot'>
+      libsbgn.annot
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;listOfStyles></code> element.</p>
-
-
-  <div class='pre p1 fill-light mt0'>new ListOfStyles()</div>
-  
   
 
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>libsbgn.annot</div>
   
   
 
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='annotation'>
+      Annotation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Represents the <code>&#x3C;annotation></code> element.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new Annotation(params: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -7168,7 +8230,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='ListOfStyles.fromXML'>
+    <div class='border-bottom' id='Annotation.fromXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7182,7 +8244,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromXML(xml: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#listofstyles">ListOfStyles</a></div>
+  <div class='pre p1 fill-light mt0'>fromXML(xml: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#annotation">Annotation</a></div>
   
   
 
@@ -7212,7 +8274,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#listofstyles">ListOfStyles</a></code>:
+      <code><a href="#annotation">Annotation</a></code>:
         
 
       
@@ -7241,11 +8303,11 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='ListOfStyles#addStyle'>
+    <div class='border-bottom' id='Annotation#addRDF'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addStyle(style)</span>
+            <span class='code strong strong truncate'>addRDF(rdfAnnotation)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7255,7 +8317,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>addStyle(style: <a href="#style">Style</a>)</div>
+  <div class='pre p1 fill-light mt0'>addRDF(rdfAnnotation: <a href="#rdfelement">RdfElement</a>)</div>
   
   
 
@@ -7271,7 +8333,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>style</span> <code class='quiet'>(<a href="#style">Style</a>)</code>
+            <span class='code bold'>rdfAnnotation</span> <code class='quiet'>(<a href="#rdfelement">RdfElement</a>)</code>
 	    
           </div>
           
@@ -7298,7 +8360,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='ListOfStyles#buildXmlObj'>
+    <div class='border-bottom' id='Annotation#buildXmlObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7350,7 +8412,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='ListOfStyles#toXML'>
+    <div class='border-bottom' id='Annotation#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7417,18 +8479,18 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='renderinformation'>
-      RenderInformation
+    <h3 class='fl m0' id='rdfelement'>
+      RdfElement
     </h3>
     
     
   </div>
   
 
-  <p>Represents the <code>&#x3C;renderInformation></code> element.</p>
+  <p>Represents the <code>&#x3C;rdf></code> element.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new RenderInformation(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  <div class='pre p1 fill-light mt0'>new RdfElement(params: any)</div>
   
   
 
@@ -7444,67 +8506,9 @@ End users don't need to interact with it. It can be safely ignored.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+            <span class='code bold'>params</span> <code class='quiet'>(any)</code>
 	    
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.id</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.name</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.programName</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.programVersion</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.backgroundColor</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.listOfColorDefinitions</span> <code class='quiet'><a href="#listofcolordefinitions">ListOfColorDefinitions</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>params.listOfStyles</span> <code class='quiet'><a href="#listofstyles">ListOfStyles</a>?</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -7523,7 +8527,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='RenderInformation.fromXML'>
+    <div class='border-bottom' id='RdfElement.fromXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7537,7 +8541,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromXML(xml: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#renderinformation">RenderInformation</a></div>
+  <div class='pre p1 fill-light mt0'>fromXML(xml: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a>): <a href="#rdfelement">RdfElement</a></div>
   
   
 
@@ -7567,7 +8571,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#renderinformation">RenderInformation</a></code>:
+      <code><a href="#rdfelement">RdfElement</a></code>:
         
 
       
@@ -7596,121 +8600,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='RenderInformation#setListOfColorDefinitions'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setListOfColorDefinitions(listOfColorDefinitions)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>setListOfColorDefinitions(listOfColorDefinitions: <a href="#listofcolordefinitions">ListOfColorDefinitions</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>listOfColorDefinitions</span> <code class='quiet'>(<a href="#listofcolordefinitions">ListOfColorDefinitions</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='RenderInformation#setListOfStyles'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setListOfStyles(listOfStyles)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>setListOfStyles(listOfStyles: <a href="#listofstyles">ListOfStyles</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>listOfStyles</span> <code class='quiet'>(<a href="#listofstyles">ListOfStyles</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='RenderInformation#buildXmlObj'>
+    <div class='border-bottom' id='RdfElement#buildXmlObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7762,7 +8652,7 @@ End users don't need to interact with it. It can be safely ignored.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='RenderInformation#toXML'>
+    <div class='border-bottom' id='RdfElement#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -7815,6 +8705,150 @@ End users don't need to interact with it. It can be safely ignored.</p>
     </div>
   
 </div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addproperty'>
+      addProperty
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>will add triples to represent key/value properties attached to the id
+kvObject can have one or multiple properties</p>
+
+
+  <div class='pre p1 fill-light mt0'>addProperty(graph: any, id: any, kvObject: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>graph</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>kvObject</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addhasproperty'>
+      addHasProperty
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>returns the id of a newly created blank node representing the HasProperty predicate
+if one already exists, returns its id</p>
+
+
+  <div class='pre p1 fill-light mt0'>addHasProperty(graph: any, id: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>graph</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

@@ -1,3 +1,9 @@
+/**
+ * The API contains two other submodules: {@link libsbgn.render} and {@link libsbgn.annot}
+ * @module libsbgn
+ * @namespace libsbgn
+*/
+
 var renderExt = require('./libsbgn-render');
 var annotExt = require('./libsbgn-annotations');
 var checkParams = require('./utilities').checkParams;
@@ -246,7 +252,7 @@ var Extension = function () {
 };
 
 /**
- * @param {Element|renderExtension.RenderInformation} extension
+ * @param {Element|render.RenderInformation} extension
  */
 Extension.prototype.add = function (extension) {
 	if (extension instanceof renderExt.RenderInformation) {
@@ -274,7 +280,7 @@ Extension.prototype.has = function (extensionName) {
 
 /**
  * @param {string} extensionName
- * @return {Element|renderExtension.RenderInformation}
+ * @return {Element|render.RenderInformation}
  */
 Extension.prototype.get = function (extensionName) {
 	if (this.has(extensionName)) {
@@ -1113,6 +1119,6 @@ NextType.fromXML = function (xmlObj) {
 ns.NextType = NextType;
 // ------- END NEXTTYPE -------
 
-ns.renderExtension = renderExt;
-ns.annotationsExtension = annotExt;
+ns.render = renderExt;
+ns.annot = annotExt;
 module.exports = ns;

@@ -1,3 +1,8 @@
+/**
+ * @module libsbgn-annotations
+ * @namespace libsbgn.annot
+*/
+
 var checkParams = require('./utilities').checkParams;
 var $rdf = require('rdflib');
 var xmldom = require('xmldom');

@@ -9,8 +9,8 @@ var pkg = require('..');
 describe('package', function() {
 	it('should expose code correctly', function() {
 		pkg.should.have.ownProperty('Sbgn');
-		pkg.should.have.ownProperty('renderExtension');
-		pkg.renderExtension.should.have.ownProperty('ColorDefinition');
+		pkg.should.have.ownProperty('render');
+		pkg.render.should.have.ownProperty('ColorDefinition');
 	});
 });
 
@@ -1171,17 +1171,17 @@ describe('usage examples', function() {
 	}
 });
 
-/*describe('libsbgn-annotations-ext', function() {
+describe('libsbgn-annotations-ext', function() {
 	it('test', function() {
 		var annot = require('../src/libsbgn-annotations');
 		// SIO has property !!  "http://semanticscience.org/resource/SIO_000223"
 		// SIO name SIO_000116 + rdf:value
-		var input = '<annotation><rdf:RDF '+
+		var input1 = '<annotation><rdf:RDF '+
 		'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" '+
 	    'xmlns:bqmodel="http://biomodels.net/model-qualifiers/" '+
 	    'xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" '+
 	    'xmlns:sio="http://semanticscience.org/resource/"> '+
-		'<rdf:Description rdf:about="anID000001">  '+
+		'<rdf:Description rdf:about="http://local/anID000001">  '+
 		'	<bqmodel:is> '+
 		'		<rdf:Bag> '+
 		'			<rdf:li rdf:resource="http://identifiers.org/biomodels.db/BIOMD0000000004" /> '+
@@ -1203,11 +1203,43 @@ describe('usage examples', function() {
 
 '		</rdf:Description> '+
 '	</rdf:RDF></annotation>';
+		var input2 = '<annotation><rdf:RDF '+
+		'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" '+
+	    'xmlns:bqmodel="http://biomodels.net/model-qualifiers/" '+
+	    'xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" '+
+	    'xmlns:sio="http://semanticscience.org/resource/"> '+
+		'<rdf:Description rdf:about="http://local/anID000002">  '+
+		'	<bqmodel:is> '+
+		'		<rdf:Bag> '+
+		'			<rdf:li rdf:resource="http://identifiers.org/biomodels.db/BIOMD00000000115" /> '+
+		'		</rdf:Bag> '+
+		'	</bqmodel:is> '+
+
+'			<bqmodel:isDescribedBy> '+
+'				<rdf:Bag> '+
+'					<rdf:li rdf:resource="http://identifiers.org/pubmed/PUBMEDID" /> '+
+'			</rdf:Bag> '+
+'			</bqmodel:isDescribedBy> '+
+
+/*'			<sio:SIO_000223> '+
+	'			<rdf:Bag> '+
+	'					<rdf:li sio:SIO_000116="myConstant" rdf:value="42" /> '+
+	'					<rdf:li sio:SIO_000116="aProp" rdf:value="123.456" /> '+
+'				</rdf:Bag> '+
+'			</sio:SIO_000223> '+*/
+
+'		</rdf:Description> '+
+'	</rdf:RDF></annotation>';
 		//console.log(input);
-		var annotation = annot.Annotation.fromXML(getXmlObj(input));
+		var annotation = annot.Annotation.fromXML(getXmlObj(input1));
+		var annotation2 = annot.Annotation.fromXML(getXmlObj(input2));
+		var globalStore = new annot.GlobalRdfStore();
+		globalStore.load([annotation, annotation2]);
 		//console.log(annotation.toXML());
 		var rdf = annotation.rdfElements[0];
 		console.log(rdf.toXML());
-		//rdf.test();
+		rdf.test();
+		globalStore.test();
+		//console.log("globalStore", globalStore.store.getTriples());
 	});
-});*/
+});
