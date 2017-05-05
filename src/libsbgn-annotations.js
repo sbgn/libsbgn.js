@@ -1,7 +1,13 @@
+/**
+ * @module libsbgn-annotations
+ * @namespace libsbgn.annot
+*/
+
 var checkParams = require('./utilities').checkParams;
 var $rdf = require('rdflib');
 var xmldom = require('xmldom');
 var N3 = require('n3');
+var Util = require('./annotation-utils');
 
 var ns = {};
 
@@ -101,6 +107,55 @@ Annotation.fromXML = function (xml) {
 ns.Annotation = Annotation;
 // ------- END ANNOTATION -------
 
+// ------- GLOBALSTORE -------
+var GlobalRdfStore = function () {
+	this.store = N3.Store();
+};
+
+GlobalRdfStore.prototype.load = function (annotations) {
+	for(var i=0; i<annotations.length; i++) {
+		var annot = annotations[i];
+		for(var j=0; j<annot.rdfElements.length; j++) {
+			var rdfElement = annot.rdfElements[j];
+			this.store.addTriples(rdfElement.graph.getTriples());
+		}
+	}
+	this.store.addPrefixes(Util.prefixes);
+};
+
+GlobalRdfStore.prototype.getPropertiesOfId = function (id) {
+	return Util.getPropertiesOfId(this.store, id);
+};
+
+GlobalRdfStore.prototype.getAllIds = function () {
+	return Util.getAllIds(this.store);
+};
+
+GlobalRdfStore.prototype.test = function () {
+	console.log("globalstore test");
+	var id2 = "http://local/anID000002";
+	var id1 = "http://local/anID000001";
+	console.log("all properties of id2", this.getPropertiesOfId(id2));
+	console.log("all ids", this.getAllIds());
+	console.log("hasSIO", Util.hasHasProperty(this.store, id2));
+	console.log("add hasprop", Util.addHasProperty(this.store, id1));
+	console.log("add hasprop2", Util.addHasProperty(this.store, id2));
+	console.log("hasSIO2", Util.hasHasProperty(this.store, id2));
+	console.log("add kvprop", Util.addProperty(this.store, id2, {test: "testvalue"}));
+	console.log("all properties of id2", this.getPropertiesOfId(id2));
+	console.log("-------");
+	console.log("all properties of id", this.getPropertiesOfId(id1));
+	console.log("add kvprop", Util.addProperty(this.store, id1, {test: "testvalue"}));
+	console.log("all properties of id", this.getPropertiesOfId(id1));
+	/*var self = this;
+	this.getAllIds().forEach(function(e){
+		console.log(e, self.getPropertiesOfId(e));
+	});*/
+};
+
+ns.GlobalRdfStore = GlobalRdfStore;
+// ------- END GLOBALSTORE -------
+
 // ------- RDFELEMENT -------
 /**
  * Represents the <code>&lt;rdf&gt;</code> element.
@@ -112,11 +167,6 @@ var RdfElement = function (params) {
 };
 
 RdfElement.uri = 'http://www.eisbm.org/';
-RdfElement.prefixes = {	rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-					    bqmodel: "http://biomodels.net/model-qualifiers/",
-					    bqbiol: "http://biomodels.net/biology-qualifiers/",
-					    sio: "http://semanticscience.org/resource/",
-					    eisbm: "http://www.eisbm.org/"};
 
 /**
  * @return {Element}
@@ -154,7 +204,7 @@ RdfElement.prototype.toXML = function() {
 	}
 
 	// serialize the stored graph to N3
-	var writer = N3.Writer({ prefixes: RdfElement.prefixes, format: 'N-Triples' });
+	var writer = N3.Writer({ prefixes: Util.prefixes, format: 'N-Triples' });
 	addSimpleWrite(writer); // add our custom methods to the writer
 	var stringN3 = writer.simpleWriteTriples(this.graph.getTriples()); // use custom method to serialize triples
 
@@ -169,7 +219,7 @@ RdfElement.prototype.toXML = function() {
 		The namespace prefixes are lost in the n3 format, so rdflib will guess them on its own.
 		The result gives weird wrong prefixes. Here we provide the original names. Aesthetic purpose only.
 	*/
-	graph.namespaces = RdfElement.prefixes;
+	graph.namespaces = Util.prefixes;
 
 	/*
 		serialize to RDF+XML 
@@ -203,17 +253,6 @@ RdfElement.prototype.toXML = function() {
 	return result;
 };
 
-RdfElement.prototype.test = function() {
-	//console.log(this.graph);
-	var RDF = $rdf.Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-	var BQMODEL = $rdf.Namespace("http://biomodels.net/model-qualifiers/");
-	var BQBIOL = $rdf.Namespace("http://biomodels.net/biology-qualifiers/");
-	var SIO = $rdf.Namespace("http://semanticscience.org/resource/");
-	
-	console.log(this.graph.getTriples("http://local/anID000001", null, null));
-
-}
-
 /**
  * @param {Element} xml
  * @return {RdfElement}
@@ -238,14 +277,33 @@ RdfElement.fromXML = function (xml) {
 
 	var parser = N3.Parser();
 	var store = N3.Store();
+	store.addPrefixes(Util.prefixes);
 	store.addTriples(parser.parse(turtle));
 	
 	rdfElement.graph = store;
 
 	return rdfElement;
 };
+
+RdfElement.prototype.getPropertiesOfId = function (id) {
+	return Util.getPropertiesOfId(this.graph, id);
+};
+
+RdfElement.prototype.getAllIds = function () {
+	return Util.getAllIds(this.graph);
+};
+
+RdfElement.prototype.test = function() {
+	//console.log(this.graph);
+	//console.log(this.graph.getTriples("http://local/anID000001", null, null));
+	console.log("expand prefix shortcut", Util.expandPrefix("sio:SIO_000116"));
+	console.log("all properties of id", this.getPropertiesOfId("http://local/anID000001"));
+	console.log("all ids", this.getAllIds());
+};
+
 ns.RdfElement = RdfElement;
 // ------- END RDFELEMENT -------
+
 
 ns.rdflib = $rdf;
 

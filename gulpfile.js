@@ -5,15 +5,9 @@ var concat = require('gulp-concat');
 var runSequence = require('run-sequence');
 var del = require('del');
 
-gulp.task('doc-md', function () {
-  return gulp.src(['./src/libsbgn.js', './src/libsbgn-render.js'])
-    .pipe(gulpDocumentation('md'))
-    .pipe(gulp.dest('docs/API'));
-});
-
 gulp.task('doc-API', function () {
   return gulp.src('./src/libsbgn.js')
-    .pipe(gulpDocumentation('html'))
+    .pipe(gulpDocumentation('html', { config: "./docs/doc_conf.yml" }, {name: 'libsbgn.js'}))
     .pipe(gulp.dest('docs/API'));
 });
 

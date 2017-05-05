@@ -1,17 +1,29 @@
 {
   "name": "libsbgn.js",
-  "version": "1.0.0",
-  "description": "sbgnml reading and writing in javascript.",
+  "version": "0.1.0",
+  "description": "SBGN-ML parsing and writing for JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "doc": "gulp doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eisbm/libsbgn.js.git"
   },
   "keywords": [
     "sbgn",
-    "sbgnml"
+    "sbgnml",
+    "sbgn-ml",
+    "xml",
+    "rdf"
   ],
   "author": "Ludovic Roy",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eisbm/libsbgn.js/issues"
+    },
+  "homepage": "https://github.com/eisbm/libsbgn.js",
   "devDependencies": {
     "mocha": "^3.2.0",
     "chai": "^3.5.0",

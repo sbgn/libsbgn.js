@@ -1,3 +1,19 @@
+/**
+ * This submodule contains the classes to manage the render extension's xml and some utility functions.
+ * It adds the ability to save the styles and colors used in an SBGN map, as features like background-color,
+ * border thickness or font properties are not part of the SBGN standard.
+ *
+ * It is loosely based on the {@link http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/render|render extension of the SBML format}.
+ * A subset of this specification has been adapted for SBGN-ML integration.
+ *
+ * See {@link Extension} for more general information on extensions in the SBGN-ML format.
+ *
+ * You can access the following classes like this: <code>libsbgn.render.ColorDefinition<code>
+ *
+ * @module libsbgn-render
+ * @namespace libsbgn.render
+*/
+
 var checkParams = require('./utilities').checkParams;
 var xmldom = require('xmldom');
 
