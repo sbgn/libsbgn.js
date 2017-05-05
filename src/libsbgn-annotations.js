@@ -53,15 +53,15 @@ var ns = {};
  * @class
  */
 var Annotation = function (params) {
-	var params = checkParams(params, []);
-	this.rdfElements = [];
+	var params = checkParams(params, ['rdfElement']);
+	this.rdfElement = params.rdfElement;
 };
 
 /**
- * @param {RdfElement} rdfAnnotation
+ * @param {RdfElement} rdfElement
  */
-Annotation.prototype.addRDF = function(rdfAnnotation) {
-	this.rdfElements.push(rdfAnnotation);
+Annotation.prototype.setRdfElement = function(rdfElement) {
+	this.rdfElement = rdfElement;
 };
 
 /**
@@ -69,10 +69,12 @@ Annotation.prototype.addRDF = function(rdfAnnotation) {
  */
 Annotation.prototype.buildXmlObj = function () {
 	var annotation = new xmldom.DOMImplementation().createDocument().createElement('annotation');
-	for (var i=0; i<this.rdfElements.length; i++) {
-		var rdf = this.rdfElements[i];
-		//console.log(rdf.toXML());
-
+	if (this.rdfElement != null) {
+		var rdf = this.rdfElement;
+		// need to parse the string returned by serializing the rdf into a dom element
+		var xmlDoc = new xmldom.DOMParser().parseFromString(rdf.toXML(), "text/xml");
+		var rdfDOMElement = xmlDoc.getElementsByTagName('rdf:RDF')[0];
+		annotation.appendChild(rdfDOMElement);
 	}
 	return annotation;
 };
@@ -94,12 +96,11 @@ Annotation.fromXML = function (xml) {
 	}
 	var annotation = new ns.Annotation();
 
-	var rdfs = xml.getElementsByTagName('rdf:RDF');
-	for (var i=0; i<rdfs.length; i++) {
-		var rdfXML = rdfs[i];
-		// parse rdf
+
+	var rdfXML = xml.getElementsByTagName('rdf:RDF')[0];
+	if (rdfXML != null) {
 		var rdf = ns.RdfElement.fromXML(rdfXML);
-		annotation.addRDF(rdf);
+		annotation.setRdfElement(rdf);
 	}
 
 	return annotation;
@@ -115,41 +116,61 @@ var GlobalRdfStore = function () {
 GlobalRdfStore.prototype.load = function (annotations) {
 	for(var i=0; i<annotations.length; i++) {
 		var annot = annotations[i];
-		for(var j=0; j<annot.rdfElements.length; j++) {
-			var rdfElement = annot.rdfElements[j];
-			this.store.addTriples(rdfElement.graph.getTriples());
+		if(annot.rdfElement != null) {
+			var rdfElement = annot.rdfElements;
+			this.store.addTriples(rdfElement.store.getTriples());
 		}
 	}
 	this.store.addPrefixes(Util.prefixes);
 };
 
-GlobalRdfStore.prototype.getPropertiesOfId = function (id) {
-	return Util.getPropertiesOfId(this.store, id);
+GlobalRdfStore.prototype.getCustomPropertiesOfId = function (id) {
+	return Util.getCustomPropertiesOfId(this.store, id);
 };
 
 GlobalRdfStore.prototype.getAllIds = function () {
 	return Util.getAllIds(this.store);
 };
 
+GlobalRdfStore.prototype.addCustomProperty = function (id, kvObject) {
+	return Util.addCustomProperty(this.store, id, kvObject);
+};
+
+GlobalRdfStore.prototype.getResourcesOfId = function(id) {
+	return Util.getResourcesOfId(this.store, id);
+};
+
+GlobalRdfStore.prototype.addResource = function (id, kvObject) {
+	return Util.addResource(this.store, id, kvObject);
+};
+
 GlobalRdfStore.prototype.test = function () {
 	console.log("globalstore test");
 	var id2 = "http://local/anID000002";
 	var id1 = "http://local/anID000001";
-	console.log("all properties of id2", this.getPropertiesOfId(id2));
+	console.log("all properties of id2", this.getCustomPropertiesOfId(id2));
 	console.log("all ids", this.getAllIds());
-	console.log("hasSIO", Util.hasHasProperty(this.store, id2));
-	console.log("add hasprop", Util.addHasProperty(this.store, id1));
-	console.log("add hasprop2", Util.addHasProperty(this.store, id2));
-	console.log("hasSIO2", Util.hasHasProperty(this.store, id2));
-	console.log("add kvprop", Util.addProperty(this.store, id2, {test: "testvalue"}));
-	console.log("all properties of id2", this.getPropertiesOfId(id2));
+	console.log("hasSIO", Util.hasRelationship(this.store, id2, "sio:SIO_000223"));
+	console.log("add hasprop", Util.getRelationship(this.store, id1, "sio:SIO_000223"));
+	console.log("add hasprop2", Util.getRelationship(this.store, id2, "sio:SIO_000223"));
+	console.log("hasSIO2", Util.hasRelationship(this.store, id2, "sio:SIO_000223"));
+	console.log("add kvprop", Util.addCustomProperty(this.store, id2, {test: "testvalue"}));
+	console.log("all properties of id2", this.getCustomPropertiesOfId(id2));
 	console.log("-------");
-	console.log("all properties of id", this.getPropertiesOfId(id1));
-	console.log("add kvprop", Util.addProperty(this.store, id1, {test: "testvalue"}));
-	console.log("all properties of id", this.getPropertiesOfId(id1));
+	console.log("all properties of id", this.getCustomPropertiesOfId(id1));
+	console.log("add kvprop", Util.addCustomProperty(this.store, id1, {test: "testvalue"}));
+	console.log("all properties of id", this.getCustomPropertiesOfId(id1));
+	console.log("**********");
+	console.log("get all resources", Util.getResourcesOfId(this.store, id1));
+	console.log("get all resources for id2", Util.getResourcesOfId(this.store, id2));
+	console.log("**********");
+	console.log("add resource for id2", Util.addResource(this.store, id2, {"bqbiol:is": "http://aURL"}));
+	console.log("get all resources for id2", Util.getResourcesOfId(this.store, id2));
+	console.log("add resource for id2", Util.addResource(this.store, id2, {"bqmodel:is": "http://aURLZZZ"}));
+	console.log("get all resources for id2", Util.getResourcesOfId(this.store, id2));
 	/*var self = this;
 	this.getAllIds().forEach(function(e){
-		console.log(e, self.getPropertiesOfId(e));
+		console.log(e, self.getCustomPropertiesOfId(e));
 	});*/
 };
 
@@ -158,22 +179,15 @@ ns.GlobalRdfStore = GlobalRdfStore;
 
 // ------- RDFELEMENT -------
 /**
- * Represents the <code>&lt;rdf&gt;</code> element.
+ * Represents the <code>&lt;rd:RDFf&gt;</code> element.
  * @class
  */
 var RdfElement = function (params) {
-	var params = checkParams(params, ['graph']);
-	this.graph = params.graph;
+	var params = checkParams(params, ['store']);
+	this.store = params.store;
 };
 
 RdfElement.uri = 'http://www.eisbm.org/';
-
-/**
- * @return {Element}
- */
-RdfElement.prototype.buildXmlObj = function () {
-
-};
 
 /**
  * @return {string}
@@ -206,7 +220,7 @@ RdfElement.prototype.toXML = function() {
 	// serialize the stored graph to N3
 	var writer = N3.Writer({ prefixes: Util.prefixes, format: 'N-Triples' });
 	addSimpleWrite(writer); // add our custom methods to the writer
-	var stringN3 = writer.simpleWriteTriples(this.graph.getTriples()); // use custom method to serialize triples
+	var stringN3 = writer.simpleWriteTriples(this.store.getTriples()); // use custom method to serialize triples
 
 	// read N3 format
 	var graph = $rdf.graph();
@@ -280,24 +294,36 @@ RdfElement.fromXML = function (xml) {
 	store.addPrefixes(Util.prefixes);
 	store.addTriples(parser.parse(turtle));
 	
-	rdfElement.graph = store;
+	rdfElement.store = store;
 
 	return rdfElement;
 };
 
-RdfElement.prototype.getPropertiesOfId = function (id) {
-	return Util.getPropertiesOfId(this.graph, id);
+RdfElement.prototype.getCustomPropertiesOfId = function (id) {
+	return Util.getCustomPropertiesOfId(this.store, id);
 };
 
 RdfElement.prototype.getAllIds = function () {
-	return Util.getAllIds(this.graph);
+	return Util.getAllIds(this.store);
+};
+
+RdfElement.prototype.addCustomProperty = function (id, kvObject) {
+	return Util.addCustomProperty(this.store, id, kvObject);
+};
+
+RdfElement.prototype.getResourcesOfId = function(id) {
+	return Util.getResourcesOfId(this.store, id);
+};
+
+RdfElement.prototype.addResource = function (id, kvObject) {
+	return Util.addResource(this.store, id, kvObject);
 };
 
 RdfElement.prototype.test = function() {
-	//console.log(this.graph);
-	//console.log(this.graph.getTriples("http://local/anID000001", null, null));
+	//console.log(this.store);
+	//console.log(this.store.getTriples("http://local/anID000001", null, null));
 	console.log("expand prefix shortcut", Util.expandPrefix("sio:SIO_000116"));
-	console.log("all properties of id", this.getPropertiesOfId("http://local/anID000001"));
+	console.log("all properties of id", this.getCustomPropertiesOfId("http://local/anID000001"));
 	console.log("all ids", this.getAllIds());
 };
 
@@ -306,5 +332,6 @@ ns.RdfElement = RdfElement;
 
 
 ns.rdflib = $rdf;
+ns.Util = Util;
 
 module.exports = ns;
