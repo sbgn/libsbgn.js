@@ -96,8 +96,8 @@ Annotation.fromXML = function (xml) {
 	}
 	var annotation = new ns.Annotation();
 
-
-	var rdfXML = xml.getElementsByTagName('rdf:RDF')[0];
+	/** xml.getElementsByTagName('rdf:RDF') doesn't work for Chrome */
+	var rdfXML = xml.getElementsByTagName('rdf:RDF')[0] || xml.getElementsByTagName('RDF')[0];
 	if (rdfXML != null) {
 		var rdf = ns.RdfElement.fromXML(rdfXML);
 		annotation.setRdfElement(rdf);
