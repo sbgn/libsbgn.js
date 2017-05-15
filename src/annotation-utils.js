@@ -201,14 +201,16 @@ ns.addResource = function (graph, id, kvObject) {
 	for(var relation in kvObject) {
 		//console.log("relation", relation);
 		var relationElement = ns.getRelationship(graph, id, relation)[0]; // doesn't matter if more than one
-		//console.log(graph.getTriples(id, relation));
+		//console.log("after get relation",relationElement, graph.getTriples(id, relation));
+		//console.log("after get realtion", graph.getTriples());
 		// using elemnt count as index may be dangerous if previous manipulation of
 		// the elements has happened. Like removing one. 
 		var propIndex = ns.countBagElements(graph, relationElement) + 1;
 		//console.log("elements in bag:", propIndex);
-		var newBlank = graph.createBlankNode();
-		//console.log("expand list element", ns.expandPrefix("rdf:_"+propIndex));
+		//console.log("new blank node", graph.getTriples());
+		//console.log("Will add", relationElement, ns.expandPrefix("rdf:_"+propIndex), kvObject[relation]);
 		graph.addTriple(relationElement, ns.expandPrefix("rdf:_"+propIndex), kvObject[relation]);
+		//console.log("end result", graph.getTriples());
 		//console.log("added", relation, kvObject[relation]);
 	}
 };

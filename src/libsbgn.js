@@ -258,11 +258,18 @@ Extension.prototype.add = function (extension) {
 	if (extension instanceof renderExt.RenderInformation) {
 		this.list['renderInformation'] = extension;
 	}
+	else if (extension instanceof annotExt.Annotation) {
+		this.list['annotation'] = extension;
+	}
 	else if (extension.nodeType == '1') { // Node.ELEMENT_NODE == 1
 		// case where renderInformation is passed unparsed
 		if (extension.tagName == 'renderInformation') {
 			var renderInformation = renderExt.RenderInformation.fromXML(extension);
 			this.list['renderInformation'] = renderInformation;
+		}
+		else if (extension.tagName == 'annotation') {
+			var annotation = annotExt.Annotation.fromXML(extension);
+			this.list['annotation'] = renderInformation;
 		}
 		else {
 			this.list[extension.tagName] = extension;
@@ -297,7 +304,7 @@ Extension.prototype.get = function (extensionName) {
 Extension.prototype.buildXmlObj = function () {
 	var extension = new xmldom.DOMImplementation().createDocument().createElement('extension');
 	for (var extInstance in this.list) {
-		if (extInstance == "renderInformation") {
+		if (extInstance == "renderInformation" || extInstance == "annotation") {
 			extension.appendChild(this.get(extInstance).buildXmlObj());
 		}
 		else {
@@ -340,8 +347,9 @@ Extension.fromXML = function (xmlObj) {
 			var renderInformation = renderExt.RenderInformation.fromXML(extXmlObj);
 			extension.add(renderInformation);
 		}
-		else if (extName == 'annotations') {
-			extension.add(extXmlObj); // to be parsed correctly
+		else if (extName == 'annotation') {
+			var annotation = annotExt.Annotation.fromXML(extXmlObj);
+			extension.add(annotation);
 		}
 		else { // unsupported extension, we still store the data as is
 			extension.add(extXmlObj);
