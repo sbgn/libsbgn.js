@@ -184,7 +184,14 @@ ns.GlobalRdfStore = GlobalRdfStore;
  */
 var RdfElement = function (params) {
 	var params = checkParams(params, ['store']);
-	this.store = params.store;
+	if (params.store) {
+		this.store = params.store;
+	}
+	else {
+		var store = N3.Store();
+		store.addPrefixes(Util.prefixes);
+		this.store = store;
+	}
 };
 
 RdfElement.uri = 'http://www.eisbm.org/';
@@ -261,8 +268,12 @@ RdfElement.prototype.toXML = function() {
 		var regexp = / rdf:parseType="Resource"/g;
 		return string.replace(regexp, '');
 	}
+
+	function replaceSlashInID(string) {
+		return string.replace(new RegExp(/rdf:about="\//g), 'rdf:about="');
+	}
 	
-	var result = replaceParseType(replaceLi(replaceBag(serialize)));
+	var result = replaceSlashInID(replaceParseType(replaceLi(replaceBag(serialize))));
 	
 	return result;
 };
