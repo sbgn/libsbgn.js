@@ -7,7 +7,7 @@
 var renderExt = require('./libsbgn-render');
 var annotExt = require('./libsbgn-annotations');
 var checkParams = require('./utilities').checkParams;
-var getFirstLevelGlyphs = require('./utilities').getFirstLevelGlyphs;
+var getFirstLevelByName = require('./utilities').getFirstLevelByName;
 var xmldom = require('xmldom');
 
 var ns = {};
@@ -50,7 +50,7 @@ SBGNBase.prototype.baseToXmlObj = function (xmlObj) {
  */
 SBGNBase.prototype.baseFromXML = function (xmlObj) {
 	// children
-	var extensionXML = xmlObj.getElementsByTagName('extension')[0];
+	var extensionXML = getFirstLevelByName(xmlObj, 'extension')[0];
 	if (extensionXML != null) {
 		var extension = ns.Extension.fromXML(extensionXML);
 		this.setExtension(extension);
@@ -222,7 +222,7 @@ Map.fromXML = function (xmlObj) {
 
 	// need to be careful here, as there can be glyph in arcs
 	//var glyphsXML = xmlObj.querySelectorAll('map > glyph');
-	var glyphsXML = getFirstLevelGlyphs(xmlObj);
+	var glyphsXML = getFirstLevelByName(xmlObj, "glyph");
 	for (var i=0; i < glyphsXML.length; i++) {
 		var glyph = ns.Glyph.fromXML(glyphsXML[i]);
 		map.addGlyph(glyph);
