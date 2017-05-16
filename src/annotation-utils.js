@@ -55,6 +55,17 @@ for(var i=0; i<controlledVocabularyList.length; i++) {
 	ns.isControlledVocabulary[ns.expandPrefix(term)] = true;
 }
 
+ns.reducePrefix = function (expandedString) {
+	for (var key in ns.prefixes) {
+		var completePrefix = ns.prefixes[key];
+		if (expandedString.startsWith(completePrefix)) {
+			return expandedString.replace(completePrefix, key+':');
+		}
+	}
+	// no prefix could be recognized
+	return expandedString;
+};
+
 ns.getCustomPropertiesOfId = function (graph, id) {
 	var kvresult = {};
 	//console.log(graph.getTriples());
