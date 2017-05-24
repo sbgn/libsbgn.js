@@ -1,4 +1,25 @@
 /**
+ * This submodule manages the annotations extension. It adds the ability to save semantic data into
+ * SBGN-ML in the form of RDF elements. Any SBGN element that can host an extension tag can also 
+ * get RDF annotations. This means that almost every element can get annotated.
+ *
+ * The annotations here are intended to be used in two ways:
+ * - with controlled vocabulary and resources, as suggested by COMBINE, with the help of MIRIAM
+ *   identifiers.
+ * - as a mean to attach arbitrary data in the form of key-value properties.
+ *
+ * # Controlled vocabulary
+ *
+ * The formal way of using annotations is to use specific vocabulary with specific identifiers to
+ * provide additional information that can not be conveyed otherwise through the SBGN format.
+ * See --link to combine qualifiers-- and --link to identifiers.org and MIRIAM---
+ * This was also based on the annotation extension of SBML --link to annotation proposal for SBML--
+ *
+ *
+ * See {@link Extension} for more general information on extensions in the SBGN-ML format.
+ *
+ * You can access the following classes like this: <code>libsbgn.annot.Annotation<code>
+ *
  * @module libsbgn-annotations
  * @namespace libsbgn.annot
 */
@@ -11,46 +32,14 @@ var Util = require('./annotation-utils');
 
 var ns = {};
 
-/*
-	EXAMPLE:
-
-	<rdf:RDF 
-		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	    xmlns:bqmodel="http://biomodels.net/model-qualifiers/"
-	    xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
-	    xmlns:eisbm="http://www.eisbm.org/rdf-annotation-newt/">
-		<rdf:Description rdf:about="#_000001">
-			<bqmodel:is>
-				<rdf:Bag>
-					<rdf:li rdf:resource="http://identifiers.org/biomodels.db/BIOMD0000000004" />
-				</rdf:Bag>
-			</bqmodel:is>
-
-			<bqmodel:isDescribedBy>
-				<rdf:Bag>
-					<rdf:li rdf:resource="http://identifiers.org/pubmed/1833774" />
-				</rdf:Bag>
-			</bqmodel:isDescribedBy>
-
-			<eisbm:hasProperty>
-				<rdf:Bag>
-					<eisbm:item eisbm:key="data" eisbm:value="42" />
-					<eisbm:item eisbm:key="data2" eisbm:value="1.23" />
-				</rdf:Bag>
-			</eisbm:hasProperty>
-
-		</rdf:Description>
-	</rdf:RDF> 
-
-
-*/
-
 //ns.xmlns = "http://www.sbml.org/sbml/level3/version1/render/version1";
 
 // ------- ANNOTATION -------
 /**
  * Represents the <code>&lt;annotation&gt;</code> element.
  * @class
+ * @param {Object} params
+ * @param {RdfElement=} params.rdfElement
  */
 var Annotation = function (params) {
 	var params = checkParams(params, ['rdfElement']);
@@ -108,10 +97,48 @@ Annotation.fromXML = function (xml) {
 ns.Annotation = Annotation;
 // ------- END ANNOTATION -------
 
-// ------- GLOBALSTORE -------
-var GlobalRdfStore = function () {
-	this.store = N3.Store();
+// ------- STOREOBJECT -------
+var StoreObject = function (params) {
+	var params = checkParams(params, ['store']);
+	if (params.store) {
+		this.store = params.store;
+	}
+	else {
+		var store = N3.Store();
+		store.addPrefixes(Util.prefixes);
+		this.store = store;
+	}
 };
+
+StoreObject.prototype.getCustomPropertiesOfId = function (id) {
+	return Util.getCustomPropertiesOfId(this.store, id);
+};
+
+StoreObject.prototype.getAllIds = function () {
+	return Util.getAllIds(this.store);
+};
+
+StoreObject.prototype.addCustomProperty = function (id, kvObject) {
+	return Util.addCustomProperty(this.store, id, kvObject);
+};
+
+StoreObject.prototype.getResourcesOfId = function(id) {
+	return Util.getResourcesOfId(this.store, id);
+};
+
+StoreObject.prototype.addResource = function (id, kvObject) {
+	return Util.addResource(this.store, id, kvObject);
+};
+
+ns.StoreObject = StoreObject;
+// ------- END STOREOBJECT -------
+
+// ------- GLOBALSTORE -------
+var GlobalRdfStore = function (params) {
+	ns.StoreObject.call(this, params);
+};
+GlobalRdfStore.prototype = Object.create(ns.StoreObject.prototype);
+GlobalRdfStore.prototype.constructor = GlobalRdfStore;
 
 GlobalRdfStore.prototype.load = function (annotations) {
 	for(var i=0; i<annotations.length; i++) {
@@ -122,26 +149,6 @@ GlobalRdfStore.prototype.load = function (annotations) {
 		}
 	}
 	this.store.addPrefixes(Util.prefixes);
-};
-
-GlobalRdfStore.prototype.getCustomPropertiesOfId = function (id) {
-	return Util.getCustomPropertiesOfId(this.store, id);
-};
-
-GlobalRdfStore.prototype.getAllIds = function () {
-	return Util.getAllIds(this.store);
-};
-
-GlobalRdfStore.prototype.addCustomProperty = function (id, kvObject) {
-	return Util.addCustomProperty(this.store, id, kvObject);
-};
-
-GlobalRdfStore.prototype.getResourcesOfId = function(id) {
-	return Util.getResourcesOfId(this.store, id);
-};
-
-GlobalRdfStore.prototype.addResource = function (id, kvObject) {
-	return Util.addResource(this.store, id, kvObject);
 };
 
 GlobalRdfStore.prototype.test = function () {
@@ -183,16 +190,10 @@ ns.GlobalRdfStore = GlobalRdfStore;
  * @class
  */
 var RdfElement = function (params) {
-	var params = checkParams(params, ['store']);
-	if (params.store) {
-		this.store = params.store;
-	}
-	else {
-		var store = N3.Store();
-		store.addPrefixes(Util.prefixes);
-		this.store = store;
-	}
+	ns.StoreObject.call(this, params);
 };
+RdfElement.prototype = Object.create(ns.StoreObject.prototype);
+RdfElement.prototype.constructor = RdfElement;
 
 RdfElement.uri = 'http://www.eisbm.org/';
 
@@ -308,26 +309,6 @@ RdfElement.fromXML = function (xml) {
 	rdfElement.store = store;
 
 	return rdfElement;
-};
-
-RdfElement.prototype.getCustomPropertiesOfId = function (id) {
-	return Util.getCustomPropertiesOfId(this.store, id);
-};
-
-RdfElement.prototype.getAllIds = function () {
-	return Util.getAllIds(this.store);
-};
-
-RdfElement.prototype.addCustomProperty = function (id, kvObject) {
-	return Util.addCustomProperty(this.store, id, kvObject);
-};
-
-RdfElement.prototype.getResourcesOfId = function(id) {
-	return Util.getResourcesOfId(this.store, id);
-};
-
-RdfElement.prototype.addResource = function (id, kvObject) {
-	return Util.addResource(this.store, id, kvObject);
 };
 
 RdfElement.prototype.test = function() {
