@@ -8,7 +8,7 @@
  *
  * See {@link Extension} for more general information on extensions in the SBGN-ML format.
  *
- * You can access the following classes like this: <code>libsbgn.render.ColorDefinition<code>
+ * You can access the following classes like this: <code>libsbgn.render.ColorDefinition</code>
  *
  * @module libsbgn-render
  * @namespace libsbgn.render

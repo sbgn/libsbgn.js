@@ -179,6 +179,22 @@ describe('libsbgn', function() {
 				map.toXML().should.equal('<map id="id" language="language"><extension/><glyph/><arc/></map>');
 			});
 		});
+
+		describe('prefix management', function() {
+			it('should allow prefixes', function() {
+				var map = sbgnjs.Map.fromXML(getXmlObj('<sbgn:map xmlns:sbgn="http://sbgn.org/libsbgn/0.2"></sbgn:map>'));
+				map.should.have.ownProperty('id');
+				should.equal(map.id, null);
+				map.should.have.ownProperty('language');
+				should.equal(map.language, null);
+				map.should.have.ownProperty('extension');
+				should.equal(map.extension, null);
+				map.should.have.ownProperty('glyphs');
+				map.glyphs.should.have.length(0);
+				map.should.have.ownProperty('arcs');
+				map.arcs.should.have.length(0);
+			});
+		});
 	});
 	describe('extension', function() {
 		describe('parse from XML', function() {
@@ -835,6 +851,62 @@ describe('libsbgn', function() {
 			should.exist(arc2.glyphs[0].label);
 			arc2.glyphs[0].label.should.be.instanceOf(sbgnjs.Label);
 			arc2.glyphs[0].label.text.should.equal('2');
+		});
+		it('should parse prefix and namespace full test', function() {
+			var sbgn = sbgnjs.Sbgn.fromXML(getXmlObj(
+				'<?xml version="1.0" encoding="UTF-8"?><sbgn xmlns:sbgn="http://sbgn.org/libsbgn/0.2">\n'+
+				    '<sbgn:map xmlns:sbgn="http://sbgn.org/libsbgn/0.2" language="process description">\n'+
+				        '<sbgn:glyph xmlns:sbgn="http://sbgn.org/libsbgn/0.2" class="macromolecule" id="g1">\n'+
+				            '<sbgn:label xmlns:sbgn="http://sbgn.org/libsbgn/0.2" text="LABEL"/>\n'+
+				            '<sbgn:bbox xmlns:sbgn="http://sbgn.org/libsbgn/0.2" w="380." h="210." x="90." y="160."/>\n'+
+				        '</sbgn:glyph>\n'+
+				        '<sbgn:glyph xmlns:sbgn="http://sbgn.org/libsbgn/0.2" class="annotation" id="g2">\n'+
+				            '<sbgn:label xmlns:sbgn="http://sbgn.org/libsbgn/0.2" text="INFO"/>\n'+
+				            '<sbgn:callout xmlns:sbgn="http://sbgn.org/libsbgn/0.2" target="g1">\n'+
+				                '<sbgn:point xmlns:sbgn="http://sbgn.org/libsbgn/0.2" x="160." y="200."/>\n'+
+				            '</sbgn:callout>\n'+
+				            '<sbgn:bbox xmlns:sbgn="http://sbgn.org/libsbgn/0.2" w="220." h="125." x="5." y="5."/>\n'+
+				        '</sbgn:glyph>\n'+
+				    '</sbgn:map>\n'+
+				'</sbgn>\n'
+			));
+			should.exist(sbgn);
+			sbgn.should.be.instanceOf(sbgnjs.Sbgn);
+			should.exist(sbgn.xmlns);
+			sbgn.xmlns.should.equal('http://sbgn.org/libsbgn/0.2');
+			// map
+			should.exist(sbgn.map);
+			sbgn.map.should.be.instanceOf(sbgnjs.Map);
+			sbgn.map.language.should.equal('process description');
+			//sbgn.map.id.should.equal('mapID');
+			sbgn.map.glyphs.should.have.lengthOf(2);
+			// glyph 1
+			var glyph1 = sbgn.map.glyphs[0];
+			glyph1.id.should.equal('g1');
+			glyph1.class_.should.equal('macromolecule');
+			should.exist(glyph1.label);
+			glyph1.label.should.be.instanceOf(sbgnjs.Label);
+			glyph1.label.text.should.equal('LABEL');
+			should.exist(glyph1.bbox);
+			glyph1.bbox.should.be.instanceOf(sbgnjs.Bbox);
+			glyph1.bbox.y.should.equal(160);
+			glyph1.bbox.x.should.equal(90);
+			glyph1.bbox.w.should.equal(380);
+			glyph1.bbox.h.should.equal(210);
+			// glyph 2
+			var glyph2 = sbgn.map.glyphs[1];
+			glyph2.id.should.equal('g2');
+			glyph2.class_.should.equal('annotation');
+			should.exist(glyph2.label);
+			glyph2.label.should.be.instanceOf(sbgnjs.Label);
+			glyph2.label.text.should.equal('INFO');
+			should.exist(glyph2.bbox);
+			glyph2.bbox.should.be.instanceOf(sbgnjs.Bbox);
+			glyph2.bbox.y.should.equal(5);
+			glyph2.bbox.x.should.equal(5);
+			glyph2.bbox.w.should.equal(220);
+			glyph2.bbox.h.should.equal(125);
+			// MISSING CALLOUTS HERE TODO		
 		});
 	});
 });

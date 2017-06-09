@@ -19,11 +19,11 @@ ns.checkParams = function (params, names) {
 	return params;
 }
 
-ns.getFirstLevelByName = function (xmlObj, tagName) {
+ns.getFirstLevelByName = function (xmlObj, localName) {
 	var result = [];
 	for(var i=0; i<xmlObj.childNodes.length; i++) {
 		var child = xmlObj.childNodes[i];
-		if (child.tagName && child.tagName == tagName) {
+		if (child.localName && child.localName == localName) {
 			result.push(child);
 		}
 	}

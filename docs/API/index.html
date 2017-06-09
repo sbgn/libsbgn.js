@@ -1122,9 +1122,9 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#Annotation#addRDF'
+                        href='#Annotation#setRdfElement'
                         class='regular pre-open'>
-                        #addRDF
+                        #setRdfElement
                       </a></li>
                       
                       <li><a
@@ -1172,12 +1172,6 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#RdfElement#buildXmlObj'
-                        class='regular pre-open'>
-                        #buildXmlObj
-                      </a></li>
-                      
-                      <li><a
                         href='#RdfElement#toXML'
                         class='regular pre-open'>
                         #toXML
@@ -1192,9 +1186,9 @@
               
                 
                 <li><a
-                  href='#addproperty'
+                  href='#rdfxml'
                   class="">
-                  addProperty
+                  rdfXML
                   
                 </a>
                 
@@ -1202,9 +1196,29 @@
               
                 
                 <li><a
-                  href='#addhasproperty'
+                  href='#addcustomproperty'
                   class="">
-                  addHasProperty
+                  addCustomProperty
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getrelationship'
+                  class="">
+                  getRelationship
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addresource'
+                  class="">
+                  addResource
                   
                 </a>
                 
@@ -6075,7 +6089,7 @@ border thickness or font properties are not part of the SBGN standard.</p>
 <p>It is loosely based on the <a href="http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/render">render extension of the SBML format</a>.
 A subset of this specification has been adapted for SBGN-ML integration.</p>
 <p>See <a href="#extension">Extension</a> for more general information on extensions in the SBGN-ML format.</p>
-<p>You can access the following classes like this: <code>libsbgn.render.ColorDefinition<code></p>
+<p>You can access the following classes like this: <code>libsbgn.render.ColorDefinition</code></p>
 
 
   <div class='pre p1 fill-light mt0'>libsbgn.render</div>
@@ -8145,7 +8159,23 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
   </div>
   
 
-  
+  <p>This submodule manages the annotations extension. It adds the ability to save semantic data into
+SBGN-ML in the form of RDF elements. Any SBGN element that can host an extension tag can also
+get RDF annotations. This means that almost every element can get annotated.</p>
+<p>The annotations here are intended to be used in two ways:</p>
+<ul>
+<li>with controlled vocabulary and resources, as suggested by COMBINE, with the help of MIRIAM
+identifiers.</li>
+<li>as a mean to attach arbitrary data in the form of key-value properties.</li>
+</ul>
+<h1>Controlled vocabulary</h1>
+<p>The formal way of using annotations is to use specific vocabulary with specific identifiers to
+provide additional information that can not be conveyed otherwise through the SBGN format.
+See --link to combine qualifiers-- and --link to identifiers.org and MIRIAM---
+This was also based on the annotation extension of SBML --link to annotation proposal for SBML--</p>
+<p>See <a href="#extension">Extension</a> for more general information on extensions in the SBGN-ML format.</p>
+<p>You can access the following classes like this: <code>libsbgn.annot.Annotation</code></p>
+
 
   <div class='pre p1 fill-light mt0'>libsbgn.annot</div>
   
@@ -8193,7 +8223,7 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
   <p>Represents the <code>&#x3C;annotation></code> element.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new Annotation(params: any)</div>
+  <div class='pre p1 fill-light mt0'>new Annotation(params: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
   
   
 
@@ -8209,9 +8239,31 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>params</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    
           </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>params.rdfElement</span> <code class='quiet'><a href="#rdfelement">RdfElement</a>?</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
           
         </div>
       
@@ -8303,11 +8355,11 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='Annotation#addRDF'>
+    <div class='border-bottom' id='Annotation#setRdfElement'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addRDF(rdfAnnotation)</span>
+            <span class='code strong strong truncate'>setRdfElement(rdfElement)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8317,7 +8369,7 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>addRDF(rdfAnnotation: <a href="#rdfelement">RdfElement</a>)</div>
+  <div class='pre p1 fill-light mt0'>setRdfElement(rdfElement: <a href="#rdfelement">RdfElement</a>)</div>
   
   
 
@@ -8333,7 +8385,7 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>rdfAnnotation</span> <code class='quiet'>(<a href="#rdfelement">RdfElement</a>)</code>
+            <span class='code bold'>rdfElement</span> <code class='quiet'>(<a href="#rdfelement">RdfElement</a>)</code>
 	    
           </div>
           
@@ -8487,7 +8539,7 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
   </div>
   
 
-  <p>Represents the <code>&#x3C;rdf></code> element.</p>
+  <p>Represents the <code>&#x3C;rd:RDFf></code> element.</p>
 
 
   <div class='pre p1 fill-light mt0'>new RdfElement(params: any)</div>
@@ -8600,58 +8652,6 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='RdfElement#buildXmlObj'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>buildXmlObj()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>buildXmlObj(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">Element</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='RdfElement#toXML'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -8719,8 +8719,54 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='addproperty'>
-      addProperty
+    <h3 class='fl m0' id='rdfxml'>
+      rdfXML
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>xml.getElementsByTagName('rdf:RDF') doesn't work for Chrome</p>
+
+
+  <div class='pre p1 fill-light mt0'>rdfXML</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addcustomproperty'>
+      addCustomProperty
     </h3>
     
     
@@ -8731,7 +8777,7 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
 kvObject can have one or multiple properties</p>
 
 
-  <div class='pre p1 fill-light mt0'>addProperty(graph: any, id: any, kvObject: any)</div>
+  <div class='pre p1 fill-light mt0'>addCustomProperty(graph: any, id: any, kvObject: any)</div>
   
   
 
@@ -8795,8 +8841,8 @@ kvObject can have one or multiple properties</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='addhasproperty'>
-      addHasProperty
+    <h3 class='fl m0' id='getrelationship'>
+      getRelationship
     </h3>
     
     
@@ -8804,10 +8850,11 @@ kvObject can have one or multiple properties</p>
   
 
   <p>returns the id of a newly created blank node representing the HasProperty predicate
-if one already exists, returns its id</p>
+if one already exists, returns its id
+returns array, potentially several SIO223 present</p>
 
 
-  <div class='pre p1 fill-light mt0'>addHasProperty(graph: any, id: any)</div>
+  <div class='pre p1 fill-light mt0'>getRelationship(graph: any, id: any, relationship: any)</div>
   
   
 
@@ -8832,6 +8879,89 @@ if one already exists, returns its id</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>relationship</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addresource'>
+      addResource
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>kvobject contains biology qualifier as key and miriam resource as value</p>
+
+
+  <div class='pre p1 fill-light mt0'>addResource(graph: any, id: any, kvObject: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>graph</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>kvObject</span> <code class='quiet'>(any)</code>
 	    
           </div>
           

@@ -75,7 +75,6 @@ var Sbgn = function (params) {
 	this.map 	= params.map;
 
 	this.allowedChildren = ['map'];
-	this.tagName = 'sbgn';
 };
 
 Sbgn.prototype = Object.create(ns.SBGNBase.prototype);
@@ -126,8 +125,22 @@ Sbgn.fromXML = function (xmlObj) {
 	var sbgn = new ns.Sbgn();
 	sbgn.xmlns = xmlObj.getAttribute('xmlns') || null;
 
+	// getting attribute with 'xmlns' doesn't work if some namespace is defined like 'xmlns:sbgn'
+	// so if there is some attribute there, and we didn't find the xmlns directly, we need to into it
+	if(!sbgn.xmlns && xmlObj.attributes.length > 0) {
+		// sbgn is not supposed to have any other attribute than an xmlns, so we assume the first attr is the xmlns
+		var attr = xmlObj.attributes[0];
+		if(attr.prefix == 'xmlns') {
+			sbgn.xmlns = attr.value;
+			sbgn.namespacePrefix = attr.localName;
+		}
+		else {
+			throw new Error("Couldn't find xmlns definition in sbgn element");
+		}
+	}
+
 	// get children
-	var mapXML = xmlObj.getElementsByTagName('map')[0];
+	var mapXML = xmlObj.getElementsByTagNameNS('*', 'map')[0];
 	if (mapXML != null) {
 		var map = ns.Map.fromXML(mapXML);
 		sbgn.setMap(map);
@@ -158,7 +171,6 @@ var Map = function (params) {
 	this.arcs 		= params.arcs || [];
 
 	this.allowedChildren = ['glyphs', 'arcs'];
-	this.tagName = 'map';
 };
 
 Map.prototype = Object.create(ns.SBGNBase.prototype);
@@ -213,8 +225,8 @@ Map.prototype.toXML = function () {
  * @return {Map}
  */
 Map.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'map') {
-		throw new Error("Bad XML provided, expected tagName map, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'map') {
+		throw new Error("Bad XML provided, expected localName map, got: " + xmlObj.localName);
 	}
 	var map = new Map();
 	map.id = xmlObj.getAttribute('id') || null;
@@ -227,7 +239,7 @@ Map.fromXML = function (xmlObj) {
 		var glyph = ns.Glyph.fromXML(glyphsXML[i]);
 		map.addGlyph(glyph);
 	}
-	var arcsXML = xmlObj.getElementsByTagName('arc') || null;
+	var arcsXML = xmlObj.getElementsByTagNameNS('*','arc') || null;
 	for (var i=0; i < arcsXML.length; i++) {
 		var arc = ns.Arc.fromXML(arcsXML[i]);
 		map.addArc(arc);
@@ -263,16 +275,16 @@ Extension.prototype.add = function (extension) {
 	}
 	else if (extension.nodeType == '1') { // Node.ELEMENT_NODE == 1
 		// case where renderInformation is passed unparsed
-		if (extension.tagName == 'renderInformation') {
+		if (extension.localName == 'renderInformation') {
 			var renderInformation = renderExt.RenderInformation.fromXML(extension);
 			this.list['renderInformation'] = renderInformation;
 		}
-		else if (extension.tagName == 'annotation') {
+		else if (extension.localName == 'annotation') {
 			var annotation = annotExt.Annotation.fromXML(extension);
 			this.list['annotation'] = renderInformation;
 		}
 		else {
-			this.list[extension.tagName] = extension;
+			this.list[extension.localName] = extension;
 		}
 	}
 };
@@ -331,17 +343,17 @@ Extension.prototype.toXML = function () {
  * @return {Extension}
  */
 Extension.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'extension') {
-		throw new Error("Bad XML provided, expected tagName extension, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'extension') {
+		throw new Error("Bad XML provided, expected localName extension, got: " + xmlObj.localName);
 	}
 	var extension = new Extension();
 	var children = xmlObj.childNodes;
 	for (var i=0; i < children.length; i++) {
-		if(!children[i].tagName) { // if tagname is here, real element found
+		if(!children[i].localName) { // if tagname is here, real element found
 			continue;
 		}
 		var extXmlObj = children[i];
-		var extName = extXmlObj.tagName;
+		var extName = extXmlObj.localName;
 		//extension.add(extInstance);
 		if (extName == 'renderInformation') {
 			var renderInformation = renderExt.RenderInformation.fromXML(extXmlObj);
@@ -392,7 +404,6 @@ var Glyph = function (params) {
 	this.ports 			= params.ports || [];
 
 	this.allowedChildren = ['label', 'state', 'bbox', 'clone', 'glyphMembers', 'ports'];
-	this.tagName = 'glyph';
 };
 
 Glyph.prototype = Object.create(ns.SBGNBase.prototype);
@@ -490,30 +501,30 @@ Glyph.prototype.toXML = function () {
  * @return {Glyph}
  */
 Glyph.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'glyph') {
-		throw new Error("Bad XML provided, expected tagName glyph, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'glyph') {
+		throw new Error("Bad XML provided, expected localName glyph, got: " + xmlObj.localName);
 	}
 	var glyph = new Glyph();
 	glyph.id 				= xmlObj.getAttribute('id') || null;
 	glyph.class_ 			= xmlObj.getAttribute('class') || null;
 	glyph.compartmentRef 	= xmlObj.getAttribute('compartmentRef') || null;
 
-	var labelXML = xmlObj.getElementsByTagName('label')[0];
+	var labelXML = xmlObj.getElementsByTagNameNS('*', 'label')[0];
 	if (labelXML != null) {
 		var label = ns.Label.fromXML(labelXML);
 		glyph.setLabel(label);
 	}
-	var stateXML = xmlObj.getElementsByTagName('state')[0];
+	var stateXML = xmlObj.getElementsByTagNameNS('*', 'state')[0];
 	if (stateXML != null) {
 		var state = ns.StateType.fromXML(stateXML);
 		glyph.setState(state);
 	}
-	var bboxXML = xmlObj.getElementsByTagName('bbox')[0];
+	var bboxXML = xmlObj.getElementsByTagNameNS('*', 'bbox')[0];
 	if (bboxXML != null) {
 		var bbox = ns.Bbox.fromXML(bboxXML);
 		glyph.setBbox(bbox);
 	}
-	var cloneXMl = xmlObj.getElementsByTagName('clone')[0];
+	var cloneXMl = xmlObj.getElementsByTagNameNS('*', 'clone')[0];
 	if (cloneXMl != null) {
 		var clone = ns.CloneType.fromXML(cloneXMl);
 		glyph.setClone(clone);
@@ -523,12 +534,12 @@ Glyph.fromXML = function (xmlObj) {
 	var children = xmlObj.childNodes;
 	for (var j=0; j < children.length; j++) { // loop through all first level children
 		var child = children[j];
-		if (child.tagName && child.tagName == "glyph") { // here we only want the glyh children
+		if (child.localName && child.localName == "glyph") { // here we only want the glyh children
 			var glyphMember = Glyph.fromXML(child); // recursive call on nested glyph
 			glyph.addGlyphMember(glyphMember);
 		}
 	}
-	var portsXML = xmlObj.getElementsByTagName('port');
+	var portsXML = xmlObj.getElementsByTagNameNS('*', 'port');
 	for (var i=0; i < portsXML.length; i++) {
 		var port = ns.Port.fromXML(portsXML[i]);
 		glyph.addPort(port);
@@ -553,7 +564,6 @@ var Label = function (params) {
 	this.text = params.text;
 
 	this.allowedChildren = [];
-	this.tagName = 'label';
 };
 
 Label.prototype = Object.create(ns.SBGNBase.prototype);
@@ -583,8 +593,8 @@ Label.prototype.toXML = function () {
  * @return {Label}
  */
 Label.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'label') {
-		throw new Error("Bad XML provided, expected tagName label, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'label') {
+		throw new Error("Bad XML provided, expected localName label, got: " + xmlObj.localName);
 	}
 	var label = new ns.Label();
 	label.text = xmlObj.getAttribute('text') || null;
@@ -614,7 +624,6 @@ var Bbox = function (params) {
 	this.h = parseFloat(params.h);
 
 	this.allowedChildren = [];
-	this.tagName = 'bbox';
 };
 
 Bbox.prototype = Object.create(ns.SBGNBase.prototype);
@@ -653,8 +662,8 @@ Bbox.prototype.toXML = function () {
  * @return {Bbox}
  */
 Bbox.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'bbox') {
-		throw new Error("Bad XML provided, expected tagName bbox, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'bbox') {
+		throw new Error("Bad XML provided, expected localName bbox, got: " + xmlObj.localName);
 	}
 	var bbox = new ns.Bbox();
 	bbox.x = parseFloat(xmlObj.getAttribute('x'));
@@ -707,8 +716,8 @@ StateType.prototype.toXML = function () {
  * @return {StateType}
  */
 StateType.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'state') {
-		throw new Error("Bad XML provided, expected tagName state, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'state') {
+		throw new Error("Bad XML provided, expected localName state, got: " + xmlObj.localName);
 	}
 	var state = new ns.StateType();
 	state.value = xmlObj.getAttribute('value') || null;
@@ -753,8 +762,8 @@ CloneType.prototype.toXML = function () {
  * @return {CloneType}
  */
 CloneType.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'clone') {
-		throw new Error("Bad XML provided, expected tagName clone, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'clone') {
+		throw new Error("Bad XML provided, expected localName clone, got: " + xmlObj.localName);
 	}
 	var clone = new ns.CloneType();
 	clone.label = xmlObj.getAttribute('label') || null;
@@ -780,7 +789,6 @@ var Port = function (params) {
 	this.y 	= parseFloat(params.y);
 
 	this.allowedChildren = [];
-	this.tagName = 'port';
 };
 
 Port.prototype = Object.create(ns.SBGNBase.prototype);
@@ -816,8 +824,8 @@ Port.prototype.toXML = function () {
  * @return {Port}
  */
 Port.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'port') {
-		throw new Error("Bad XML provided, expected tagName port, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'port') {
+		throw new Error("Bad XML provided, expected localName port, got: " + xmlObj.localName);
 	}
 	var port = new ns.Port();
 	port.x 	= parseFloat(xmlObj.getAttribute('x'));
@@ -857,7 +865,6 @@ var Arc = function (params) {
 	this.glyphs = params.glyphs || [];
 
 	this.allowedChildren = ['start', 'nexts', 'end', 'glyphs'];
-	this.tagName = 'arc';
 };
 
 Arc.prototype = Object.create(ns.SBGNBase.prototype);
@@ -938,8 +945,8 @@ Arc.prototype.toXML = function () {
  * @return {Arc}
  */
 Arc.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'arc') {
-		throw new Error("Bad XML provided, expected tagName arc, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'arc') {
+		throw new Error("Bad XML provided, expected localName arc, got: " + xmlObj.localName);
 	}
 	var arc = new ns.Arc();
 	arc.id 		= xmlObj.getAttribute('id') || null;
@@ -947,22 +954,22 @@ Arc.fromXML = function (xmlObj) {
 	arc.source 	= xmlObj.getAttribute('source') || null;
 	arc.target 	= xmlObj.getAttribute('target') || null;
 
-	var startXML = xmlObj.getElementsByTagName('start')[0];
+	var startXML = xmlObj.getElementsByTagNameNS('*', 'start')[0];
 	if (startXML != null) {
 		var start = ns.StartType.fromXML(startXML);
 		arc.setStart(start);
 	}
-	var nextXML = xmlObj.getElementsByTagName('next');
+	var nextXML = xmlObj.getElementsByTagNameNS('*', 'next');
 	for (var i=0; i < nextXML.length; i++) {
 		var next = ns.NextType.fromXML(nextXML[i]);
 		arc.addNext(next);
 	}
-	var endXML = xmlObj.getElementsByTagName('end')[0];
+	var endXML = xmlObj.getElementsByTagNameNS('*', 'end')[0];
 	if (endXML != null) {
 		var end = ns.EndType.fromXML(endXML);
 		arc.setEnd(end);
 	}
-	var glyphsXML = xmlObj.getElementsByTagName('glyph');
+	var glyphsXML = xmlObj.getElementsByTagNameNS('*', 'glyph');
 	for (var i=0; i < glyphsXML.length; i++) {
 		var glyph = ns.Glyph.fromXML(glyphsXML[i]);
 		arc.addGlyph(glyph);
@@ -1014,8 +1021,8 @@ StartType.prototype.toXML = function () {
  * @return {StartType}
  */
 StartType.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'start') {
-		throw new Error("Bad XML provided, expected tagName start, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'start') {
+		throw new Error("Bad XML provided, expected localName start, got: " + xmlObj.localName);
 	}
 	var start = new ns.StartType();
 	start.x = parseFloat(xmlObj.getAttribute('x'));
@@ -1065,8 +1072,8 @@ EndType.prototype.toXML = function () {
  * @return {EndType}
  */
 EndType.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'end') {
-		throw new Error("Bad XML provided, expected tagName end, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'end') {
+		throw new Error("Bad XML provided, expected localName end, got: " + xmlObj.localName);
 	}
 	var end = new ns.EndType();
 	end.x = parseFloat(xmlObj.getAttribute('x'));
@@ -1116,8 +1123,8 @@ NextType.prototype.toXML = function () {
  * @return {NextType}
  */
 NextType.fromXML = function (xmlObj) {
-	if (xmlObj.tagName != 'next') {
-		throw new Error("Bad XML provided, expected tagName next, got: " + xmlObj.tagName);
+	if (xmlObj.localName != 'next') {
+		throw new Error("Bad XML provided, expected localName next, got: " + xmlObj.localName);
 	}
 	var next = new ns.NextType();
 	next.x = parseFloat(xmlObj.getAttribute('x'));

@@ -18,7 +18,7 @@
  *
  * See {@link Extension} for more general information on extensions in the SBGN-ML format.
  *
- * You can access the following classes like this: <code>libsbgn.annot.Annotation<code>
+ * You can access the following classes like this: <code>libsbgn.annot.Annotation</code>
  *
  * @module libsbgn-annotations
  * @namespace libsbgn.annot
