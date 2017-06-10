@@ -8,6 +8,8 @@ var xmldom = require('xmldom');
 var pkg = require('..');
 var annot = sbgnjs.annot;
 var N3 = require('n3');
+var xml2js = require('xml2js');
+var util = require('util');
 
 
 describe('package', function() {
@@ -1443,4 +1445,65 @@ describe('libsbgn-annotations-ext', function() {
 		//globalStore.test();
 
 	});*/
+});
+
+describe('xml2js test', function(){
+	it.only('test1', function(){
+		var string = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n"+
+				"<sbgn xmlns='http://sbgn.org/libsbgn/0.3'>\n"+
+				"<map language='process description' id='mapID'>\n"+
+				"<extension>\n"+
+					"<renderInformation id='renderInformation' programName='sbgnviz' programVersion='3.1.0' backgroundColor='#ffffff' xmlns='http://www.sbml.org/sbml/level3/version1/render/version1'>\n"+
+					"</renderInformation>\n"+
+				"</extension>\n"+
+
+				"<glyph id='_82f19e9e-6aa2-42b3-8b5e-8cee17197085' class='compartment'  >\n"+
+					"<label text='synaptic button' />\n"+
+					"<bbox y='236.9443994213774' x='163.55225216049354' w='263.29323174695764' h='297.15583352545445' />\n"+
+				"</glyph>\n"+
+				"<glyph id='_66737d5c-5193-43a2-baa6-094aa1c21654' class='macromolecule' compartmentRef='_82f19e9e-6aa2-42b3-8b5e-8cee17197085' >\n"+
+					"<label text='CHT1' />\n"+
+					"<state value='val' variable='var' />\n"+
+					"<bbox y='497.47523294683185' x='300.32877164779546' w='70' h='35' />\n"+
+					"<clone label='clone label' />\n"+
+				"</glyph>\n"+
+
+				"<arc id='id' class='production' source='source' target='target'>\n"+
+					"<start y='353' x='208.35'/>\n"+
+					"<next y='1' x='2.35'/>\n"+
+					"<next y='3' x='4.35'/>\n"+
+					"<end y='5' x='6.35'/>\n"+
+				"</arc>\n"+
+				"<arc id='id2' class='consumption' source='source2' target='target2'>\n"+
+					"<start y='9' x='8'/>\n"+
+					"<end y='3' x='2'/>\n"+
+					"<glyph id='cardi' class='cardinality' >\n"+
+						"<label text='2' />\n"+
+					"</glyph>\n"+
+				"</arc>\n"+
+				"</map>\n"+
+				"</sbgn>\n";
+
+		var string2 =
+				'<?xml version="1.0" encoding="UTF-8"?><sbgn xmlns:sbgn="http://sbgn.org/libsbgn/0.2">\n'+
+				    '<sbgn:map xmlns:sbgn="http://sbgn.org/libsbgn/0.2" language="process description">\n'+
+				        '<sbgn:glyph xmlns:sbgn="http://sbgn.org/libsbgn/0.2" class="macromolecule" id="g1">\n'+
+				            '<sbgn:label xmlns:sbgn="http://sbgn.org/libsbgn/0.2" text="LABEL"/>\n'+
+				            '<sbgn:bbox xmlns:sbgn="http://sbgn.org/libsbgn/0.2" w="380." h="210." x="90." y="160."/>\n'+
+				        '</sbgn:glyph>\n'+
+				        '<sbgn:glyph xmlns:sbgn="http://sbgn.org/libsbgn/0.2" class="annotation" id="g2">\n'+
+				            '<sbgn:label xmlns:sbgn="http://sbgn.org/libsbgn/0.2" text="INFO"/>\n'+
+				            '<sbgn:callout xmlns:sbgn="http://sbgn.org/libsbgn/0.2" target="g1">\n'+
+				                '<sbgn:point xmlns:sbgn="http://sbgn.org/libsbgn/0.2" x="160." y="200."/>\n'+
+				            '</sbgn:callout>\n'+
+				            '<sbgn:bbox xmlns:sbgn="http://sbgn.org/libsbgn/0.2" w="220." h="125." x="5." y="5."/>\n'+
+				        '</sbgn:glyph>\n'+
+				    '</sbgn:map>\n'+
+				'</sbgn>\n';
+		var parser = new xml2js.Parser();
+		parser.parseString(string2, function (err, result) {
+	        console.log(util.inspect(result, false, null));
+	        console.log('Done');
+	    });
+	});
 });
