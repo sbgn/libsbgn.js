@@ -772,6 +772,51 @@ CloneType.fromXML = function (xmlObj) {
 ns.CloneType = CloneType;
 // ------- END CLONE -------
 
+// ------- ENTITYTYPE -------
+/**
+ * Represents the <code>&lt;entity&gt;</code> element.
+ * @class EntityType
+ * @param {Object} params
+ * @param {string=} params.name
+ */
+var EntityType = function (params) {
+	var params = checkParams(params, ['name']);
+	this.name = params.name;
+};
+
+/**
+ * @return {Element}
+ */
+EntityType.prototype.buildXmlObj = function () {
+	var entity = new xmldom.DOMImplementation().createDocument().createElement('entity');
+	if(this.name != null) {
+		entity.setAttribute('name', this.name);
+	}
+	return entity;
+};
+
+/**
+ * @return {string}
+ */
+EntityType.prototype.toXML = function () {
+	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+};
+
+/**
+ * @param {Element} xmlObj
+ * @return {EntityType}
+ */
+EntityType.fromXML = function (xmlObj) {
+	if (xmlObj.localName != 'entity') {
+		throw new Error("Bad XML provided, expected localName entity, got: " + xmlObj.localName);
+	}
+	var entity = new ns.EntityType();
+	entity.name = xmlObj.getAttribute('name') || null;
+	return entity;
+};
+ns.EntityType = EntityType;
+// ------- END ENTITYTYPE -------
+
 // ------- PORT -------
 /**
  * Represents the <code>&lt;port&gt;</code> element.

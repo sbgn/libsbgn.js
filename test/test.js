@@ -402,6 +402,26 @@ describe('libsbgn', function() {
 			clone.toXML().should.equal('<clone label="some label"/>');
 		});
 	});
+	describe('entity', function() {
+		it('should parse empty', function() {
+			var entity = sbgnjs.EntityType.fromXML(getXmlObj("<entity/>"));
+			entity.should.have.ownProperty('name');
+			should.equal(entity.name, null);
+		});
+		it('should parse complete', function() {
+			var entity = sbgnjs.EntityType.fromXML(getXmlObj('<entity name="some name"/>'));
+			should.exist(entity.name);
+			entity.name.should.equal('some name');
+		});
+		it('should write empty', function() {
+			var entity = new sbgnjs.EntityType();
+			entity.toXML().should.equal('<entity/>');
+		});
+		it('should write complete', function() {
+			var entity = new sbgnjs.EntityType({name: 'some name'});
+			entity.toXML().should.equal('<entity name="some name"/>');
+		});
+	});
 	describe('port', function() {
 		it('should parse empty', function() {
 			var port = sbgnjs.Port.fromXML(getXmlObj("<port/>"));
