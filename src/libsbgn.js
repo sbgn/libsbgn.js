@@ -385,12 +385,13 @@ ns.Extension = Extension;
  * @param {Bbox=} params.bbox
  * @param {StateType=} params.state
  * @param {CloneType=} params.clone
+ * @param {EntityType=} params.entity
  * @param {Glyph[]=} params.glyphMembers
  * @param {Port[]=} params.ports
  */
 var Glyph = function (params) {
 	ns.SBGNBase.call(this, params);
-	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone']);
+	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone', 'entity']);
 	this.id 			= params.id;
 	this.class_ 		= params.class_;
 	this.compartmentRef = params.compartmentRef;
@@ -400,10 +401,11 @@ var Glyph = function (params) {
 	this.state 			= params.state;
 	this.bbox 			= params.bbox;
 	this.clone 			= params.clone;
+	this.entity 		= params.entity;
 	this.glyphMembers 	= params.glyphMembers || []; // case of complex, can have arbitrary list of nested glyphs
 	this.ports 			= params.ports || [];
 
-	this.allowedChildren = ['label', 'state', 'bbox', 'clone', 'glyphMembers', 'ports'];
+	this.allowedChildren = ['label', 'state', 'bbox', 'clone', 'glyphMembers', 'ports', 'entity'];
 };
 
 Glyph.prototype = Object.create(ns.SBGNBase.prototype);
@@ -435,6 +437,13 @@ Glyph.prototype.setBbox = function (bbox) {
  */
 Glyph.prototype.setClone = function (clone) {
 	this.clone = clone;
+};
+
+/**
+ * @param {EntityType} entity
+ */
+Glyph.prototype.setEntity = function (entity) {
+	this.entity = entity;
 };
 
 /**
@@ -478,6 +487,9 @@ Glyph.prototype.buildXmlObj = function () {
 	}
 	if(this.clone != null) {
 		glyph.appendChild(this.clone.buildXmlObj());
+	}
+	if(this.entity != null) {
+		glyph.appendChild(this.entity.buildXmlObj());
 	}
 	for(var i=0; i < this.glyphMembers.length; i++) {
 		glyph.appendChild(this.glyphMembers[i].buildXmlObj());
@@ -528,6 +540,11 @@ Glyph.fromXML = function (xmlObj) {
 	if (cloneXMl != null) {
 		var clone = ns.CloneType.fromXML(cloneXMl);
 		glyph.setClone(clone);
+	}
+	var entityXML = xmlObj.getElementsByTagNameNS('*', 'entity')[0];
+	if (entityXML != null) {
+		var entity = ns.EntityType.fromXML(entityXML);
+		glyph.setEntity(entity);
 	}
 	// need special care because of recursion of nested glyph nodes
 	// take only first level glyphs

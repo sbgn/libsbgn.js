@@ -578,6 +578,13 @@ describe('libsbgn', function() {
 				glyph.clone.should.be.a('object');
 				glyph.clone.should.be.instanceOf(sbgnjs.CloneType);
 			});
+			it('should parse entity child', function() {
+				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><entity name='test'/></glyph>"));
+				should.exist(glyph.entity);
+				glyph.entity.should.be.a('object');
+				glyph.entity.should.be.instanceOf(sbgnjs.EntityType);
+				glyph.entity.name.should.equal('test');
+			});
 			it('should parse nested glyph child', function() {
 				var glyph = sbgnjs.Glyph.fromXML(getXmlObj("<glyph><glyph></glyph></glyph>"));
 				should.exist(glyph.glyphMembers);
@@ -615,6 +622,7 @@ describe('libsbgn', function() {
 				glyph.setState(new sbgnjs.StateType());
 				glyph.setBbox(new sbgnjs.Bbox());
 				glyph.setClone(new sbgnjs.CloneType());
+				glyph.setEntity(new sbgnjs.EntityType());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
 				glyph.addPort(new sbgnjs.Port());
 				glyph.toXML().should.equal('<glyph id="id" class="a_class" compartmentRef="a_compartment_id">'+
@@ -622,6 +630,7 @@ describe('libsbgn', function() {
 												"<state/>"+
 												"<bbox/>"+
 												"<clone/>"+
+												"<entity/>"+
 												"<glyph/>"+
 												"<port/>"+
 											"</glyph>");
