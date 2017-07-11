@@ -482,14 +482,14 @@ Glyph.prototype.buildXmlObj = function () {
 	if(this.state != null) {
 		glyph.appendChild(this.state.buildXmlObj());
 	}
-	if(this.bbox != null) {
-		glyph.appendChild(this.bbox.buildXmlObj());
-	}
 	if(this.clone != null) {
 		glyph.appendChild(this.clone.buildXmlObj());
 	}
 	if(this.entity != null) {
 		glyph.appendChild(this.entity.buildXmlObj());
+	}
+	if(this.bbox != null) {
+		glyph.appendChild(this.bbox.buildXmlObj());
 	}
 	for(var i=0; i < this.glyphMembers.length; i++) {
 		glyph.appendChild(this.glyphMembers[i].buildXmlObj());
