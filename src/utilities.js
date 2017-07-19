@@ -1,4 +1,5 @@
 var ns = {};
+var xml2js = require('xml2js');
 
 /*
 	guarantees to return an object with given args being set to null if not present, other args returned as is
@@ -28,6 +29,25 @@ ns.getFirstLevelByName = function (xmlObj, localName) {
 		}
 	}
 	return result;
+};
+
+ns.addAttributes = function (jsObj, attributes) {
+	jsObj.$ = attributes;
+};
+
+ns.parseString = function (string, fn) {
+	var parser = new xml2js.Parser({
+		tagNameProcessors: [xml2js.processors.stripPrefix],
+		attrValueProcessors: [xml2js.processors.parseNumbers, xml2js.processors.parseBooleans]
+	});
+	parser.parseString(string, fn);
+};
+
+ns.buildString = function (obj) {
+	return new xml2js.Builder({
+		headless: true,
+		renderOpts: {pretty: false}
+	}).buildObject(obj);
 };
 
 module.exports = ns;

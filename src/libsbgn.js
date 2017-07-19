@@ -9,6 +9,8 @@ var annotExt = require('./libsbgn-annotations');
 var checkParams = require('./utilities').checkParams;
 var getFirstLevelByName = require('./utilities').getFirstLevelByName;
 var xmldom = require('xmldom');
+var xml2js = require('xml2js');
+var utils = require('./utilities');
 
 var ns = {};
 
@@ -44,6 +46,12 @@ SBGNBase.prototype.baseToXmlObj = function (xmlObj) {
 	}
 };
 
+SBGNBase.prototype.baseToJsObj = function (jsObj) {
+	if(this.extension != null) {
+		jsObj.extension = this.extension.buildJsObj();
+	}
+};
+
 /**
  * parse things specific to SBGNBase type
  * @param {Element} xmlObj the xml object being parsed
@@ -53,6 +61,14 @@ SBGNBase.prototype.baseFromXML = function (xmlObj) {
 	var extensionXML = getFirstLevelByName(xmlObj, 'extension')[0];
 	if (extensionXML != null) {
 		var extension = ns.Extension.fromXML(extensionXML);
+		this.setExtension(extension);
+	}
+};
+
+SBGNBase.prototype.baseFromObj = function (jsObj) {
+	console.log("base", jsObj);
+	if (jsObj.extension) {
+		var extension = ns.Extension.fromObj(jsObj.extension);
 		this.setExtension(extension);
 	}
 };
@@ -90,7 +106,7 @@ Sbgn.prototype.setMap = function (map) {
 /**
  * @return {Element}
  */
-Sbgn.prototype.buildXmlObj = function () {
+Sbgn.prototype.buildXmlObj_old = function () {
 	var sbgn = new xmldom.DOMImplementation().createDocument().createElement('sbgn');
 	// attributes
 	if(this.xmlns != null) {
@@ -108,17 +124,46 @@ Sbgn.prototype.buildXmlObj = function () {
 };
 
 /**
+ * @return {Object} - xml2js formatted object
+ */
+Sbgn.prototype.buildJsObj = function () {
+	var sbgnObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.xmlns != null) {
+		attributes.xmlns = this.xmlns;
+	}
+	if(this.language != null) {
+		attributes.language = this.language;
+	}
+	utils.addAttributes(sbgnObj, attributes);
+
+	// children
+	this.baseToJsObj(sbgnObj);
+	if (this.map != null) {
+		sbgnObj.map = this.map.buildJsObj();
+	}
+	console.log(sbgnObj);
+	return sbgnObj;
+};
+
+/**
  * @return {string}
  */
 Sbgn.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	//var builder = new xml2js.Builder();
+	//var xml = builder.buildObject(this.buildXmlObj());
+	return utils.buildString({
+		sbgn: this.buildJsObj()
+	});
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Sbgn}
  */
-Sbgn.fromXML = function (xmlObj) {
+Sbgn.fromXML_old = function (xmlObj) {
 	if (xmlObj.tagName != 'sbgn') {
 		throw new Error("Bad XML provided, expected tagName sbgn, got: " + xmlObj.tagName);
 	}
@@ -146,6 +191,77 @@ Sbgn.fromXML = function (xmlObj) {
 		sbgn.setMap(map);
 	}
 	sbgn.baseFromXML(xmlObj); // call to parent class
+	return sbgn;
+};
+
+Sbgn.fromXML = function (string) {
+	/*var parser = new xml2js.Parser({
+		tagNameProcessors: [xml2js.processors.stripPrefix],
+		attrValueProcessors: [xml2js.processors.parseNumbers, xml2js.processors.parseBooleans]
+	});
+	var sbgn;
+	parser.parseString(string, function (err, result) {
+        //console.log(util.inspect(result, false, null));
+        sbgn = Sbgn.fromObj(result);
+        //console.log('Done');
+    });
+    return sbgn;*/
+    var sbgn;
+    function fn (err, result) {
+        //console.log(util.inspect(result, false, null));
+        sbgn = Sbgn.fromObj(result);
+        //console.log('Done');
+    }
+    utils.parseString(string, fn);
+    return sbgn;
+
+};
+
+/**
+ * @param {Element} xmlObj
+ * @return {Sbgn}
+ */
+Sbgn.fromObj = function (jsObj) {
+	console.log("sbgn", jsObj, typeof jsObj);
+	if (typeof jsObj.sbgn == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName sbgn, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var sbgn = new ns.Sbgn();
+	jsObj = jsObj.sbgn;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return sbgn;
+	}
+
+	if(jsObj.$) { // we have some atributes
+		var attributes = jsObj.$;
+		sbgn.xmlns = attributes.xmlns || null;
+
+		// getting attribute with 'xmlns' doesn't work if some namespace is defined like 'xmlns:sbgn'
+		// so if there is some attribute there, and we didn't find the xmlns directly, we need to into it
+		if(!sbgn.xmlns && Object.keys(attributes).length > 0) {
+			// sbgn is not supposed to have any other attribute than an xmlns, so we assume the first attr is the xmlns
+			var key = Object.keys(attributes)[0];
+			if(key.startsWith('xmlns')) {
+				sbgn.xmlns = attributes[key];
+				sbgn.namespacePrefix = key.replace('xmlns:', '');
+			}
+			else {
+				throw new Error("Couldn't find xmlns definition in sbgn element");
+			}
+		}
+	}
+
+	if(jsObj.map) { // we have some children
+		// get children
+		var mapXML = jsObj.map[0];
+		if (mapXML != null) {
+			var map = ns.Map.fromObj({map: mapXML});
+			sbgn.setMap(map);
+		}
+	}
+
+	sbgn.baseFromObj(jsObj); // call to parent class
 	return sbgn;
 };
 ns.Sbgn = Sbgn;
@@ -214,17 +330,51 @@ Map.prototype.buildXmlObj = function () {
 };
 
 /**
+ * @return {Object} - xml2js formatted object
+ */
+Map.prototype.buildJsObj = function () {
+	var mapObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.id != null) {
+		attributes.id = this.id;
+	}
+	if(this.language != null) {
+		attributes.language = this.language;
+	}
+	utils.addAttributes(mapObj, attributes);
+
+	// children
+	this.baseToJsObj(mapObj);
+	for(var i=0; i < this.glyphs.length; i++) {
+		if (i==0) {
+			mapObj.glyph = [];
+		}
+		mapObj.glyph.push(this.glyphs[i].buildXmlObj());
+	}
+	for(var i=0; i < this.arcs.length; i++) {
+		if (i==0) {
+			mapObj.arc = [];
+		}
+		mapObj.arc.push(this.arcs[i].buildXmlObj());
+	}
+	console.log(mapObj);
+	return mapObj;
+};
+
+/**
  * @return {string}
  */
 Map.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({map: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Map}
  */
-Map.fromXML = function (xmlObj) {
+Map.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'map') {
 		throw new Error("Bad XML provided, expected localName map, got: " + xmlObj.localName);
 	}
@@ -248,6 +398,53 @@ Map.fromXML = function (xmlObj) {
 	map.baseFromXML(xmlObj);
 	return map;
 };
+
+Map.fromXML = function (string) {
+	var map;
+	function fn (err, result) {
+        map = Map.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return map;
+};
+
+Map.fromObj = function (jsObj) {
+	console.log("map", jsObj);
+	if (typeof jsObj.map == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName map, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var map = new ns.Map();
+	jsObj = jsObj.map;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return map;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		map.id = attributes.id || null;
+		map.language = attributes.language || null;
+	}
+
+	if(jsObj.glyph) {
+		var glyphs = jsObj.glyph;
+		for (var i=0; i < glyphs.length; i++) {
+			var glyph = ns.Glyph.fromObj({glyph: glyphs[i]});
+			map.addGlyph(glyph);
+		}
+	}
+	if(jsObj.arc) {
+		var arcs = jsObj.arc;
+		for (var i=0; i < arcs.length; i++) {
+			var arc = ns.Arc.fromObj({arc: arcs[i]});
+			map.addArc(arc);
+		}
+	}
+
+	map.baseFromObj(jsObj);
+	return map;
+};
+
 ns.Map = Map;
 // ------- END MAP -------
 
@@ -369,6 +566,36 @@ Extension.fromXML = function (xmlObj) {
 	}
 	return extension;
 };
+
+Extension.fromObj = function (jsObj) {
+	console.log("extension fromobj", jsObj);
+
+	var extension = new Extension();
+
+	console.log("jextension", Object.keys(jsObj));
+	//var children = Object.keys(jsObj);
+	for (var i=0; i < jsObj.length; i++) {
+		var extName = Object.keys(jsObj[i])[0];
+		var extJsObj = jsObj[i][extName];
+		console.log("extension found:", extName, extJsObj);
+
+		//extension.add(extInstance);
+		if (extName == 'renderInformation') {
+			var renderInformation = renderExt.RenderInformation.fromObj(extJsObj);
+			extension.add(renderInformation);
+		}
+		else if (extName == 'annotation') {
+			var annotation = annotExt.Annotation.fromObj(extJsObj);
+			extension.add(annotation);
+		}
+		else { // unsupported extension, we still store the data as is
+			extension.add(extJsObj);
+		}
+	}
+
+	return extension;
+};
+
 ns.Extension = Extension;
 // ------- END EXTENSIONS -------
 
@@ -581,18 +808,31 @@ Label.prototype.buildXmlObj = function () {
 	return label;
 };
 
+Label.prototype.buildJsObj = function () {
+	var labelObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.text != null) {
+		attributes.text = this.text;
+	}
+	utils.addAttributes(labelObj, attributes);
+	this.baseToJsObj(labelObj);
+	return labelObj;
+};
+
 /**
  * @return {string}
  */
 Label.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({label: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Label}
  */
-Label.fromXML = function (xmlObj) {
+Label.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'label') {
 		throw new Error("Bad XML provided, expected localName label, got: " + xmlObj.localName);
 	}
@@ -601,6 +841,35 @@ Label.fromXML = function (xmlObj) {
 	label.baseFromXML(xmlObj);
 	return label;
 };
+
+Label.fromXML = function (string) {
+	var label;
+	function fn (err, result) {
+        label = Label.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return label;
+};
+
+Label.fromObj = function (jsObj) {
+	if (typeof jsObj.label == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName label, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var label = new ns.Label();
+	jsObj = jsObj.label;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return label;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		label.text = attributes.text || null;
+	}
+	label.baseFromObj(jsObj);
+	return label;
+};
+
 ns.Label = Label;
 // ------- END LABEL -------
 
@@ -650,18 +919,40 @@ Bbox.prototype.buildXmlObj = function () {
 	return bbox;
 }
 
+Bbox.prototype.buildJsObj = function () {
+	var bboxObj = {};
+
+	// attributes
+	var attributes = {};
+	if(!isNaN(this.x)) {
+		attributes.x = this.x;
+	}
+	if(!isNaN(this.y)) {
+		attributes.y = this.y;
+	}
+	if(!isNaN(this.w)) {
+		attributes.w = this.w;
+	}
+	if(!isNaN(this.h)) {
+		attributes.h = this.h;
+	}
+	utils.addAttributes(bboxObj, attributes);
+	this.baseToJsObj(bboxObj);
+	return bboxObj;
+};
+
 /**
  * @return {string}
  */
 Bbox.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({bbox: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Bbox}
  */
-Bbox.fromXML = function (xmlObj) {
+Bbox.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'bbox') {
 		throw new Error("Bad XML provided, expected localName bbox, got: " + xmlObj.localName);
 	}
@@ -673,6 +964,38 @@ Bbox.fromXML = function (xmlObj) {
 	bbox.baseFromXML(xmlObj);
 	return bbox;
 };
+
+Bbox.fromXML = function (string) {
+	var bbox;
+	function fn (err, result) {
+        bbox = Bbox.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return bbox;
+};
+
+Bbox.fromObj = function (jsObj) {
+	if (typeof jsObj.bbox == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName bbox, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var bbox = new ns.Bbox();
+	jsObj = jsObj.bbox;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return bbox;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		bbox.x = parseFloat(attributes.x);
+		bbox.y = parseFloat(attributes.y);
+		bbox.w = parseFloat(attributes.w);
+		bbox.h = parseFloat(attributes.h);
+	}
+	bbox.baseFromObj(jsObj);
+	return bbox;
+};
+
 ns.Bbox = Bbox;
 // ------- END BBOX -------
 
@@ -704,18 +1027,33 @@ StateType.prototype.buildXmlObj = function () {
 	return state;
 };
 
+StateType.prototype.buildJsObj = function () {
+	var stateObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.value != null) {
+		attributes.value = this.value;
+	}
+	if(this.variable != null) {
+		attributes.variable = this.variable;
+	}
+	utils.addAttributes(stateObj, attributes);
+	return stateObj;
+};
+
 /**
  * @return {string}
  */
 StateType.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({state: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {StateType}
  */
-StateType.fromXML = function (xmlObj) {
+StateType.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'state') {
 		throw new Error("Bad XML provided, expected localName state, got: " + xmlObj.localName);
 	}
@@ -724,6 +1062,35 @@ StateType.fromXML = function (xmlObj) {
 	state.variable = xmlObj.getAttribute('variable') || null;
 	return state;
 };
+
+StateType.fromXML = function (string) {
+	var state;
+	function fn (err, result) {
+        state = StateType.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return state;
+};
+
+StateType.fromObj = function (jsObj) {
+	if (typeof jsObj.state == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName state, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var state = new ns.StateType();
+	jsObj = jsObj.state;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return state;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		state.value = attributes.value || null;
+		state.variable = attributes.variable || null;
+	}
+	return state;
+};
+
 ns.StateType = StateType;
 // ------- END STATE -------
 
@@ -750,18 +1117,30 @@ CloneType.prototype.buildXmlObj = function () {
 	return clone;
 };
 
+CloneType.prototype.buildJsObj = function () {
+	var cloneObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.label != null) {
+		attributes.label = this.label;
+	}
+	utils.addAttributes(cloneObj, attributes);
+	return cloneObj;
+};
+
 /**
  * @return {string}
  */
 CloneType.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({clone: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {CloneType}
  */
-CloneType.fromXML = function (xmlObj) {
+CloneType.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'clone') {
 		throw new Error("Bad XML provided, expected localName clone, got: " + xmlObj.localName);
 	}
@@ -769,6 +1148,34 @@ CloneType.fromXML = function (xmlObj) {
 	clone.label = xmlObj.getAttribute('label') || null;
 	return clone;
 };
+
+CloneType.fromXML = function (string) {
+	var clone;
+	function fn (err, result) {
+        clone = CloneType.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return clone;
+};
+
+CloneType.fromObj = function (jsObj) {
+	if (typeof jsObj.clone == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName clone, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var clone = new ns.CloneType();
+	jsObj = jsObj.clone;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return clone;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		clone.label = attributes.label || null;
+	}
+	return clone;
+};
+
 ns.CloneType = CloneType;
 // ------- END CLONE -------
 
@@ -812,18 +1219,37 @@ Port.prototype.buildXmlObj = function () {
 	return port;
 };
 
+Port.prototype.buildJsObj = function () {
+	var portObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.id != null) {
+		attributes.id = this.id;
+	}
+	if(!isNaN(this.x)) {
+		attributes.x = this.x;
+	}
+	if(!isNaN(this.y)) {
+		attributes.y = this.y;
+	}
+	utils.addAttributes(portObj, attributes);
+	this.baseToJsObj(portObj);
+	return portObj;
+};
+
 /**
  * @return {string}
  */
 Port.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({port: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Port}
  */
-Port.fromXML = function (xmlObj) {
+Port.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'port') {
 		throw new Error("Bad XML provided, expected localName port, got: " + xmlObj.localName);
 	}
@@ -834,6 +1260,37 @@ Port.fromXML = function (xmlObj) {
 	port.baseFromXML(xmlObj);
 	return port;
 };
+
+Port.fromXML = function (string) {
+	var port;
+	function fn (err, result) {
+        port = Port.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return port;
+};
+
+Port.fromObj = function (jsObj) {
+	if (typeof jsObj.port == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName port, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var port = new ns.Port();
+	jsObj = jsObj.port;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return port;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		port.x = parseFloat(attributes.x);
+		port.y = parseFloat(attributes.y);
+		port.id = attributes.id || null;
+	}
+	port.baseFromObj(jsObj);
+	return port;
+};
+
 ns.Port = Port;
 // ------- END PORT -------
 
@@ -1009,18 +1466,33 @@ StartType.prototype.buildXmlObj = function () {
 	return start;
 };
 
+StartType.prototype.buildJsObj = function () {
+	var startObj = {};
+
+	// attributes
+	var attributes = {};
+	if(!isNaN(this.x)) {
+		attributes.x = this.x;
+	}
+	if(!isNaN(this.y)) {
+		attributes.y = this.y;
+	}
+	utils.addAttributes(startObj, attributes);
+	return startObj;
+};
+
 /**
  * @return {string}
  */
 StartType.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({start: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {StartType}
  */
-StartType.fromXML = function (xmlObj) {
+StartType.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'start') {
 		throw new Error("Bad XML provided, expected localName start, got: " + xmlObj.localName);
 	}
@@ -1029,6 +1501,35 @@ StartType.fromXML = function (xmlObj) {
 	start.y = parseFloat(xmlObj.getAttribute('y'));
 	return start;
 };
+
+StartType.fromXML = function (string) {
+	var start;
+	function fn (err, result) {
+        start = StartType.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return start;
+};
+
+StartType.fromObj = function (jsObj) {
+	if (typeof jsObj.start == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName start, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var start = new ns.StartType();
+	jsObj = jsObj.start;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return start;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		start.x = parseFloat(attributes.x);
+		start.y = parseFloat(attributes.y);
+	}
+	return start;
+};
+
 ns.StartType = StartType;
 // ------- END STARTTYPE -------
 
@@ -1060,18 +1561,33 @@ EndType.prototype.buildXmlObj = function () {
 	return end;
 };
 
+EndType.prototype.buildJsObj = function () {
+	var endObj = {};
+
+	// attributes
+	var attributes = {};
+	if(!isNaN(this.x)) {
+		attributes.x = this.x;
+	}
+	if(!isNaN(this.y)) {
+		attributes.y = this.y;
+	}
+	utils.addAttributes(endObj, attributes);
+	return endObj;
+};
+
 /**
  * @return {string}
  */
 EndType.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({end: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {EndType}
  */
-EndType.fromXML = function (xmlObj) {
+EndType.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'end') {
 		throw new Error("Bad XML provided, expected localName end, got: " + xmlObj.localName);
 	}
@@ -1080,6 +1596,35 @@ EndType.fromXML = function (xmlObj) {
 	end.y = parseFloat(xmlObj.getAttribute('y'));
 	return end;
 };
+
+EndType.fromXML = function (string) {
+	var end;
+	function fn (err, result) {
+        end = EndType.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return end;
+};
+
+EndType.fromObj = function (jsObj) {
+	if (typeof jsObj.end == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName end, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var end = new ns.EndType();
+	jsObj = jsObj.end;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return end;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		end.x = parseFloat(attributes.x);
+		end.y = parseFloat(attributes.y);
+	}
+	return end;
+};
+
 ns.EndType = EndType;
 // ------- END ENDTYPE -------
 
@@ -1111,18 +1656,33 @@ NextType.prototype.buildXmlObj = function () {
 	return next;
 };
 
+NextType.prototype.buildJsObj = function () {
+	var nextObj = {};
+
+	// attributes
+	var attributes = {};
+	if(!isNaN(this.x)) {
+		attributes.x = this.x;
+	}
+	if(!isNaN(this.y)) {
+		attributes.y = this.y;
+	}
+	utils.addAttributes(nextObj, attributes);
+	return nextObj;
+};
+
 /**
  * @return {string}
  */
 NextType.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({next: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {NextType}
  */
-NextType.fromXML = function (xmlObj) {
+NextType.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'next') {
 		throw new Error("Bad XML provided, expected localName next, got: " + xmlObj.localName);
 	}
@@ -1131,6 +1691,35 @@ NextType.fromXML = function (xmlObj) {
 	next.y = parseFloat(xmlObj.getAttribute('y'));
 	return next;
 };
+
+NextType.fromXML = function (string) {
+	var next;
+	function fn (err, result) {
+        next = NextType.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return next;
+};
+
+NextType.fromObj = function (jsObj) {
+	if (typeof jsObj.next == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName next, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var next = new ns.NextType();
+	jsObj = jsObj.next;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return next;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		next.x = parseFloat(attributes.x);
+		next.y = parseFloat(attributes.y);
+	}
+	return next;
+};
+
 ns.NextType = NextType;
 // ------- END NEXTTYPE -------
 
