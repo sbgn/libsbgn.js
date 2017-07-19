@@ -68,7 +68,7 @@ SBGNBase.prototype.baseFromXML = function (xmlObj) {
 SBGNBase.prototype.baseFromObj = function (jsObj) {
 	console.log("base", jsObj);
 	if (jsObj.extension) {
-		var extension = ns.Extension.fromObj(jsObj.extension);
+		var extension = ns.Extension.fromObj({extension: jsObj.extension[0]});
 		this.setExtension(extension);
 	}
 };
@@ -351,13 +351,13 @@ Map.prototype.buildJsObj = function () {
 		if (i==0) {
 			mapObj.glyph = [];
 		}
-		mapObj.glyph.push(this.glyphs[i].buildXmlObj());
+		mapObj.glyph.push(this.glyphs[i].buildJsObj());
 	}
 	for(var i=0; i < this.arcs.length; i++) {
 		if (i==0) {
 			mapObj.arc = [];
 		}
-		mapObj.arc.push(this.arcs[i].buildXmlObj());
+		mapObj.arc.push(this.arcs[i].buildJsObj());
 	}
 	console.log(mapObj);
 	return mapObj;
@@ -367,7 +367,7 @@ Map.prototype.buildJsObj = function () {
  * @return {string}
  */
 Map.prototype.toXML = function () {
-	return utils.buildString({map: this.buildJsObj()})
+	return utils.buildString({map: this.buildJsObj()});
 };
 
 /**
@@ -470,7 +470,30 @@ Extension.prototype.add = function (extension) {
 	else if (extension instanceof annotExt.Annotation) {
 		this.list['annotation'] = extension;
 	}
-	else if (extension.nodeType == '1') { // Node.ELEMENT_NODE == 1
+	else if(typeof extension == "string") {
+		var parsedAsObj;
+		function fn (err, result) {
+	        parsedAsObj = result;
+	    };
+	    utils.parseString(extension, fn);
+	    console.log("parsed unknown ext", parsedAsObj);
+	    var name = Object.keys(parsedAsObj)[0];
+	    if(name == "renderInformation") {
+	    	var renderInformation = renderExt.RenderInformation.fromXML(extension);
+			this.list['renderInformation'] = renderInformation;
+	    }
+	    else if(name == "annotation") {
+	    	var annotation = annotExt.Annotation.fromXML(extension);
+			this.list['annotation'] = renderInformation;
+	    }
+	    else {
+	    	this.list[name] = extension;
+	    }
+	}
+	/*else { // expect an object with key: string form
+		this.list[Object.keys(extension)[0]] = Object.values(extension)[0];
+	}*/
+	/*else if (extension.nodeType == '1') { // Node.ELEMENT_NODE == 1
 		// case where renderInformation is passed unparsed
 		if (extension.localName == 'renderInformation') {
 			var renderInformation = renderExt.RenderInformation.fromXML(extension);
@@ -483,7 +506,7 @@ Extension.prototype.add = function (extension) {
 		else {
 			this.list[extension.localName] = extension;
 		}
-	}
+	}*/
 };
 
 /**
@@ -528,18 +551,43 @@ Extension.prototype.buildXmlObj = function () {
 	return extension;
 };
 
+Extension.prototype.buildJsObj = function () {
+	var extensionObj = {};
+
+	for (var extInstance in this.list) {
+		if (extInstance == "renderInformation") {
+			extensionObj.renderInformation =  this.get(extInstance).buildJsObj();
+		} 
+		else if (extInstance == "annotation") {
+			extensionObj.annotation =  this.get(extInstance).buildJsObj();
+		}
+		else {
+			// unsupported extensions are stored as is, as xml string
+			// we need to parse it to build the js object
+			var unsupportedExtObj;
+			function fn (err, result) {
+		        unsupportedExtObj = result;
+		    };
+		    utils.parseString(this.get(extInstance), fn);
+			extensionObj[extInstance] = unsupportedExtObj[extInstance];
+		}
+	}
+	console.log("extensionObj", extensionObj);
+	return extensionObj;
+};
+
 /**
  * @return {string}
  */
 Extension.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({extension: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Extension}
  */
-Extension.fromXML = function (xmlObj) {
+Extension.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'extension') {
 		throw new Error("Bad XML provided, expected localName extension, got: " + xmlObj.localName);
 	}
@@ -567,29 +615,49 @@ Extension.fromXML = function (xmlObj) {
 	return extension;
 };
 
+Extension.fromXML = function (string) {
+	var extension;
+	function fn (err, result) {
+        extension = Extension.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return extension;
+};
+
 Extension.fromObj = function (jsObj) {
 	console.log("extension fromobj", jsObj);
+	if (typeof jsObj.extension == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName extension, got: " + Object.keys(jsObj)[0]);
+	}
 
 	var extension = new Extension();
+	jsObj = jsObj.extension;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return extension;
+	}
 
-	console.log("jextension", Object.keys(jsObj));
+	console.log("jextension", Object.keys(jsObj), jsObj);
 	//var children = Object.keys(jsObj);
-	for (var i=0; i < jsObj.length; i++) {
-		var extName = Object.keys(jsObj[i])[0];
-		var extJsObj = jsObj[i][extName];
+	for (var extName in jsObj) {
+		//var extName = Object.keys(jsObj[i])[0];
+		var extJsObj = jsObj[extName];
 		console.log("extension found:", extName, extJsObj);
 
 		//extension.add(extInstance);
 		if (extName == 'renderInformation') {
-			var renderInformation = renderExt.RenderInformation.fromObj(extJsObj);
+			var renderInformation = renderExt.RenderInformation.fromObj({renderInformation: extJsObj});
 			extension.add(renderInformation);
 		}
 		else if (extName == 'annotation') {
-			var annotation = annotExt.Annotation.fromObj(extJsObj);
+			var annotation = annotExt.Annotation.fromObj({annotation: extJsObj});
 			extension.add(annotation);
 		}
 		else { // unsupported extension, we still store the data as is
-			extension.add(extJsObj);
+			var unsupportedExt = {};
+			unsupportedExt[extName] = extJsObj[0]; // make extension serialisable
+			var stringExt = utils.buildString(unsupportedExt); // serialise to string
+			console.log("unsupported extension", unsupportedExt, stringExt);
+			extension.add(stringExt); // save it
 		}
 	}
 
@@ -728,18 +796,67 @@ Glyph.prototype.buildXmlObj = function () {
 	return glyph;
 };
 
+Glyph.prototype.buildJsObj = function () {
+	var glyphObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.id != null) {
+		attributes.id = this.id;
+	}
+	if(this.class_ != null) {
+		attributes.class = this.class_;
+	}
+	if(this.compartmentRef != null) {
+		attributes.compartmentRef = this.compartmentRef;
+	}
+	utils.addAttributes(glyphObj, attributes);
+
+	// children
+	this.baseToJsObj(glyphObj);
+	if(this.label != null) {
+		glyphObj.label =  this.label.buildJsObj();
+	}
+	if(this.state != null) {
+		glyphObj.state =  this.state.buildJsObj();
+	}
+	if(this.clone != null) {
+		glyphObj.clone =  this.clone.buildJsObj();
+	}
+	if(this.entity != null) {
+		glyphObj.entity =  this.entity.buildJsObj();
+	}
+	if(this.bbox != null) {
+		glyphObj.bbox =  this.bbox.buildJsObj();
+	}
+	for(var i=0; i < this.glyphMembers.length; i++) {
+		if (i==0) {
+			glyphObj.glyph = [];
+		}
+		glyphObj.glyph.push(this.glyphMembers[i].buildJsObj());
+	}
+	for(var i=0; i < this.ports.length; i++) {
+		if (i==0) {
+			glyphObj.port = [];
+		}
+		glyphObj.port.push(this.ports[i].buildJsObj());
+	}
+	console.log(glyphObj);
+	return glyphObj;
+};
+
 /**
  * @return {string}
  */
 Glyph.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({glyph: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Glyph}
  */
-Glyph.fromXML = function (xmlObj) {
+Glyph.fromXML_ = function (xmlObj) {
 	if (xmlObj.localName != 'glyph') {
 		throw new Error("Bad XML provided, expected localName glyph, got: " + xmlObj.localName);
 	}
@@ -791,6 +908,76 @@ Glyph.fromXML = function (xmlObj) {
 	glyph.baseFromXML(xmlObj);
 	return glyph;
 };
+
+Glyph.fromXML = function (string) {
+	var glyph;
+	function fn (err, result) {
+        glyph = Glyph.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return glyph;
+};
+
+Glyph.fromObj = function (jsObj) {
+	console.log("glyph", jsObj);
+	if (typeof jsObj.glyph == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName glyph, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var glyph = new ns.Glyph();
+	jsObj = jsObj.glyph;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return glyph;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		glyph.id = attributes.id || null;
+		glyph.class_ = attributes.class || null;
+		glyph.compartmentRef = attributes.compartmentRef || null;
+	}
+
+	// children
+	if(jsObj.label) {
+		var label = ns.Label.fromObj({label: jsObj.label[0]});
+		glyph.setLabel(label);
+	}
+	if(jsObj.state) {
+		var state = ns.StateType.fromObj({state: jsObj.state[0]});
+		glyph.setState(state);
+	}
+	if(jsObj.clone) {
+		var clone = ns.CloneType.fromObj({clone: jsObj.clone[0]});
+		glyph.setClone(clone);
+	}
+	if(jsObj.entity) {
+		var entity = ns.EntityType.fromObj({entity: jsObj.entity[0]});
+		glyph.setEntity(entity);
+	}
+	if(jsObj.bbox) {
+		var bbox = ns.Bbox.fromObj({bbox: jsObj.bbox[0]});
+		glyph.setBbox(bbox);
+	}
+
+	if(jsObj.glyph) {
+		var glyphs = jsObj.glyph;
+		for (var i=0; i < glyphs.length; i++) {
+			var glyphMember = ns.Glyph.fromObj({glyph: glyphs[i]});
+			glyph.addGlyphMember(glyphMember);
+		}
+	}
+	if(jsObj.port) {
+		var ports = jsObj.port;
+		for (var i=0; i < ports.length; i++) {
+			var port = ns.Port.fromObj({port: ports[i]});
+			glyph.addPort(port);
+		}
+	}
+
+	glyph.baseFromObj(jsObj);
+	return glyph;
+};
+
 ns.Glyph = Glyph;
 // ------- END GLYPH -------
 
@@ -1219,18 +1406,30 @@ EntityType.prototype.buildXmlObj = function () {
 	return entity;
 };
 
+EntityType.prototype.buildJsObj = function () {
+	var entityObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.name != null) {
+		attributes.name = this.name;
+	}
+	utils.addAttributes(entityObj, attributes);
+	return entityObj;
+};
+
 /**
  * @return {string}
  */
 EntityType.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({entity: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {EntityType}
  */
-EntityType.fromXML = function (xmlObj) {
+EntityType.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'entity') {
 		throw new Error("Bad XML provided, expected localName entity, got: " + xmlObj.localName);
 	}
@@ -1238,6 +1437,34 @@ EntityType.fromXML = function (xmlObj) {
 	entity.name = xmlObj.getAttribute('name') || null;
 	return entity;
 };
+
+EntityType.fromXML = function (string) {
+	var entity;
+	function fn (err, result) {
+        entity = EntityType.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return entity;
+};
+
+EntityType.fromObj = function (jsObj) {
+	if (typeof jsObj.entity == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName entity, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var entity = new ns.EntityType();
+	jsObj = jsObj.entity;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return entity;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		entity.name = attributes.name || null;
+	}
+	return entity;
+};
+
 ns.EntityType = EntityType;
 // ------- END ENTITYTYPE -------
 
@@ -1452,18 +1679,64 @@ Arc.prototype.buildXmlObj = function () {
 	return arc;
 };
 
+Arc.prototype.buildJsObj = function () {
+	var arcObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.id != null) {
+		attributes.id = this.id;
+	}
+	if(this.class_ != null) {
+		attributes.class = this.class_;
+	}
+	if(this.source != null) {
+		attributes.source = this.source;
+	}
+	if(this.target != null) {
+		attributes.target = this.target;
+	}
+	utils.addAttributes(arcObj, attributes);
+
+	// children
+	this.baseToJsObj(arcObj);
+	for(var i=0; i < this.glyphs.length; i++) {
+		if (i==0) {
+			arcObj.glyph = [];
+		}
+		arcObj.glyph.push(this.glyphs[i].buildJsObj());
+	}
+	if(this.start != null) {
+		arcObj.start =  this.start.buildJsObj();
+	}
+	if(this.state != null) {
+		arcObj.state =  this.state.buildJsObj();
+	}
+	for(var i=0; i < this.nexts.length; i++) {
+		if (i==0) {
+			arcObj.next = [];
+		}
+		arcObj.next.push(this.nexts[i].buildJsObj());
+	}
+	if(this.end != null) {
+		arcObj.end =  this.end.buildJsObj();
+	}
+	console.log(arcObj);
+	return arcObj;
+};
+
 /**
  * @return {string}
  */
 Arc.prototype.toXML = function () {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({arc: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xmlObj
  * @return {Arc}
  */
-Arc.fromXML = function (xmlObj) {
+Arc.fromXML_old = function (xmlObj) {
 	if (xmlObj.localName != 'arc') {
 		throw new Error("Bad XML provided, expected localName arc, got: " + xmlObj.localName);
 	}
@@ -1497,6 +1770,64 @@ Arc.fromXML = function (xmlObj) {
 	arc.baseFromXML(xmlObj);
 	return arc;
 };
+
+Arc.fromXML = function (string) {
+	var arc;
+	function fn (err, result) {
+        arc = Arc.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return arc;
+};
+
+Arc.fromObj = function (jsObj) {
+	console.log("arc", jsObj);
+	if (typeof jsObj.arc == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName arc, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var arc = new ns.Arc();
+	jsObj = jsObj.arc;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return arc;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		arc.id = attributes.id || null;
+		arc.class_ = attributes.class || null;
+		arc.source = attributes.source || null;
+		arc.target = attributes.target || null;
+	}
+
+	// children
+	if(jsObj.start) {
+		var start = ns.StartType.fromObj({start: jsObj.start[0]});
+		arc.setStart(start);
+	}
+	if(jsObj.next) {
+		var nexts = jsObj.next;
+		for (var i=0; i < nexts.length; i++) {
+			var next = ns.NextType.fromObj({next: nexts[i]});
+			arc.addNext(next);
+		}
+	}
+	if(jsObj.end) {
+		var end = ns.EndType.fromObj({end: jsObj.end[0]});
+		arc.setEnd(end);
+	}
+	if(jsObj.glyph) {
+		var glyphs = jsObj.glyph;
+		for (var i=0; i < glyphs.length; i++) {
+			var glyph = ns.Glyph.fromObj({glyph: glyphs[i]});
+			arc.addGlyph(glyph);
+		}
+	}
+
+	arc.baseFromObj(jsObj);
+	return arc;
+};
+
 ns.Arc = Arc;
 // ------- END ARC -------
 
