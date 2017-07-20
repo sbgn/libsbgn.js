@@ -135,7 +135,6 @@ ListOfColorDefinitions.fromXML = function (string) {
 };
 
 ListOfColorDefinitions.fromObj = function (jsObj) {
-	console.log("listOfColorDefinitions", jsObj);
 	if (typeof jsObj.listOfColorDefinitions == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName listOfColorDefinitions, got: " + Object.keys(jsObj)[0]);
 	}
@@ -340,7 +339,6 @@ Style.prototype.buildJsObj = function () {
 	if(this.renderGroup != null) {
 		styleObj.g =  this.renderGroup.buildJsObj();
 	}
-	console.log(styleObj);
 	return styleObj;
 };
 
@@ -361,7 +359,6 @@ Style.fromXML = function (string) {
 };
 
 Style.fromObj = function (jsObj) {
-	console.log("style", jsObj);
 	if (typeof jsObj.style == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName style, got: " + Object.keys(jsObj)[0]);
 	}
@@ -437,7 +434,6 @@ ListOfStyles.fromXML = function (string) {
 };
 
 ListOfStyles.fromObj = function (jsObj) {
-	console.log("listOfStyles", jsObj);
 	if (typeof jsObj.listOfStyles == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName listOfStyles, got: " + Object.keys(jsObj)[0]);
 	}
@@ -532,7 +528,6 @@ RenderInformation.prototype.buildJsObj = function () {
 	if(this.listOfStyles != null) {
 		renderInformationObj.listOfStyles =  this.listOfStyles.buildJsObj();
 	}
-	console.log(renderInformationObj);
 	return renderInformationObj;
 };
 
@@ -553,7 +548,6 @@ RenderInformation.fromXML = function (string) {
 };
 
 RenderInformation.fromObj = function (jsObj) {
-	console.log("renderInformation", jsObj);
 	if (typeof jsObj.renderInformation == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + Object.keys(jsObj)[0]);
 	}

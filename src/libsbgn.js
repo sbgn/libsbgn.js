@@ -43,7 +43,6 @@ SBGNBase.prototype.baseToJsObj = function (jsObj) {
 };
 
 SBGNBase.prototype.baseFromObj = function (jsObj) {
-	console.log("base", jsObj);
 	if (jsObj.extension) {
 		var extension = ns.Extension.fromObj({extension: jsObj.extension[0]});
 		this.setExtension(extension);
@@ -101,7 +100,6 @@ Sbgn.prototype.buildJsObj = function () {
 	if (this.map != null) {
 		sbgnObj.map = this.map.buildJsObj();
 	}
-	console.log(sbgnObj);
 	return sbgnObj;
 };
 
@@ -119,9 +117,7 @@ Sbgn.prototype.toXML = function () {
 Sbgn.fromXML = function (string) {
     var sbgn;
     function fn (err, result) {
-        //console.log(util.inspect(result, false, null));
         sbgn = Sbgn.fromObj(result);
-        //console.log('Done');
     }
     utils.parseString(string, fn);
     return sbgn;
@@ -133,7 +129,6 @@ Sbgn.fromXML = function (string) {
  * @return {Sbgn}
  */
 Sbgn.fromObj = function (jsObj) {
-	console.log("sbgn", jsObj, typeof jsObj);
 	if (typeof jsObj.sbgn == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName sbgn, got: " + Object.keys(jsObj)[0]);
 	}
@@ -247,7 +242,6 @@ Map.prototype.buildJsObj = function () {
 		}
 		mapObj.arc.push(this.arcs[i].buildJsObj());
 	}
-	console.log(mapObj);
 	return mapObj;
 };
 
@@ -268,7 +262,6 @@ Map.fromXML = function (string) {
 };
 
 Map.fromObj = function (jsObj) {
-	console.log("map", jsObj);
 	if (typeof jsObj.map == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName map, got: " + Object.keys(jsObj)[0]);
 	}
@@ -335,7 +328,6 @@ Extension.prototype.add = function (extension) {
 	        parsedAsObj = result;
 	    };
 	    utils.parseString(extension, fn);
-	    console.log("parsed unknown ext", parsedAsObj);
 	    var name = Object.keys(parsedAsObj)[0];
 	    if(name == "renderInformation") {
 	    	var renderInformation = renderExt.RenderInformation.fromXML(extension);
@@ -393,7 +385,6 @@ Extension.prototype.buildJsObj = function () {
 			extensionObj[extInstance] = unsupportedExtObj[extInstance];
 		}
 	}
-	console.log("extensionObj", extensionObj);
 	return extensionObj;
 };
 
@@ -414,7 +405,6 @@ Extension.fromXML = function (string) {
 };
 
 Extension.fromObj = function (jsObj) {
-	console.log("extension fromobj", jsObj);
 	if (typeof jsObj.extension == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName extension, got: " + Object.keys(jsObj)[0]);
 	}
@@ -425,12 +415,10 @@ Extension.fromObj = function (jsObj) {
 		return extension;
 	}
 
-	console.log("jextension", Object.keys(jsObj), jsObj);
 	//var children = Object.keys(jsObj);
 	for (var extName in jsObj) {
 		//var extName = Object.keys(jsObj[i])[0];
 		var extJsObj = jsObj[extName];
-		console.log("extension found:", extName, extJsObj);
 
 		//extension.add(extInstance);
 		if (extName == 'renderInformation') {
@@ -445,7 +433,6 @@ Extension.fromObj = function (jsObj) {
 			var unsupportedExt = {};
 			unsupportedExt[extName] = extJsObj[0]; // make extension serialisable
 			var stringExt = utils.buildString(unsupportedExt); // serialise to string
-			console.log("unsupported extension", unsupportedExt, stringExt);
 			extension.add(stringExt); // save it
 		}
 	}
@@ -589,7 +576,6 @@ Glyph.prototype.buildJsObj = function () {
 		}
 		glyphObj.port.push(this.ports[i].buildJsObj());
 	}
-	console.log(glyphObj);
 	return glyphObj;
 };
 
@@ -610,7 +596,6 @@ Glyph.fromXML = function (string) {
 };
 
 Glyph.fromObj = function (jsObj) {
-	console.log("glyph", jsObj);
 	if (typeof jsObj.glyph == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName glyph, got: " + Object.keys(jsObj)[0]);
 	}
@@ -1217,7 +1202,6 @@ Arc.prototype.buildJsObj = function () {
 	if(this.end != null) {
 		arcObj.end =  this.end.buildJsObj();
 	}
-	console.log(arcObj);
 	return arcObj;
 };
 
@@ -1238,7 +1222,6 @@ Arc.fromXML = function (string) {
 };
 
 Arc.fromObj = function (jsObj) {
-	console.log("arc", jsObj);
 	if (typeof jsObj.arc == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName arc, got: " + Object.keys(jsObj)[0]);
 	}

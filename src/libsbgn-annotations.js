@@ -82,7 +82,6 @@ Annotation.fromXML = function (string) {
 };
 
 Annotation.fromObj = function (jsObj) {
-	console.log("annotation", jsObj);
 	if (typeof jsObj.annotation == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName annotation, got: " + Object.keys(jsObj)[0]);
 	}
@@ -302,7 +301,6 @@ RdfElement.fromString = function (stringXml) {
 	var graph = $rdf.graph();
 
 	// rdflib only accepts string as input, not xml elements
-	console.log("From string", stringXml);
 	try {
 	    $rdf.parse(stringXml, graph, RdfElement.uri, 'application/rdf+xml');
 	} catch (err) {
@@ -332,7 +330,6 @@ RdfElement.fromXML = function (string) {
 };
 
 RdfElement.fromObj = function (jsObj) {
-	console.log("rdfElement", jsObj);
 	if (typeof jsObj['rdf:RDF'] == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName rdf:RDF, got: " + Object.keys(jsObj)[0]);
 	}
@@ -345,7 +342,6 @@ RdfElement.fromObj = function (jsObj) {
 
 	var obj = {};
 	obj['rdf:RDF'] = jsObj;
-	console.log("built RDF obj", utils.buildString(obj));
 	rdfElement = ns.RdfElement.fromString(utils.buildString(obj));
 
 	return rdfElement;
