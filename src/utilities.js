@@ -43,6 +43,13 @@ ns.parseString = function (string, fn) {
 	parser.parseString(string, fn);
 };
 
+ns.parseStringKeepPrefix = function (string, fn) {
+	var parser = new xml2js.Parser({
+		attrValueProcessors: [xml2js.processors.parseNumbers, xml2js.processors.parseBooleans]
+	});
+	parser.parseString(string, fn);
+};
+
 ns.buildString = function (obj) {
 	return new xml2js.Builder({
 		headless: true,

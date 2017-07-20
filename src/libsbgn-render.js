@@ -803,7 +803,7 @@ RenderInformation.fromXML = function (string) {
 RenderInformation.fromObj = function (jsObj) {
 	console.log("renderInformation", jsObj);
 	if (typeof jsObj.renderInformation == 'undefined') {
-		throw new Error("Bad XML provided, expected tagNamerenderInformation, got: " + Object.keys(jsObj)[0]);
+		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var renderInformation = new ns.RenderInformation();

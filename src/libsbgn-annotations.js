@@ -29,6 +29,7 @@ var $rdf = require('rdflib');
 var xmldom = require('xmldom');
 var N3 = require('n3');
 var Util = require('./annotation-utils');
+var utils = require('./utilities');
 
 var ns = {};
 
@@ -68,18 +69,30 @@ Annotation.prototype.buildXmlObj = function () {
 	return annotation;
 };
 
+Annotation.prototype.buildJsObj = function () {
+	var annotationJsonObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.id != null) {
+		attributes.id = this.id;
+	}
+	utils.addAttributes(annotationJsonObj, attributes);
+	return annotationJsonObj;
+};
+
 /**
  * @return {string}
  */
 Annotation.prototype.toXML = function() {
-	return new xmldom.XMLSerializer().serializeToString(this.buildXmlObj());
+	return utils.buildString({annotation: this.buildJsObj()})
 };
 
 /**
  * @param {Element} xml
  * @return {Annotation}
  */
-Annotation.fromXML = function (xml) {
+Annotation.fromXML_old = function (xml) {
 	if (xml.tagName != 'annotation') {
 		throw new Error("Bad XML provided, expected tagName annotation, got: " + xml.tagName);
 	}
@@ -94,6 +107,42 @@ Annotation.fromXML = function (xml) {
 
 	return annotation;
 };
+
+Annotation.fromXML = function (string) {
+	var annotation;
+	function fn (err, result) {
+        annotation = Annotation.fromObj(result);
+    };
+    utils.parseStringKeepPrefix(string, fn);
+    return annotation;
+};
+
+Annotation.fromObj = function (jsObj) {
+	console.log("annotation", jsObj);
+	if (typeof jsObj.annotation == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName annotation, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var annotation = new ns.Annotation();
+	jsObj = jsObj.annotation;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return annotation;
+	}
+
+	// children
+	if(jsObj['rdf:RDF']) {
+		/*var listOfColorDefinitions = ns.ListOfColorDefinitions.fromObj({listOfColorDefinitions: jsObj.listOfColorDefinitions[0]});
+		renderInformation.setListOfColorDefinitions(listOfColorDefinitions);*/
+
+		var obj = {};
+		obj['rdf:RDF'] = jsObj['rdf:RDF'][0];
+		var rdf = ns.RdfElement.fromObj(obj);
+		annotation.setRdfElement(rdf);
+	}
+
+	return annotation;
+};
+
 ns.Annotation = Annotation;
 // ------- END ANNOTATION -------
 
@@ -283,15 +332,16 @@ RdfElement.prototype.toXML = function() {
  * @param {Element} xml
  * @return {RdfElement}
  */
-RdfElement.fromXML = function (xml) {
-	if (xml.tagName != 'rdf:RDF') {
+RdfElement.fromString = function (stringXml) {
+	/*if (xml.tagName != 'rdf:RDF') {
 		throw new Error("Bad XML provided, expected tagName rdf:RDF, got: " + xml.tagName);
-	}
+	}*/
 	var rdfElement = new RdfElement();
 	var graph = $rdf.graph();
 
 	// rdflib only accepts string as input, not xml elements
-	var stringXml = new xmldom.XMLSerializer().serializeToString(xml);
+	//var stringXml = new xmldom.XMLSerializer().serializeToString(xml);
+	console.log("From string", stringXml);
 	try {
 	    $rdf.parse(stringXml, graph, RdfElement.uri, 'application/rdf+xml');
 	} catch (err) {
@@ -307,6 +357,35 @@ RdfElement.fromXML = function (xml) {
 	store.addTriples(parser.parse(turtle));
 	
 	rdfElement.store = store;
+
+	return rdfElement;
+};
+
+RdfElement.fromXML = function (string) {
+	var rdfElement;
+	function fn (err, result) {
+        rdfElement = RdfElement.fromObj(result);
+    };
+    utils.parseStringKeepPrefix(string, fn);
+    return rdfElement;
+};
+
+RdfElement.fromObj = function (jsObj) {
+	console.log("rdfElement", jsObj);
+	if (typeof jsObj['rdf:RDF'] == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName rdf:RDF, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var rdfElement = new ns.RdfElement();
+	jsObj = jsObj['rdf:RDF'];
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return rdfElement;
+	}
+
+	var obj = {};
+	obj['rdf:RDF'] = jsObj;
+	console.log("built RDF obj", utils.buildString(obj));
+	rdfElement = ns.RdfElement.fromString(utils.buildString(obj));
 
 	return rdfElement;
 };

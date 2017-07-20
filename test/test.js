@@ -4,7 +4,6 @@ chai.use(require('chai-string'));
 var sbgnjs = require('../src/libsbgn');
 var renderExt = require('../src/libsbgn-render');
 var checkParams = require('../src/utilities').checkParams;
-var xmldom = require('xmldom');
 var pkg = require('..');
 var annot = sbgnjs.annot;
 var N3 = require('n3');
@@ -53,10 +52,6 @@ describe('utilities', function() {
 		});
 	});
 });
-
-function getXmlObj(string) {
-	return new xmldom.DOMParser().parseFromString(string, "text/xml").documentElement;
-};
 
 describe('libsbgn', function() {
 	describe('sbgn', function() {
@@ -1366,14 +1361,14 @@ describe('libsbgn-annotations-ext', function() {
 
 
 		beforeEach('build necessary RDF store from different test inputs', function() {
-			simplest = annot.Annotation.fromXML(getXmlObj(header+simplestString+footer)).rdfElement;
-			empty = annot.Annotation.fromXML(getXmlObj(header+footer)).rdfElement;
-			emptyDescription = annot.Annotation.fromXML(getXmlObj(header+emptyDescriptionString+footer)).rdfElement;
-			emptyRelation = annot.Annotation.fromXML(getXmlObj(header+emptyRelationString+footer)).rdfElement;
-			emptyBag = annot.Annotation.fromXML(getXmlObj(header+emptyBagString+footer)).rdfElement;
-			inline = annot.Annotation.fromXML(getXmlObj(header+inlineString+footer)).rdfElement;
-			doubleDescription = annot.Annotation.fromXML(getXmlObj(header+doubleDescriptionString+footer)).rdfElement;
-			doubleRelation = annot.Annotation.fromXML(getXmlObj(header+doubleRelationString+footer)).rdfElement;
+			simplest = annot.Annotation.fromXML(header+simplestString+footer).rdfElement;
+			empty = annot.Annotation.fromXML(header+footer).rdfElement;
+			emptyDescription = annot.Annotation.fromXML(header+emptyDescriptionString+footer).rdfElement;
+			emptyRelation = annot.Annotation.fromXML(header+emptyRelationString+footer).rdfElement;
+			emptyBag = annot.Annotation.fromXML(header+emptyBagString+footer).rdfElement;
+			inline = annot.Annotation.fromXML(header+inlineString+footer).rdfElement;
+			doubleDescription = annot.Annotation.fromXML(header+doubleDescriptionString+footer).rdfElement;
+			doubleRelation = annot.Annotation.fromXML(header+doubleRelationString+footer).rdfElement;
 
 		});
 
