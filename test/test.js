@@ -528,6 +528,40 @@ describe('libsbgn', function() {
 			next.toXML().should.equal('<next x="1" y="2"/>');
 		});
 	});
+	describe('point', function() {
+		it('should parse empty', function() {
+			var point = sbgnjs.Point.fromXML("<point/>");
+			point.should.have.ownProperty('x');
+			point.x.should.be.NaN;
+			point.should.have.ownProperty('y');
+			point.y.should.be.NaN;
+		});
+		it('should parse complete', function() {
+			var point = sbgnjs.Point.fromXML('<point x="1" y="2"/>');
+			should.exist(point.x);
+			point.x.should.equal(1);
+			should.exist(point.y);
+			point.y.should.equal(2);
+		});
+		it('should write empty', function() {
+			var point = new sbgnjs.Point();
+			point.toXML().should.equal('<point/>');
+		});
+		it('should write complete', function() {
+			var point = new sbgnjs.Point({x: 1, y: 2});
+			point.toXML().should.equal('<point x="1" y="2"/>');
+		});
+		it('should parse extension', function() {
+			var point = sbgnjs.Point.fromXML("<point><extension/></point>");
+			should.exist(point.extension);
+			point.extension.should.be.a('object');
+			point.extension.should.be.instanceOf(sbgnjs.Extension);
+		});
+		it('should write extension', function() {
+			var point = new sbgnjs.Point({extension: new sbgnjs.Extension()});
+			point.toXML().should.equal('<point><extension/></point>');
+		});
+	});
 
 	describe('glyph', function() {
 		describe('parse from XML', function() {

@@ -1472,6 +1472,78 @@ NextType.fromObj = function (jsObj) {
 ns.NextType = NextType;
 // ------- END NEXTTYPE -------
 
+// ------- POINT -------
+/**
+ * Represents the <code>&lt;point&gt;</code> element.
+ * @class Point
+ * @param {Object} params
+ * @param {string|number=} params.x
+ * @param {string|number=} params.y
+ */
+var Point = function (params) {
+	ns.SBGNBase.call(this, params);
+	var params = checkParams(params, ['x', 'y']);
+	this.x = parseFloat(params.x);
+	this.y = parseFloat(params.y);
+};
+Point.prototype = Object.create(ns.SBGNBase.prototype);
+Point.prototype.constructor = Point;
+
+Point.prototype.buildJsObj = function () {
+	var pointJsObj = {};
+
+	// attributes
+	var attributes = {};
+	if(!isNaN(this.x)) {
+		attributes.x = this.x;
+	}
+	if(!isNaN(this.y)) {
+		attributes.y = this.y;
+	}
+	utils.addAttributes(pointJsObj, attributes);
+	this.baseToJsObj(pointJsObj);
+	return pointJsObj;
+};
+
+/**
+ * @return {string}
+ */
+Point.prototype.toXML = function () {
+	return utils.buildString({point: this.buildJsObj()})
+};
+
+Point.fromXML = function (string) {
+	var point;
+	function fn (err, result) {
+        point = Point.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return point;
+};
+
+Point.fromObj = function (jsObj) {
+	if (typeof jsObj.point == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName point, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var point = new ns.Point();
+	jsObj = jsObj.point;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return point;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		point.x = parseFloat(attributes.x);
+		point.y = parseFloat(attributes.y);
+	}
+	point.baseFromObj(jsObj);
+	return point;
+};
+
+ns.Point = Point;
+// ------- END POINT -------
+
 ns.render = renderExt;
 ns.annot = annotExt;
 module.exports = ns;
