@@ -24,8 +24,9 @@ ns.xmlns = "http://sbgn.org/libsbgn/0.3";
  * @param {Extension=} params.extension
  */
 var SBGNBase = function (params) {
-	var params = checkParams(params, ['extension']);
+	var params = checkParams(params, ['extension', 'notes']);
 	this.extension 	= params.extension;
+	this.notes = params.notes;
 };
 
 /**
@@ -36,9 +37,20 @@ SBGNBase.prototype.setExtension = function (extension) {
 	this.extension = extension;
 };
 
+/**
+ * Allows inheriting objects to get an notes element.
+ * @param {Notes} notes
+ */
+SBGNBase.prototype.setNotes = function (notes) {
+	this.notes = notes;
+};
+
 SBGNBase.prototype.baseToJsObj = function (jsObj) {
 	if(this.extension != null) {
 		jsObj.extension = this.extension.buildJsObj();
+	}
+	if(this.notes != null) {
+		jsObj.notes = this.notes.buildJsObj();
 	}
 };
 
@@ -46,6 +58,10 @@ SBGNBase.prototype.baseFromObj = function (jsObj) {
 	if (jsObj.extension) {
 		var extension = ns.Extension.fromObj({extension: jsObj.extension[0]});
 		this.setExtension(extension);
+	}
+	if (jsObj.notes) {
+		var notes = ns.Notes.fromObj({notes: jsObj.notes[0]});
+		this.setNotes(notes);
 	}
 };
 ns.SBGNBase = SBGNBase;
@@ -300,9 +316,9 @@ Map.fromObj = function (jsObj) {
 ns.Map = Map;
 // ------- END MAP -------
 
-// ------- EXTENSIONS -------
+// ------- EXTENSION -------
 /**
-  * Represents the <code>&lt;extension&gt;</code> element.
+ * Represents the <code>&lt;extension&gt;</code> element.
  * @class
  */
 var Extension = function () {
@@ -441,7 +457,75 @@ Extension.fromObj = function (jsObj) {
 };
 
 ns.Extension = Extension;
-// ------- END EXTENSIONS -------
+// ------- END EXTENSION -------
+
+// ------- NOTES -------
+/**
+ * Represents the <code>&lt;notes&gt;</code> element.
+ * Its single attribute content stores xhtml elements as string.
+ * @class
+ */
+var Notes = function () {
+	this.content = "";
+};
+
+Notes.prototype.setContent = function (string) {
+	this.content = string;
+};
+
+Notes.prototype.appendContent = function (string) {
+	this.content += string;
+};
+
+Notes.prototype.buildJsObj = function () {
+
+	var parsedContent;
+    utils.parseString(this.content, function (err, result) {
+        parsedContent = result;
+    });
+
+	return parsedContent;
+};
+
+/**
+ * @return {string}
+ */
+Notes.prototype.toXML = function () {
+	return utils.buildString({notes: this.buildJsObj()})
+};
+
+Notes.fromXML = function (string) {
+	var notes;
+	function fn (err, result) {
+        notes = Notes.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return notes;
+};
+
+Notes.fromObj = function (jsObj) {
+	if (typeof jsObj.notes == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName notes, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var notes = new Notes();
+	jsObj = jsObj.notes;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return notes;
+	}
+
+	var stringExt = utils.buildString({notes: jsObj}); // serialise to string
+	// xml2js does weird things when you just want to serialize the content
+	// need to include the <notes> root to get it properly, and then remove it in the result string.
+	stringExt = stringExt.replace('<notes>', '');
+	stringExt = stringExt.replace('</notes>', '');
+	notes.content = stringExt; // save it
+
+	return notes;
+};
+
+ns.Notes = Notes;
+// ------- END NOTES -------
 
 // ------- GLYPH -------
 /**

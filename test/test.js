@@ -112,6 +112,24 @@ describe('libsbgn', function() {
 								"</extension><map/></sbgn>");
 				});
 			})
+			describe('notes', function() {
+				it('should parse notes', function(){
+					var sbgn = sbgnjs.Sbgn.fromXML("<sbgn><map></map><notes><p>test</p></notes></sbgn>");
+					should.exist(sbgn.notes);
+					sbgn.notes.should.be.a('object');
+					sbgn.notes.should.be.instanceOf(sbgnjs.Notes);
+					sbgn.notes.content.should.equal("<p>test</p>");
+				});
+				it('should write notes', function(){
+					var sbgn = new sbgnjs.Sbgn();
+					sbgn.setNotes(new sbgnjs.Notes());
+					sbgn.notes.setContent("<p>test</p>");
+					sbgn.setMap(new sbgnjs.Map());
+					sbgn.toXML().should.equal("<sbgn><notes>"+
+								'<p>test</p>'+
+								"</notes><map/></sbgn>");
+				});
+			})
 		})
 	});
 
@@ -283,6 +301,48 @@ describe('libsbgn', function() {
 				var extension = new sbgnjs.Extension();
 				extension.add(renderExt.RenderInformation.fromXML('<renderInformation></renderInformation>'));
 				extension.toXML().should.equal('<extension><renderInformation xmlns="'+renderExt.xmlns+'"/></extension>');
+			});
+		});
+	});
+	describe('notes', function() {
+		describe('parse from XML', function() {
+			it('should parse empty', function () {
+				var notes = sbgnjs.Notes.fromXML('<notes></notes>');
+				notes.should.have.ownProperty('content');
+				notes.content.should.be.a('string');
+			});
+			it('should parse with some content', function () {
+				var notes = sbgnjs.Notes.fromXML('<notes><p style="font-size:72pt">random content</p></notes>');
+				notes.should.have.ownProperty('content');
+				notes.content.should.be.a('string');
+				notes.content.should.equal('<p style="font-size:72pt">random content</p>');
+			});
+		});
+		describe('test notes functions', function() {
+			it('set content', function () {
+				var notes = new sbgnjs.Notes();
+				notes.setContent("<p>test</p>")
+				notes.content.should.equal("<p>test</p>");
+				notes.setContent("<p>test2</p>")
+				notes.content.should.equal("<p>test2</p>");
+			});
+			it('append content', function () {
+				var notes = new sbgnjs.Notes();
+				notes.setContent("<p>test</p>")
+				notes.content.should.equal("<p>test</p>");
+				notes.appendContent("<p>test2</p>")
+				notes.content.should.equal("<p>test</p><p>test2</p>");
+			});
+		});
+		describe('write to XML', function () {
+			it('should write empty notes', function () {
+				var notes = new sbgnjs.Notes();
+				notes.toXML().should.equal("<notes/>");
+			});
+			it('should write notes with content', function () {
+				var notes = new sbgnjs.Notes();
+				notes.setContent("<span>test</span>")
+				notes.toXML().should.equal("<notes><span>test</span></notes>");
 			});
 		});
 	});
