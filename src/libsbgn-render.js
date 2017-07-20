@@ -16,7 +16,6 @@
 
 var checkParams = require('./utilities').checkParams;
 var utils = require('./utilities');
-var xmldom = require('xmldom');
 var xml2js = require('xml2js');
 
 var ns = {};
@@ -35,20 +34,6 @@ var ColorDefinition = function(params) {
 	var params = checkParams(params, ['id', 'value']);
 	this.id 	= params.id;
 	this.value 	= params.value;
-};
-
-/**
- * @return {Element}
- */
-ColorDefinition.prototype.buildXmlObj = function () {
-	var colorDefinition = new xmldom.DOMImplementation().createDocument().createElement('colorDefinition');
-	if (this.id != null) {
-		colorDefinition.setAttribute('id', this.id);
-	}
-	if (this.value != null) {
-		colorDefinition.setAttribute('value', this.value);
-	}
-	return colorDefinition;
 };
 
 ColorDefinition.prototype.buildJsObj = function () {
@@ -71,20 +56,6 @@ ColorDefinition.prototype.buildJsObj = function () {
  */
 ColorDefinition.prototype.toXML = function () {
 	return utils.buildString({colorDefinition: this.buildJsObj()})
-};
-
-/**
- * @param {Element} xml
- * @return {ColorDefinition}
- */
-ColorDefinition.fromXML_old = function (xml) {
-	if (xml.tagName != 'colorDefinition') {
-		throw new Error("Bad XML provided, expected tagName colorDefinition, got: " + xml.tagName);
-	}
-	var colorDefinition = new ns.ColorDefinition();
-	colorDefinition.id 		= xml.getAttribute('id') || null;
-	colorDefinition.value 	= xml.getAttribute('value') || null;
-	return colorDefinition;
 };
 
 ColorDefinition.fromXML = function (string) {
@@ -134,17 +105,6 @@ ListOfColorDefinitions.prototype.addColorDefinition = function (colorDefinition)
 	this.colorDefinitions.push(colorDefinition);
 };
 
-/**
- * @return {Element}
- */
-ListOfColorDefinitions.prototype.buildXmlObj = function () {
-	var listOfColorDefinitions = new xmldom.DOMImplementation().createDocument().createElement('listOfColorDefinitions');
-	for(var i=0; i<this.colorDefinitions.length; i++) {
-		listOfColorDefinitions.appendChild(this.colorDefinitions[i].buildXmlObj());
-	}
-	return listOfColorDefinitions;
-};
-
 ListOfColorDefinitions.prototype.buildJsObj = function () {
 	var listOfColorDefinitionsObj = {};
 
@@ -163,25 +123,6 @@ ListOfColorDefinitions.prototype.buildJsObj = function () {
  */
 ListOfColorDefinitions.prototype.toXML = function () {
 	return utils.buildString({listOfColorDefinitions: this.buildJsObj()})
-};
-
-/**
- * @param {Element} xml
- * @return {ListOfColorDefinitions}
- */
-ListOfColorDefinitions.fromXML_old = function (xml) {
-	if (xml.tagName != 'listOfColorDefinitions') {
-		throw new Error("Bad XML provided, expected tagName listOfColorDefinitions, got: " + xml.tagName);
-	}
-	var listOfColorDefinitions = new ns.ListOfColorDefinitions();
-
-	var colorDefinitions = xml.getElementsByTagName('colorDefinition');
-	for (var i=0; i<colorDefinitions.length; i++) {
-		var colorDefinitionXML = colorDefinitions[i];
-		var colorDefinition = ns.ColorDefinition.fromXML(colorDefinitionXML);
-		listOfColorDefinitions.addColorDefinition(colorDefinition);
-	}
-	return listOfColorDefinitions;
 };
 
 ListOfColorDefinitions.fromXML = function (string) {
@@ -255,44 +196,6 @@ var RenderGroup = function (params) {
 	this.strokeWidth 	= params.strokeWidth;
 };
 
-/**
- * @return {Element}
- */
-RenderGroup.prototype.buildXmlObj = function () {
-	var renderGroup = new xmldom.DOMImplementation().createDocument().createElement('g');
-	if (this.id != null) {
-		renderGroup.setAttribute('id', this.id);
-	}
-	if (this.fontSize != null) {
-		renderGroup.setAttribute('fontSize', this.fontSize);
-	}
-	if (this.fontFamily != null) {
-		renderGroup.setAttribute('fontFamily', this.fontFamily);
-	}
-	if (this.fontWeight != null) {
-		renderGroup.setAttribute('fontWeight', this.fontWeight);
-	}
-	if (this.fontStyle != null) {
-		renderGroup.setAttribute('fontStyle', this.fontStyle);
-	}
-	if (this.textAnchor != null) {
-		renderGroup.setAttribute('textAnchor', this.textAnchor);
-	}
-	if (this.vtextAnchor != null) {
-		renderGroup.setAttribute('vtextAnchor', this.vtextAnchor);
-	}
-	if (this.stroke != null) {
-		renderGroup.setAttribute('stroke', this.stroke);
-	}
-	if (this.strokeWidth != null) {
-		renderGroup.setAttribute('strokeWidth', this.strokeWidth);
-	}
-	if (this.fill != null) {
-		renderGroup.setAttribute('fill', this.fill);
-	}
-	return renderGroup;
-};
-
 RenderGroup.prototype.buildJsObj = function () {
 	var renderGroupObj = {};
 
@@ -337,28 +240,6 @@ RenderGroup.prototype.buildJsObj = function () {
  */
 RenderGroup.prototype.toXML = function () {
 	return utils.buildString({g: this.buildJsObj()})
-};
-
-/**
- * @param {Element} xml
- * @return {RenderGroup}
- */
-RenderGroup.fromXML_old = function (xml) {
-	if (xml.tagName != 'g') {
-		throw new Error("Bad XML provided, expected tagName g, got: " + xml.tagName);
-	}
-	var renderGroup = new ns.RenderGroup({});
-	renderGroup.id 			= xml.getAttribute('id') || null;
-	renderGroup.fontSize 	= xml.getAttribute('fontSize') || null;
-	renderGroup.fontFamily 	= xml.getAttribute('fontFamily') || null;
-	renderGroup.fontWeight 	= xml.getAttribute('fontWeight') || null;
-	renderGroup.fontStyle 	= xml.getAttribute('fontStyle') || null;
-	renderGroup.textAnchor 	= xml.getAttribute('textAnchor') || null;
-	renderGroup.vtextAnchor = xml.getAttribute('vtextAnchor') || null;
-	renderGroup.stroke 		= xml.getAttribute('stroke') || null;
-	renderGroup.strokeWidth = xml.getAttribute('strokeWidth') || null;
-	renderGroup.fill 		= xml.getAttribute('fill') || null;
-	return renderGroup;
 };
 
 RenderGroup.fromXML = function (string) {
@@ -439,27 +320,6 @@ Style.prototype.setIdListFromArray = function (idArray) {
 	this.idList = idArray.join(' ');
 }
 
-/**
- * @return {Element}
- */
-Style.prototype.buildXmlObj = function () {
-	var style = new xmldom.DOMImplementation().createDocument().createElement('style');
-	if (this.id != null) {
-		style.setAttribute('id', this.id);
-	}
-	if (this.name != null) {
-		style.setAttribute('name', this.name);
-	}
-	if (this.idList != null) {
-		style.setAttribute('idList', this.idList);
-	}
-
-	if (this.renderGroup) {
-		style.appendChild(this.renderGroup.buildXmlObj());
-	}
-	return style;
-};
-
 Style.prototype.buildJsObj = function () {
 	var styleObj = {};
 
@@ -489,26 +349,6 @@ Style.prototype.buildJsObj = function () {
  */
 Style.prototype.toXML = function () {
 	return utils.buildString({style: this.buildJsObj()})
-};
-
-/**
- * @param {Element} xml
- * @return {Style}
- */
-Style.fromXML_old = function (xml) {
-	if (xml.tagName != 'style') {
-		throw new Error("Bad XML provided, expected tagName style, got: " + xml.tagName);
-	}
-	var style = new ns.Style();
-	style.id 		= xml.getAttribute('id') || null;
-	style.name 		= xml.getAttribute('name') || null;
-	style.idList 	= xml.getAttribute('idList') || null;
-
-	var renderGroupXML = xml.getElementsByTagName('g')[0];
-	if (renderGroupXML != null) {
-		style.renderGroup = ns.RenderGroup.fromXML(renderGroupXML);
-	}
-	return style;
 };
 
 Style.fromXML = function (string) {
@@ -567,17 +407,6 @@ ListOfStyles.prototype.addStyle = function(style) {
 	this.styles.push(style);
 };
 
-/**
- * @return {Element}
- */
-ListOfStyles.prototype.buildXmlObj = function () {
-	var listOfStyles = new xmldom.DOMImplementation().createDocument().createElement('listOfStyles');
-	for(var i=0; i<this.styles.length; i++) {
-		listOfStyles.appendChild(this.styles[i].buildXmlObj());
-	}
-	return listOfStyles;
-};
-
 ListOfStyles.prototype.buildJsObj = function () {
 	var listOfStylesObj = {};
 
@@ -596,25 +425,6 @@ ListOfStyles.prototype.buildJsObj = function () {
  */
 ListOfStyles.prototype.toXML = function () {
 	return utils.buildString({listOfStyles: this.buildJsObj()})
-};
-
-/**
- * @param {Element} xml
- * @return {ListOfStyles}
- */
-ListOfStyles.fromXML_old = function (xml) {
-	if (xml.tagName != 'listOfStyles') {
-		throw new Error("Bad XML provided, expected tagName listOfStyles, got: " + xml.tagName);
-	}
-	var listOfStyles = new ns.ListOfStyles();
-
-	var styles = xml.getElementsByTagName('style');
-	for (var i=0; i<styles.length; i++) {
-		var styleXML = styles[i];
-		var style = ns.Style.fromXML(styleXML);
-		listOfStyles.addStyle(style);
-	}
-	return listOfStyles;
 };
 
 ListOfStyles.fromXML = function (string) {
@@ -692,37 +502,6 @@ RenderInformation.prototype.setListOfStyles = function(listOfStyles) {
 	this.listOfStyles = listOfStyles;
 };
 
-/**
- * @return {Element}
- */
-RenderInformation.prototype.buildXmlObj = function () {
-	var renderInformation = new xmldom.DOMImplementation().createDocument().createElement('renderInformation');
-	renderInformation.setAttribute('xmlns', ns.xmlns);
-	if (this.id != null) {
-		renderInformation.setAttribute('id', this.id);
-	}
-	if (this.name != null) {
-		renderInformation.setAttribute('name', this.name);
-	}
-	if (this.programName != null) {
-		renderInformation.setAttribute('programName', this.programName);
-	}
-	if (this.programVersion != null) {
-		renderInformation.setAttribute('programVersion', this.programVersion);
-	}
-	if (this.backgroundColor != null) {
-		renderInformation.setAttribute('backgroundColor', this.backgroundColor);
-	}
-
-	if (this.listOfColorDefinitions) {
-		renderInformation.appendChild(this.listOfColorDefinitions.buildXmlObj());
-	}
-	if (this.listOfStyles) {
-		renderInformation.appendChild(this.listOfStyles.buildXmlObj());
-	}
-	return renderInformation;
-};
-
 RenderInformation.prototype.buildJsObj = function () {
 	var renderInformationObj = {};
 
@@ -762,33 +541,6 @@ RenderInformation.prototype.buildJsObj = function () {
  */
 RenderInformation.prototype.toXML = function() {
 	return utils.buildString({renderInformation: this.buildJsObj()})
-};
-
-/**
- * @param {Element} xml
- * @return {RenderInformation}
- */
-RenderInformation.fromXML_old = function (xml) {
-	if (xml.tagName != 'renderInformation') {
-		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + xml.tagName);
-	}
-	var renderInformation = new ns.RenderInformation();
-	renderInformation.id 				= xml.getAttribute('id') || null;
-	renderInformation.name 				= xml.getAttribute('name') || null;
-	renderInformation.programName 		= xml.getAttribute('programName') || null;
-	renderInformation.programVersion 	= xml.getAttribute('programVersion') || null;
-	renderInformation.backgroundColor 	= xml.getAttribute('backgroundColor') || null;
-
-	var listOfColorDefinitionsXML = xml.getElementsByTagName('listOfColorDefinitions')[0];
-	var listOfStylesXML = xml.getElementsByTagName('listOfStyles')[0];
-	if (listOfColorDefinitionsXML != null) {
-		renderInformation.listOfColorDefinitions = ns.ListOfColorDefinitions.fromXML(listOfColorDefinitionsXML);
-	}
-	if (listOfStylesXML != null) {
-		renderInformation.listOfStyles = ns.ListOfStyles.fromXML(listOfStylesXML);
-	}
-
-	return renderInformation;
 };
 
 RenderInformation.fromXML = function (string) {

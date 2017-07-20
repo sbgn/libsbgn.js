@@ -26,7 +26,6 @@
 
 var checkParams = require('./utilities').checkParams;
 var $rdf = require('rdflib');
-var xmldom = require('xmldom');
 var N3 = require('n3');
 var Util = require('./annotation-utils');
 var utils = require('./utilities');
@@ -54,21 +53,6 @@ Annotation.prototype.setRdfElement = function(rdfElement) {
 	this.rdfElement = rdfElement;
 };
 
-/**
- * @return {Element}
- */
-Annotation.prototype.buildXmlObj = function () {
-	var annotation = new xmldom.DOMImplementation().createDocument().createElement('annotation');
-	if (this.rdfElement != null) {
-		var rdf = this.rdfElement;
-		// need to parse the string returned by serializing the rdf into a dom element
-		var xmlDoc = new xmldom.DOMParser().parseFromString(rdf.toXML(), "text/xml");
-		var rdfDOMElement = xmlDoc.getElementsByTagName('rdf:RDF')[0];
-		annotation.appendChild(rdfDOMElement);
-	}
-	return annotation;
-};
-
 Annotation.prototype.buildJsObj = function () {
 	var annotationJsonObj = {};
 
@@ -86,26 +70,6 @@ Annotation.prototype.buildJsObj = function () {
  */
 Annotation.prototype.toXML = function() {
 	return utils.buildString({annotation: this.buildJsObj()})
-};
-
-/**
- * @param {Element} xml
- * @return {Annotation}
- */
-Annotation.fromXML_old = function (xml) {
-	if (xml.tagName != 'annotation') {
-		throw new Error("Bad XML provided, expected tagName annotation, got: " + xml.tagName);
-	}
-	var annotation = new ns.Annotation();
-
-	/** xml.getElementsByTagName('rdf:RDF') doesn't work for Chrome */
-	var rdfXML = xml.getElementsByTagName('rdf:RDF')[0] || xml.getElementsByTagName('RDF')[0];
-	if (rdfXML != null) {
-		var rdf = ns.RdfElement.fromXML(rdfXML);
-		annotation.setRdfElement(rdf);
-	}
-
-	return annotation;
 };
 
 Annotation.fromXML = function (string) {
@@ -333,14 +297,11 @@ RdfElement.prototype.toXML = function() {
  * @return {RdfElement}
  */
 RdfElement.fromString = function (stringXml) {
-	/*if (xml.tagName != 'rdf:RDF') {
-		throw new Error("Bad XML provided, expected tagName rdf:RDF, got: " + xml.tagName);
-	}*/
+
 	var rdfElement = new RdfElement();
 	var graph = $rdf.graph();
 
 	// rdflib only accepts string as input, not xml elements
-	//var stringXml = new xmldom.XMLSerializer().serializeToString(xml);
 	console.log("From string", stringXml);
 	try {
 	    $rdf.parse(stringXml, graph, RdfElement.uri, 'application/rdf+xml');
