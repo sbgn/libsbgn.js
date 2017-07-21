@@ -8,7 +8,6 @@ var renderExt = require('./libsbgn-render');
 var annotExt = require('./libsbgn-annotations');
 var xml2js = require('xml2js');
 var utils = require('./utilities');
-var getFirstLevelByName = utils.getFirstLevelByName;
 var checkParams = utils.checkParams;
 
 var ns = {}; // namespace that encapsulates all exportable features
@@ -90,8 +89,6 @@ var Sbgn = function (params) {
 	var params = checkParams(params, ['xmlns', 'map']);
 	this.xmlns 	= params.xmlns;
 	this.map 	= params.map;
-
-	this.allowedChildren = ['map'];
 };
 
 Sbgn.prototype = Object.create(ns.SBGNBase.prototype);
@@ -114,9 +111,6 @@ Sbgn.prototype.buildJsObj = function () {
 	var attributes = {};
 	if(this.xmlns != null) {
 		attributes.xmlns = this.xmlns;
-	}
-	if(this.language != null) {
-		attributes.language = this.language;
 	}
 	utils.addAttributes(sbgnObj, attributes);
 
@@ -216,8 +210,6 @@ var Map = function (params) {
 	this.language 	= params.language;
 	this.glyphs 	= params.glyphs || [];
 	this.arcs 		= params.arcs || [];
-
-	this.allowedChildren = ['glyphs', 'arcs'];
 };
 
 Map.prototype = Object.create(ns.SBGNBase.prototype);
@@ -620,8 +612,6 @@ var Glyph = function (params) {
 	this.entity 		= params.entity;
 	this.glyphMembers 	= params.glyphMembers || []; // case of complex, can have arbitrary list of nested glyphs
 	this.ports 			= params.ports || [];
-
-	this.allowedChildren = ['label', 'state', 'bbox', 'clone', 'glyphMembers', 'ports', 'entity'];
 };
 
 Glyph.prototype = Object.create(ns.SBGNBase.prototype);
@@ -825,8 +815,6 @@ var Label = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['text']);
 	this.text = params.text;
-
-	this.allowedChildren = [];
 };
 
 Label.prototype = Object.create(ns.SBGNBase.prototype);
@@ -912,8 +900,6 @@ var Bbox = function (params) {
 	this.y = parseFloat(params.y);
 	this.w = parseFloat(params.w);
 	this.h = parseFloat(params.h);
-
-	this.allowedChildren = [];
 };
 
 Bbox.prototype = Object.create(ns.SBGNBase.prototype);
@@ -1230,8 +1216,6 @@ var Port = function (params) {
 	this.id = params.id;
 	this.x 	= parseFloat(params.x);
 	this.y 	= parseFloat(params.y);
-
-	this.allowedChildren = [];
 };
 
 Port.prototype = Object.create(ns.SBGNBase.prototype);
@@ -1333,8 +1317,6 @@ var Arc = function (params) {
 	this.end 	= params.end;
 	this.nexts 	= params.nexts || [];
 	this.glyphs = params.glyphs || [];
-
-	this.allowedChildren = ['start', 'nexts', 'end', 'glyphs'];
 };
 
 Arc.prototype = Object.create(ns.SBGNBase.prototype);
