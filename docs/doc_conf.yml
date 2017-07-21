@@ -5,11 +5,14 @@ toc:
 - Bbox
 - CloneType
 - EndType
+- EntityType
 - Extension
 - Glyph
 - Label
 - Map
 - NextType
+- Notes
+- Point
 - Port
 - Sbgn
 - SBGNBase

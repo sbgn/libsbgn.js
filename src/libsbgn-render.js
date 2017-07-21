@@ -14,8 +14,8 @@
  * @namespace libsbgn.render
 */
 
-var checkParams = require('./utilities').checkParams;
 var utils = require('./utilities');
+var checkParams = utils.checkParams;
 var xml2js = require('xml2js');
 
 var ns = {};
@@ -36,6 +36,9 @@ var ColorDefinition = function(params) {
 	this.value 	= params.value;
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 ColorDefinition.prototype.buildJsObj = function () {
 	var colordefObj = {};
 
@@ -58,6 +61,10 @@ ColorDefinition.prototype.toXML = function () {
 	return utils.buildString({colorDefinition: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {ColorDefinition}
+ */
 ColorDefinition.fromXML = function (string) {
 	var colorDefinition;
 	function fn (err, result) {
@@ -67,6 +74,10 @@ ColorDefinition.fromXML = function (string) {
     return colorDefinition;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {ColorDefinition}
+ */
 ColorDefinition.fromObj = function (jsObj) {
 	if (typeof jsObj.colorDefinition == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName colorDefinition, got: " + Object.keys(jsObj)[0]);
@@ -105,6 +116,17 @@ ListOfColorDefinitions.prototype.addColorDefinition = function (colorDefinition)
 	this.colorDefinitions.push(colorDefinition);
 };
 
+ListOfColorDefinitions.prototype.getColorById = function (id) {
+
+};
+
+ListOfColorDefinitions.prototype.getAllColors = function () {
+
+};
+
+/**
+ * @return {Object} - xml2js formatted object
+ */
 ListOfColorDefinitions.prototype.buildJsObj = function () {
 	var listOfColorDefinitionsObj = {};
 
@@ -125,6 +147,10 @@ ListOfColorDefinitions.prototype.toXML = function () {
 	return utils.buildString({listOfColorDefinitions: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {ListOfColorDefinitions}
+ */
 ListOfColorDefinitions.fromXML = function (string) {
 	var listOfColorDefinitions;
 	function fn (err, result) {
@@ -134,6 +160,10 @@ ListOfColorDefinitions.fromXML = function (string) {
     return listOfColorDefinitions;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {ListOfColorDefinitions}
+ */
 ListOfColorDefinitions.fromObj = function (jsObj) {
 	if (typeof jsObj.listOfColorDefinitions == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName listOfColorDefinitions, got: " + Object.keys(jsObj)[0]);
@@ -195,6 +225,9 @@ var RenderGroup = function (params) {
 	this.strokeWidth 	= params.strokeWidth;
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 RenderGroup.prototype.buildJsObj = function () {
 	var renderGroupObj = {};
 
@@ -241,6 +274,10 @@ RenderGroup.prototype.toXML = function () {
 	return utils.buildString({g: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {RenderGroup}
+ */
 RenderGroup.fromXML = function (string) {
 	var g;
 	function fn (err, result) {
@@ -250,6 +287,10 @@ RenderGroup.fromXML = function (string) {
     return g;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {RenderGroup}
+ */
 RenderGroup.fromObj = function (jsObj) {
 	if (typeof jsObj.g == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName g, got: " + Object.keys(jsObj)[0]);
@@ -319,6 +360,9 @@ Style.prototype.setIdListFromArray = function (idArray) {
 	this.idList = idArray.join(' ');
 }
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Style.prototype.buildJsObj = function () {
 	var styleObj = {};
 
@@ -349,6 +393,10 @@ Style.prototype.toXML = function () {
 	return utils.buildString({style: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Style}
+ */
 Style.fromXML = function (string) {
 	var style;
 	function fn (err, result) {
@@ -358,6 +406,10 @@ Style.fromXML = function (string) {
     return style;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Style}
+ */
 Style.fromObj = function (jsObj) {
 	if (typeof jsObj.style == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName style, got: " + Object.keys(jsObj)[0]);
@@ -404,6 +456,9 @@ ListOfStyles.prototype.addStyle = function(style) {
 	this.styles.push(style);
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 ListOfStyles.prototype.buildJsObj = function () {
 	var listOfStylesObj = {};
 
@@ -424,6 +479,10 @@ ListOfStyles.prototype.toXML = function () {
 	return utils.buildString({listOfStyles: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {ListOfStyles}
+ */
 ListOfStyles.fromXML = function (string) {
 	var listOfStyles;
 	function fn (err, result) {
@@ -433,6 +492,10 @@ ListOfStyles.fromXML = function (string) {
     return listOfStyles;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {ListOfStyles}
+ */
 ListOfStyles.fromObj = function (jsObj) {
 	if (typeof jsObj.listOfStyles == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName listOfStyles, got: " + Object.keys(jsObj)[0]);
@@ -498,6 +561,9 @@ RenderInformation.prototype.setListOfStyles = function(listOfStyles) {
 	this.listOfStyles = listOfStyles;
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 RenderInformation.prototype.buildJsObj = function () {
 	var renderInformationObj = {};
 
@@ -538,6 +604,10 @@ RenderInformation.prototype.toXML = function() {
 	return utils.buildString({renderInformation: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {RenderInformation}
+ */
 RenderInformation.fromXML = function (string) {
 	var renderInformation;
 	function fn (err, result) {
@@ -547,6 +617,10 @@ RenderInformation.fromXML = function (string) {
     return renderInformation;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {RenderInformation}
+ */
 RenderInformation.fromObj = function (jsObj) {
 	if (typeof jsObj.renderInformation == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + Object.keys(jsObj)[0]);

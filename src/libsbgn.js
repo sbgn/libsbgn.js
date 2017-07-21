@@ -6,22 +6,23 @@
 
 var renderExt = require('./libsbgn-render');
 var annotExt = require('./libsbgn-annotations');
-var checkParams = require('./utilities').checkParams;
-var getFirstLevelByName = require('./utilities').getFirstLevelByName;
 var xml2js = require('xml2js');
 var utils = require('./utilities');
+var getFirstLevelByName = utils.getFirstLevelByName;
+var checkParams = utils.checkParams;
 
-var ns = {};
+var ns = {}; // namespace that encapsulates all exportable features
 
 ns.xmlns = "http://sbgn.org/libsbgn/0.3";
 
 // ------- SBGNBase -------
 /**
- * Parent class for several sbgn elements. Used to provide extension element.
+ * Parent class for several sbgn elements. Used to provide extension and notes element.
  * End users don't need to interact with it. It can be safely ignored.
  * @class
  * @param {Object} params
  * @param {Extension=} params.extension
+ * @param {Notes=} params.notes
  */
 var SBGNBase = function (params) {
 	var params = checkParams(params, ['extension', 'notes']);
@@ -38,13 +39,17 @@ SBGNBase.prototype.setExtension = function (extension) {
 };
 
 /**
- * Allows inheriting objects to get an notes element.
+ * Allows inheriting objects to get a notes element.
  * @param {Notes} notes
  */
 SBGNBase.prototype.setNotes = function (notes) {
 	this.notes = notes;
 };
 
+/**
+ * Add the appropriate properties to jsObj.
+ * @param {Object} jsObj - xml2js formatted object
+ */
 SBGNBase.prototype.baseToJsObj = function (jsObj) {
 	if(this.extension != null) {
 		jsObj.extension = this.extension.buildJsObj();
@@ -54,6 +59,10 @@ SBGNBase.prototype.baseToJsObj = function (jsObj) {
 	}
 };
 
+/**
+ * Get the appropriate properties from jsObj.
+ * @param {Object} jsObj - xml2js formatted object
+ */
 SBGNBase.prototype.baseFromObj = function (jsObj) {
 	if (jsObj.extension) {
 		var extension = ns.Extension.fromObj({extension: jsObj.extension[0]});
@@ -123,13 +132,13 @@ Sbgn.prototype.buildJsObj = function () {
  * @return {string}
  */
 Sbgn.prototype.toXML = function () {
-	//var builder = new xml2js.Builder();
-	//var xml = builder.buildObject(this.buildXmlObj());
-	return utils.buildString({
-		sbgn: this.buildJsObj()
-	});
+	return utils.buildString({sbgn: this.buildJsObj()});
 };
 
+/**
+ * @param {String} string
+ * @return {Sbgn}
+ */
 Sbgn.fromXML = function (string) {
     var sbgn;
     function fn (err, result) {
@@ -141,7 +150,7 @@ Sbgn.fromXML = function (string) {
 };
 
 /**
- * @param {Element} xmlObj
+ * @param {Object} jsObj - xml2js formatted object
  * @return {Sbgn}
  */
 Sbgn.fromObj = function (jsObj) {
@@ -268,6 +277,10 @@ Map.prototype.toXML = function () {
 	return utils.buildString({map: this.buildJsObj()});
 };
 
+/**
+ * @param {String} string
+ * @return {Map}
+ */
 Map.fromXML = function (string) {
 	var map;
 	function fn (err, result) {
@@ -277,6 +290,10 @@ Map.fromXML = function (string) {
     return map;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Map}
+ */
 Map.fromObj = function (jsObj) {
 	if (typeof jsObj.map == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName map, got: " + Object.keys(jsObj)[0]);
@@ -323,13 +340,13 @@ ns.Map = Map;
  */
 var Extension = function () {
 	// consider first order children, add them with their tagname as property of this object
-	// store xmlObject if no supported parsing (unrecognized extensions)
+	// store string if no supported parsing (unrecognized extensions)
 	// else store instance of the extension
 	this.list = {};
 };
 
 /**
- * @param {Element|render.RenderInformation} extension
+ * @param {String|render.RenderInformation|annot.Annotation} extension
  */
 Extension.prototype.add = function (extension) {
 	if (extension instanceof renderExt.RenderInformation) {
@@ -369,7 +386,7 @@ Extension.prototype.has = function (extensionName) {
 
 /**
  * @param {string} extensionName
- * @return {Element|render.RenderInformation}
+ * @return {String|render.RenderInformation|annot.Annotation}
  */
 Extension.prototype.get = function (extensionName) {
 	if (this.has(extensionName)) {
@@ -380,6 +397,9 @@ Extension.prototype.get = function (extensionName) {
 	}
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Extension.prototype.buildJsObj = function () {
 	var extensionObj = {};
 
@@ -411,6 +431,10 @@ Extension.prototype.toXML = function () {
 	return utils.buildString({extension: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Extension}
+ */
 Extension.fromXML = function (string) {
 	var extension;
 	function fn (err, result) {
@@ -420,6 +444,10 @@ Extension.fromXML = function (string) {
     return extension;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Extension}
+ */
 Extension.fromObj = function (jsObj) {
 	if (typeof jsObj.extension == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName extension, got: " + Object.keys(jsObj)[0]);
@@ -462,21 +490,31 @@ ns.Extension = Extension;
 // ------- NOTES -------
 /**
  * Represents the <code>&lt;notes&gt;</code> element.
- * Its single attribute content stores xhtml elements as string.
+ * Its single content attribute stores xhtml elements as string.
  * @class
  */
 var Notes = function () {
 	this.content = "";
 };
 
+/**
+ * Overwrite the content.
+ * @param {String} string
+ */
 Notes.prototype.setContent = function (string) {
 	this.content = string;
 };
 
+/**
+ * @param {String} string
+ */
 Notes.prototype.appendContent = function (string) {
 	this.content += string;
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Notes.prototype.buildJsObj = function () {
 
 	var parsedContent;
@@ -494,6 +532,10 @@ Notes.prototype.toXML = function () {
 	return utils.buildString({notes: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Notes}
+ */
 Notes.fromXML = function (string) {
 	var notes;
 	function fn (err, result) {
@@ -503,6 +545,10 @@ Notes.fromXML = function (string) {
     return notes;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Notes}
+ */
 Notes.fromObj = function (jsObj) {
 	if (typeof jsObj.notes == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName notes, got: " + Object.keys(jsObj)[0]);
@@ -615,6 +661,9 @@ Glyph.prototype.addPort = function (port) {
 	this.ports.push(port);
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Glyph.prototype.buildJsObj = function () {
 	var glyphObj = {};
 
@@ -670,6 +719,10 @@ Glyph.prototype.toXML = function () {
 	return utils.buildString({glyph: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Glyph}
+ */
 Glyph.fromXML = function (string) {
 	var glyph;
 	function fn (err, result) {
@@ -679,6 +732,10 @@ Glyph.fromXML = function (string) {
     return glyph;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Glyph}
+ */
 Glyph.fromObj = function (jsObj) {
 	if (typeof jsObj.glyph == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName glyph, got: " + Object.keys(jsObj)[0]);
@@ -760,6 +817,9 @@ var Label = function (params) {
 Label.prototype = Object.create(ns.SBGNBase.prototype);
 Label.prototype.constructor = ns.Label;
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Label.prototype.buildJsObj = function () {
 	var labelObj = {};
 
@@ -780,6 +840,10 @@ Label.prototype.toXML = function () {
 	return utils.buildString({label: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Label}
+ */
 Label.fromXML = function (string) {
 	var label;
 	function fn (err, result) {
@@ -789,6 +853,10 @@ Label.fromXML = function (string) {
     return label;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Label}
+ */
 Label.fromObj = function (jsObj) {
 	if (typeof jsObj.label == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName label, got: " + Object.keys(jsObj)[0]);
@@ -836,6 +904,9 @@ var Bbox = function (params) {
 Bbox.prototype = Object.create(ns.SBGNBase.prototype);
 Bbox.prototype.constructor = ns.Bbox;
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Bbox.prototype.buildJsObj = function () {
 	var bboxObj = {};
 
@@ -865,6 +936,10 @@ Bbox.prototype.toXML = function () {
 	return utils.buildString({bbox: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Bbox}
+ */
 Bbox.fromXML = function (string) {
 	var bbox;
 	function fn (err, result) {
@@ -874,6 +949,10 @@ Bbox.fromXML = function (string) {
     return bbox;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Bbox}
+ */
 Bbox.fromObj = function (jsObj) {
 	if (typeof jsObj.bbox == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName bbox, got: " + Object.keys(jsObj)[0]);
@@ -913,6 +992,9 @@ var StateType = function (params) {
 	this.variable = params.variable;
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 StateType.prototype.buildJsObj = function () {
 	var stateObj = {};
 
@@ -936,19 +1018,9 @@ StateType.prototype.toXML = function () {
 };
 
 /**
- * @param {Element} xmlObj
+ * @param {String} string
  * @return {StateType}
  */
-StateType.fromXML_old = function (xmlObj) {
-	if (xmlObj.localName != 'state') {
-		throw new Error("Bad XML provided, expected localName state, got: " + xmlObj.localName);
-	}
-	var state = new ns.StateType();
-	state.value = xmlObj.getAttribute('value') || null;
-	state.variable = xmlObj.getAttribute('variable') || null;
-	return state;
-};
-
 StateType.fromXML = function (string) {
 	var state;
 	function fn (err, result) {
@@ -958,6 +1030,10 @@ StateType.fromXML = function (string) {
     return state;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {StateType}
+ */
 StateType.fromObj = function (jsObj) {
 	if (typeof jsObj.state == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName state, got: " + Object.keys(jsObj)[0]);
@@ -992,6 +1068,9 @@ var CloneType = function (params) {
 	this.label = params.label;
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 CloneType.prototype.buildJsObj = function () {
 	var cloneObj = {};
 
@@ -1011,6 +1090,10 @@ CloneType.prototype.toXML = function () {
 	return utils.buildString({clone: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {CloneType}
+ */
 CloneType.fromXML = function (string) {
 	var clone;
 	function fn (err, result) {
@@ -1020,6 +1103,10 @@ CloneType.fromXML = function (string) {
     return clone;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {CloneType}
+ */
 CloneType.fromObj = function (jsObj) {
 	if (typeof jsObj.clone == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName clone, got: " + Object.keys(jsObj)[0]);
@@ -1053,6 +1140,9 @@ var EntityType = function (params) {
 	this.name = params.name;
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 EntityType.prototype.buildJsObj = function () {
 	var entityObj = {};
 
@@ -1072,6 +1162,10 @@ EntityType.prototype.toXML = function () {
 	return utils.buildString({entity: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {EntityType}
+ */
 EntityType.fromXML = function (string) {
 	var entity;
 	function fn (err, result) {
@@ -1081,6 +1175,10 @@ EntityType.fromXML = function (string) {
     return entity;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {EntityType}
+ */
 EntityType.fromObj = function (jsObj) {
 	if (typeof jsObj.entity == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName entity, got: " + Object.keys(jsObj)[0]);
@@ -1124,6 +1222,9 @@ var Port = function (params) {
 Port.prototype = Object.create(ns.SBGNBase.prototype);
 Port.prototype.constructor = ns.Port;
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Port.prototype.buildJsObj = function () {
 	var portObj = {};
 
@@ -1150,6 +1251,10 @@ Port.prototype.toXML = function () {
 	return utils.buildString({port: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Port}
+ */
 Port.fromXML = function (string) {
 	var port;
 	function fn (err, result) {
@@ -1159,6 +1264,10 @@ Port.fromXML = function (string) {
     return port;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Port}
+ */
 Port.fromObj = function (jsObj) {
 	if (typeof jsObj.port == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName port, got: " + Object.keys(jsObj)[0]);
@@ -1244,6 +1353,9 @@ Arc.prototype.addGlyph = function (glyph) {
 	this.glyphs.push(glyph);
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Arc.prototype.buildJsObj = function () {
 	var arcObj = {};
 
@@ -1296,6 +1408,10 @@ Arc.prototype.toXML = function () {
 	return utils.buildString({arc: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Arc}
+ */
 Arc.fromXML = function (string) {
 	var arc;
 	function fn (err, result) {
@@ -1305,6 +1421,10 @@ Arc.fromXML = function (string) {
     return arc;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Arc}
+ */
 Arc.fromObj = function (jsObj) {
 	if (typeof jsObj.arc == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName arc, got: " + Object.keys(jsObj)[0]);
@@ -1369,6 +1489,9 @@ var StartType = function (params) {
 	this.y = parseFloat(params.y);
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 StartType.prototype.buildJsObj = function () {
 	var startObj = {};
 
@@ -1391,6 +1514,10 @@ StartType.prototype.toXML = function () {
 	return utils.buildString({start: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {StartType}
+ */
 StartType.fromXML = function (string) {
 	var start;
 	function fn (err, result) {
@@ -1400,6 +1527,10 @@ StartType.fromXML = function (string) {
     return start;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {StartType}
+ */
 StartType.fromObj = function (jsObj) {
 	if (typeof jsObj.start == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName start, got: " + Object.keys(jsObj)[0]);
@@ -1436,6 +1567,9 @@ var EndType = function (params) {
 	this.y = parseFloat(params.y);
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 EndType.prototype.buildJsObj = function () {
 	var endObj = {};
 
@@ -1458,6 +1592,10 @@ EndType.prototype.toXML = function () {
 	return utils.buildString({end: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {EndType}
+ */
 EndType.fromXML = function (string) {
 	var end;
 	function fn (err, result) {
@@ -1467,6 +1605,10 @@ EndType.fromXML = function (string) {
     return end;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {EndType}
+ */
 EndType.fromObj = function (jsObj) {
 	if (typeof jsObj.end == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName end, got: " + Object.keys(jsObj)[0]);
@@ -1503,6 +1645,9 @@ var NextType = function (params) {
 	this.y = parseFloat(params.y);
 };
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 NextType.prototype.buildJsObj = function () {
 	var nextObj = {};
 
@@ -1525,6 +1670,10 @@ NextType.prototype.toXML = function () {
 	return utils.buildString({next: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {NextType}
+ */
 NextType.fromXML = function (string) {
 	var next;
 	function fn (err, result) {
@@ -1534,6 +1683,10 @@ NextType.fromXML = function (string) {
     return next;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {NextType}
+ */
 NextType.fromObj = function (jsObj) {
 	if (typeof jsObj.next == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName next, got: " + Object.keys(jsObj)[0]);
@@ -1573,6 +1726,9 @@ var Point = function (params) {
 Point.prototype = Object.create(ns.SBGNBase.prototype);
 Point.prototype.constructor = Point;
 
+/**
+ * @return {Object} - xml2js formatted object
+ */
 Point.prototype.buildJsObj = function () {
 	var pointJsObj = {};
 
@@ -1596,6 +1752,10 @@ Point.prototype.toXML = function () {
 	return utils.buildString({point: this.buildJsObj()})
 };
 
+/**
+ * @param {String} string
+ * @return {Point}
+ */
 Point.fromXML = function (string) {
 	var point;
 	function fn (err, result) {
@@ -1605,6 +1765,10 @@ Point.fromXML = function (string) {
     return point;
 };
 
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Point}
+ */
 Point.fromObj = function (jsObj) {
 	if (typeof jsObj.point == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName point, got: " + Object.keys(jsObj)[0]);
