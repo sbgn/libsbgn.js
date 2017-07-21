@@ -107,6 +107,7 @@ ns.ColorDefinition = ColorDefinition;
  */
 var ListOfColorDefinitions = function () {
 	this.colorDefinitions = [];
+	this.colorIndex = {};
 };
 
 /**
@@ -114,14 +115,24 @@ var ListOfColorDefinitions = function () {
  */
 ListOfColorDefinitions.prototype.addColorDefinition = function (colorDefinition) {
 	this.colorDefinitions.push(colorDefinition);
+	this.colorIndex[colorDefinition.id] = colorDefinition.value;
 };
 
+/**
+ * Convenient method to get a color value directly.
+ * @param {string} id
+ * @return {string}
+ */
 ListOfColorDefinitions.prototype.getColorById = function (id) {
-
+	return this.colorIndex[id];
 };
 
+/**
+ * Convenient method to get all the color values in the list.
+ * @return {string[]}
+ */
 ListOfColorDefinitions.prototype.getAllColors = function () {
-
+	return Object.values(this.colorIndex);
 };
 
 /**

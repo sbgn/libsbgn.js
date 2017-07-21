@@ -65,6 +65,27 @@ describe('libsbgn-render', function() {
 				listof.toXML().should.equal("<listOfColorDefinitions><colorDefinition/><colorDefinition/></listOfColorDefinitions>");
 			});
 		});
+		describe('utilities', function() {
+			var listof;
+			beforeEach('build listOfColorDefinitions variable', function() {
+				listof = new renderExt.ListOfColorDefinitions();
+				listof.addColorDefinition(new renderExt.ColorDefinition({id: "id1", value: "#FFFFFF"}));
+				listof.addColorDefinition(new renderExt.ColorDefinition({id: "id2", value: "#000000"}));
+			});
+			it('should maintain color index', function() {
+				listof.should.have.ownProperty('colorIndex');
+				listof.colorIndex.should.be.a('object');
+				listof.colorIndex["id1"].should.equal("#FFFFFF");
+				listof.colorIndex["id2"].should.equal("#000000");
+			});
+			it('getColorById should return the right color', function() {
+				listof.getColorById("id1").should.equal("#FFFFFF");
+				listof.getColorById("id2").should.equal("#000000");
+			});
+			it('getAllColors should return array of all colors', function() {
+				listof.getAllColors().should.deep.equal(["#FFFFFF", "#000000"]);
+			});
+		});
 	});
 
 	describe('renderGroup', function() {
