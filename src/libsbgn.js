@@ -238,6 +238,21 @@ Map.prototype.addArc = function (arc) {
 };
 
 /**
+ * @param {string} class_
+ * @return {Gyph[]}
+ */
+Map.prototype.getGlyphsByClass = function (class_) {
+	var resultGlyphs = [];
+	for(var i=0; i < this.glyphs.length; i++) {
+		var glyph = this.glyphs[i];
+		if(glyph.class_ == class_) {
+			resultGlyphs.push(glyph);
+		}
+	}
+	return resultGlyphs;
+};
+
+/**
  * @return {Object} - xml2js formatted object
  */
 Map.prototype.buildJsObj = function () {

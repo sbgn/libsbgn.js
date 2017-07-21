@@ -194,6 +194,21 @@ describe('libsbgn', function() {
 				map.toXML().should.equal('<map id="id" language="language"><extension/><glyph/><arc/></map>');
 			});
 		});
+		describe('utilities', function() {
+			it('getGlyphsByClass', function() {
+				var map = new sbgnjs.Map({id: "id", language: "language"});
+				map.addGlyph(new sbgnjs.Glyph({id: "1", class_ : "compartment"}));
+				map.addGlyph(new sbgnjs.Glyph({id: "2", class_ : "compartment"}));
+				map.addGlyph(new sbgnjs.Glyph({id: "3", class_ : "macromolecule"}));
+				map.getGlyphsByClass('fgh').should.deep.equal([]);
+				var compartments = map.getGlyphsByClass("compartment");
+				compartments.length.should.equal(2);
+				compartments[0].id.should.equal("1");
+				var macromolecules = map.getGlyphsByClass("macromolecule");
+				macromolecules.length.should.equal(1);
+				macromolecules[0].id.should.equal("3");
+			});
+		});
 
 		describe('prefix management', function() {
 			it('should allow prefixes', function() {
