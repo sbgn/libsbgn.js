@@ -1110,6 +1110,18 @@
                       </a></li>
                       
                       <li><a
+                        href='#ListOfColorDefinitions#getColorById'
+                        class='regular pre-open'>
+                        #getColorById
+                      </a></li>
+                      
+                      <li><a
+                        href='#ListOfColorDefinitions#getAllColors'
+                        class='regular pre-open'>
+                        #getAllColors
+                      </a></li>
+                      
+                      <li><a
                         href='#ListOfColorDefinitions#buildJsObj'
                         class='regular pre-open'>
                         #buildJsObj
@@ -1163,6 +1175,12 @@
                         href='#ListOfStyles#addStyle'
                         class='regular pre-open'>
                         #addStyle
+                      </a></li>
+                      
+                      <li><a
+                        href='#ListOfStyles#getStyleMap'
+                        class='regular pre-open'>
+                        #getStyleMap
                       </a></li>
                       
                       <li><a
@@ -1343,6 +1361,12 @@
                         href='#Style#setIdListFromArray'
                         class='regular pre-open'>
                         #setIdListFromArray
+                      </a></li>
+                      
+                      <li><a
+                        href='#Style#getStyleMap'
+                        class='regular pre-open'>
+                        #getStyleMap
                       </a></li>
                       
                       <li><a
@@ -9010,6 +9034,125 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='ListOfColorDefinitions#getColorById'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getColorById(id)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenient method to get a color value directly.</p>
+
+
+  <div class='pre p1 fill-light mt0'>getColorById(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ListOfColorDefinitions#getAllColors'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getAllColors()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenient method to get all the color values in the list.</p>
+
+
+  <div class='pre p1 fill-light mt0'>getAllColors(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='ListOfColorDefinitions#buildJsObj'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -9344,6 +9487,61 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ListOfStyles#getStyleMap'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getStyleMap()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience function returning a map of ids to their respective RenderGroup object,
+for all the styles.
+The style properties can then be directly accessed. Example: map[id].stroke</p>
+
+
+  <div class='pre p1 fill-light mt0'>getStyleMap(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#rendergroup">RenderGroup</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#rendergroup">RenderGroup</a>></code>:
+        
+
+      
+    
   
 
   
@@ -10718,6 +10916,60 @@ A subset of this specification has been adapted for SBGN-ML integration.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Style#getStyleMap'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getStyleMap()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convenience function returning a map of ids to their respective RenderGroup object.
+The style properties can then be directly accessed. Example: map[id].stroke</p>
+
+
+  <div class='pre p1 fill-light mt0'>getStyleMap(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#rendergroup">RenderGroup</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#rendergroup">RenderGroup</a>></code>:
+        
+
+      
+    
   
 
   

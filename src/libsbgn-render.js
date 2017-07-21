@@ -372,6 +372,20 @@ Style.prototype.setIdListFromArray = function (idArray) {
 }
 
 /**
+ * Convenience function returning a map of ids to their respective RenderGroup object.
+ * The style properties can then be directly accessed. Example: map[id].stroke
+ * @return {Object.<string, RenderGroup>}
+ */
+Style.prototype.getStyleMap = function () {
+	var index = {};
+	var ids = this.getIdListAsArray();
+	for(var i=0; i < ids.length; i++) {
+		var id = ids[i];
+		index[id] = this.renderGroup;
+	}
+	return index;
+};
+/**
  * @return {Object} - xml2js formatted object
  */
 Style.prototype.buildJsObj = function () {
@@ -463,9 +477,27 @@ var ListOfStyles = function() {
 /**
  * @param {Style} style
  */
-ListOfStyles.prototype.addStyle = function(style) {
+ListOfStyles.prototype.addStyle = function (style) {
 	this.styles.push(style);
 };
+
+/**
+ * Convenience function returning a map of ids to their respective RenderGroup object,
+ * for all the styles.
+ * The style properties can then be directly accessed. Example: map[id].stroke
+ * @return {Object.<string, RenderGroup>}
+ */
+ListOfStyles.prototype.getStyleMap = function () {
+	var index = {};
+	for(var i=0; i < this.styles.length; i++) {
+		var style = this.styles[i];
+		var subIndex = style.getStyleMap();
+		for(var id in subIndex) {
+			index[id] = subIndex[id];
+		}
+	}
+	return index;
+}
 
 /**
  * @return {Object} - xml2js formatted object

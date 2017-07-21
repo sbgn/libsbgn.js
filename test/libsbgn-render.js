@@ -188,7 +188,7 @@ describe('libsbgn-render', function() {
 				style.toXML().should.equal('<style id="id" name="myName" idList="a b c"><g/></style>');
 			});
 		});
-		describe('test the utility function', function() {
+		describe('test utilities function', function() {
 			it('getIdListAsArray', function() {
 				var style = new renderExt.Style({idList: 'a b c'});
 				var array = style.getIdListAsArray();
@@ -202,6 +202,12 @@ describe('libsbgn-render', function() {
 				should.exist(style.idList);
 				style.idList.should.be.a('string');
 				style.idList.should.equal('a b c');
+			});
+			it('getStyleMap', function() {
+				var style = new renderExt.Style({idList: 'a b c', renderGroup: new renderExt.RenderGroup({stroke: 'red'})});
+				var styleIndex = style.getStyleMap();
+				Object.keys(styleIndex).should.deep.equal(['a', 'b', 'c']);
+				styleIndex['a'].stroke.should.equal('red');
 			});
 		});
 	});
@@ -233,6 +239,20 @@ describe('libsbgn-render', function() {
 				listof.addStyle(new renderExt.Style());
 				listof.addStyle(new renderExt.Style());
 				listof.toXML().should.equal("<listOfStyles><style/><style/></listOfStyles>");
+			});
+		});
+		describe('test utilities function', function() {
+			it('getStyleMap', function() {
+				var style = new renderExt.Style({idList: 'a b c', renderGroup: new renderExt.RenderGroup({stroke: 'red'})});
+				var style2 = new renderExt.Style({idList: 'd e f', renderGroup: new renderExt.RenderGroup({stroke: 'yellow'})});
+				var listOf = new renderExt.ListOfStyles();
+				listOf.addStyle(style);
+				listOf.addStyle(style2);
+				var styleIndex = listOf.getStyleMap();
+				Object.keys(styleIndex).should.deep.equal(['a', 'b', 'c', 'd', 'e', 'f']);
+				styleIndex['a'].stroke.should.equal('red');
+				styleIndex['b'].stroke.should.equal('red');
+				styleIndex['e'].stroke.should.equal('yellow');
 			});
 		});
 	});
