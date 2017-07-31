@@ -663,6 +663,32 @@ describe('libsbgn', function() {
 		});
 	});
 
+	describe('callout', function() {
+		it('should parse empty', function() {
+			var callout = sbgnjs.Callout.fromXML("<callout/>");
+			callout.should.have.ownProperty('target');
+			should.equal(callout.target, null);
+			callout.should.have.ownProperty('point');
+			should.equal(callout.point, null);
+		});
+		it('should parse complete', function() {
+			var callout = sbgnjs.Callout.fromXML('<callout target="ref"><point x="1" y="2"/></callout>');
+			should.exist(callout.target);
+			callout.target.should.equal("ref");
+			should.exist(callout.point);
+			callout.point.should.be.instanceOf(sbgnjs.Point);
+			callout.point.should.deep.equal(new sbgnjs.Point({x: 1, y: 2}));
+		});
+		it('should write empty', function() {
+			var callout = new sbgnjs.Callout();
+			callout.toXML().should.equal('<callout/>');
+		});
+		it('should write complete', function() {
+			var callout = new sbgnjs.Callout({target: "ref", point: new sbgnjs.Point({x: 1, y: 2})});
+			callout.toXML().should.equal('<callout target="ref"><point x="1" y="2"/></callout>');
+		});
+	});
+
 	describe('glyph', function() {
 		describe('parse from XML', function() {
 			it('should parse empty', function() {

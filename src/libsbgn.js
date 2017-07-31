@@ -1838,6 +1838,98 @@ Point.fromObj = function (jsObj) {
 ns.Point = Point;
 // ------- END POINT -------
 
+// ------- CALLOUT -------
+/**
+ * Represents the <code>&lt;callout&gt;</code> element.
+ * @class Callout
+ * @param {Object} params
+ * @param {string=} params.target
+ * @param {Point=} params.point
+ */
+var Callout = function (params) {
+	var params = checkParams(params, ['target', 'point']);
+	this.target = params.target;
+	this.point = params.point;
+};
+
+/**
+ * @param {Point} point
+ */
+Callout.prototype.setPoint = function(point) {
+	this.point = point;
+};
+
+/**
+ * @return {Object} - xml2js formatted object
+ */
+Callout.prototype.buildJsObj = function () {
+	var calloutObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.target != null) {
+		attributes.target = this.target;
+	}
+	utils.addAttributes(calloutObj, attributes);
+
+	// children
+	if(this.point != null) {
+		calloutObj.point =  this.point.buildJsObj();
+	}
+	return calloutObj;
+};
+
+/**
+ * @return {string}
+ */
+Callout.prototype.toXML = function () {
+	return utils.buildString({callout: this.buildJsObj()})
+};
+
+/**
+ * @param {String} string
+ * @return {Callout}
+ */
+Callout.fromXML = function (string) {
+	var callout;
+	function fn (err, result) {
+        callout = Callout.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return callout;
+};
+
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Callout}
+ */
+Callout.fromObj = function (jsObj) {
+	if (typeof jsObj.callout == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName callout, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var callout = new ns.Callout();
+	jsObj = jsObj.callout;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return callout;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		callout.target = attributes.target || null;
+	}
+
+	// children
+	if(jsObj.point) {
+		var point = ns.Point.fromObj({point: jsObj.point[0]});
+		callout.setPoint(point);
+	}
+	return callout;
+};
+
+ns.Callout = Callout;
+// ------- END CALLOUT -------
+
 ns.render = renderExt;
 ns.annot = annotExt;
 module.exports = ns;
