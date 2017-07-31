@@ -403,17 +403,19 @@ describe('libsbgn', function() {
 			should.equal(label.text, null);
 		});
 		it('should parse complete', function() {
-			var label = sbgnjs.Label.fromXML('<label text="some text"/>');
+			var label = sbgnjs.Label.fromXML('<label text="some text"><bbox/></label>');
 			should.exist(label.text);
 			label.text.should.equal('some text');
+			should.exist(label.bbox);
+			label.bbox.should.be.instanceOf(sbgnjs.Bbox);
 		});
 		it('should write empty', function() {
 			var label = new sbgnjs.Label();
 			label.toXML().should.equal('<label/>');
 		});
 		it('should write complete', function() {
-			var label = new sbgnjs.Label({text: 'some text'});
-			label.toXML().should.equal('<label text="some text"/>');
+			var label = new sbgnjs.Label({text: 'some text', bbox: new sbgnjs.Bbox()});
+			label.toXML().should.equal('<label text="some text"><bbox/></label>');
 		});
 		it('should read and write newline in attributes', function() {
 			var label = new sbgnjs.Label({text: 'some \ntext'});

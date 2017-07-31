@@ -897,15 +897,24 @@ ns.Glyph = Glyph;
  * @extends SBGNBase
  * @param {Object} params
  * @param {string=} params.text
+ * @param {Bbox=} params.bbox
  */
 var Label = function (params) {
 	ns.SBGNBase.call(this, params);
-	var params = checkParams(params, ['text']);
+	var params = checkParams(params, ['text', 'bbox']);
 	this.text = params.text;
+	this.bbox = params.bbox;
 };
 
 Label.prototype = Object.create(ns.SBGNBase.prototype);
 Label.prototype.constructor = ns.Label;
+
+/**
+ * @param {Bbox} bbox
+ */
+Label.prototype.setBbox = function (bbox) {
+	this.bbox = bbox;
+};
 
 /**
  * @return {Object} - xml2js formatted object
@@ -919,7 +928,11 @@ Label.prototype.buildJsObj = function () {
 		attributes.text = this.text;
 	}
 	utils.addAttributes(labelObj, attributes);
+
 	this.baseToJsObj(labelObj);
+	if(this.bbox != null) {
+		labelObj.bbox =  this.bbox.buildJsObj();
+	}
 	return labelObj;
 };
 
@@ -961,6 +974,11 @@ Label.fromObj = function (jsObj) {
 	if(jsObj.$) { // we have some attributes
 		var attributes = jsObj.$;
 		label.text = attributes.text || null;
+	}
+
+	if(jsObj.bbox) {
+		var bbox = ns.Bbox.fromObj({bbox: jsObj.bbox[0]});
+		label.setBbox(bbox);
 	}
 	label.baseFromObj(jsObj);
 	return label;
