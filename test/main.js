@@ -507,17 +507,18 @@ describe('libsbgn', function() {
 			should.equal(clone.label, null);
 		});
 		it('should parse complete', function() {
-			var clone = sbgnjs.CloneType.fromXML('<clone label="some label"/>');
+			var clone = sbgnjs.CloneType.fromXML('<clone><label text="some label"/></clone>');
 			should.exist(clone.label);
-			clone.label.should.equal('some label');
+			clone.label.should.be.instanceOf(sbgnjs.Label);
+			clone.label.text.should.equal('some label');
 		});
 		it('should write empty', function() {
 			var clone = new sbgnjs.CloneType();
 			clone.toXML().should.equal('<clone/>');
 		});
 		it('should write complete', function() {
-			var clone = new sbgnjs.CloneType({label: 'some label'});
-			clone.toXML().should.equal('<clone label="some label"/>');
+			var clone = new sbgnjs.CloneType({label: new sbgnjs.Label({text: 'some label'})});
+			clone.toXML().should.equal('<clone><label text="some label"/></clone>');
 		});
 	});
 	describe('entity', function() {
@@ -1014,7 +1015,7 @@ describe('libsbgn', function() {
 					"<label text='CHT1' />\n"+
 					"<state value='val' variable='var' />\n"+
 					"<bbox y='497.47523294683185' x='300.32877164779546' w='70' h='35' />\n"+
-					"<clone label='clone label' />\n"+
+					"<clone><label text='clone label' /></clone>\n"+
 				"</glyph>\n"+
 
 				"<arc id='id' class='production' source='source' target='target'>\n"+
@@ -1081,7 +1082,7 @@ describe('libsbgn', function() {
 			glyph2.bbox.h.should.equal(35);
 			should.exist(glyph2.clone);
 			glyph2.clone.should.be.instanceOf(sbgnjs.CloneType);
-			glyph2.clone.label.should.equal('clone label');
+			glyph2.clone.label.text.should.equal('clone label');
 			// arcs
 			sbgn.maps[0].arcs.should.have.lengthOf(2);
 			// arc1

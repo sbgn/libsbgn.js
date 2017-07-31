@@ -1175,17 +1175,22 @@ var CloneType = function (params) {
 };
 
 /**
+ * @param {Label} label
+ */
+CloneType.prototype.setLabel = function (label) {
+	this.label = label;
+};
+
+/**
  * @return {Object} - xml2js formatted object
  */
 CloneType.prototype.buildJsObj = function () {
 	var cloneObj = {};
 
-	// attributes
-	var attributes = {};
+	// children
 	if(this.label != null) {
-		attributes.label = this.label;
+		cloneObj.label =  this.label.buildJsObj();
 	}
-	utils.addAttributes(cloneObj, attributes);
 	return cloneObj;
 };
 
@@ -1224,9 +1229,10 @@ CloneType.fromObj = function (jsObj) {
 		return clone;
 	}
 
-	if(jsObj.$) { // we have some attributes
-		var attributes = jsObj.$;
-		clone.label = attributes.label || null;
+	// children
+	if(jsObj.label) {
+		var label = ns.Label.fromObj({label: jsObj.label[0]});
+		clone.setLabel(label);
 	}
 	return clone;
 };
