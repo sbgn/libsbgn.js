@@ -160,6 +160,8 @@ describe('libsbgn', function() {
 				map.arcs.should.have.length(0);
 				map.should.have.ownProperty('bbox');
 				should.equal(map.bbox, null);
+				map.should.have.ownProperty('arcgroups');
+				map.arcs.should.have.length(0);
 			});
 			it('should parse id', function() {
 				var map = sbgnjs.Map.fromXML("<map id='a'></map>");
@@ -204,6 +206,13 @@ describe('libsbgn', function() {
 				should.exist(map.arcs[1]);
 				map.arcs[1].should.be.instanceOf(sbgnjs.Arc);
 			});
+			it('should parse arcgroup', function() {
+				var map = sbgnjs.Map.fromXML("<map><arcgroup></arcgroup></map>");
+				should.exist(map.arcgroups);
+				map.arcgroups.should.be.a('array');
+				map.arcgroups.should.have.length(1);
+				map.arcgroups[0].should.be.instanceOf(sbgnjs.Arcgroup);
+			});
 		});
 		describe('write to XML', function() {
 			it('should write empty map', function() {
@@ -216,7 +225,8 @@ describe('libsbgn', function() {
 				map.addGlyph(new sbgnjs.Glyph());
 				map.addArc(new sbgnjs.Arc());
 				map.setBbox(new sbgnjs.Bbox());
-				map.toXML().should.equal('<map id="id" language="language" version="version"><extension/><bbox/><glyph/><arc/></map>');
+				map.addArcgroup(new sbgnjs.Arcgroup());
+				map.toXML().should.equal('<map id="id" language="language" version="version"><extension/><bbox/><glyph/><arc/><arcgroup/></map>');
 			});
 		});
 		describe('utilities', function() {
@@ -686,6 +696,39 @@ describe('libsbgn', function() {
 		it('should write complete', function() {
 			var callout = new sbgnjs.Callout({target: "ref", point: new sbgnjs.Point({x: 1, y: 2})});
 			callout.toXML().should.equal('<callout target="ref"><point x="1" y="2"/></callout>');
+		});
+	});
+
+	describe('arcgroup', function() {
+		it('should parse empty', function() {
+			var arcgroup = sbgnjs.Arcgroup.fromXML("<arcgroup/>");
+			arcgroup.should.have.ownProperty('class_');
+			should.equal(arcgroup.class_, null);
+			arcgroup.should.have.ownProperty('glyphs');
+			arcgroup.glyphs.should.have.length(0);
+			arcgroup.should.have.ownProperty('arcs');
+			arcgroup.arcs.should.have.length(0);
+		});
+		it('should parse complete', function() {
+			var arcgroup = sbgnjs.Arcgroup.fromXML('<arcgroup class="class"><glyph/><arc/><arc/></arcgroup>');
+			should.exist(arcgroup.class_);
+			arcgroup.class_.should.equal("class");
+			arcgroup.glyphs.should.have.length(1);
+			arcgroup.glyphs[0].should.be.instanceOf(sbgnjs.Glyph);
+			arcgroup.arcs.should.have.length(2);
+			arcgroup.arcs[0].should.be.instanceOf(sbgnjs.Arc);
+			arcgroup.arcs[1].should.be.instanceOf(sbgnjs.Arc);
+		});
+		it('should write empty', function() {
+			var arcgroup = new sbgnjs.Arcgroup();
+			arcgroup.toXML().should.equal('<arcgroup/>');
+		});
+		it('should write complete', function() {
+			var arcgroup = new sbgnjs.Arcgroup({class_: "class"});
+			arcgroup.toXML().should.equal('<arcgroup class="class"/>');
+			arcgroup.addGlyph(new sbgnjs.Glyph());
+			arcgroup.addArc(new sbgnjs.Arc());
+			arcgroup.toXML().should.equal('<arcgroup class="class"><glyph/><arc/></arcgroup>');
 		});
 	});
 

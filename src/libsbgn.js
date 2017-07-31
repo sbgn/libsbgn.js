@@ -206,16 +206,18 @@ ns.Sbgn = Sbgn;
  * @param {Glyph[]=} params.glyphs
  * @param {Arc[]=} params.arcs
  * @param {Bbox=} params.bbox
+ * @param {Arcgroup[]=} params.arcgroups
  */
 var Map = function (params) {
 	ns.SBGNBase.call(this, params);
-	var params = checkParams(params, ['id', 'language', 'version', 'glyphs', 'arcs', 'bbox']);
+	var params = checkParams(params, ['id', 'language', 'version', 'glyphs', 'arcs', 'bbox', 'arcgroups']);
 	this.id 		= params.id;
 	this.language 	= params.language;
 	this.version	= params.version;
 	this.bbox 		= params.bbox;
 	this.glyphs 	= params.glyphs || [];
 	this.arcs 		= params.arcs || [];
+	this.arcgroups 	= params.arcgroups || [];
 };
 
 Map.prototype = Object.create(ns.SBGNBase.prototype);
@@ -240,6 +242,13 @@ Map.prototype.addArc = function (arc) {
  */
 Map.prototype.setBbox = function (bbox) {
 	this.bbox = bbox;
+};
+
+/**
+ * @param {Arcgroup} arc
+ */
+Map.prototype.addArcgroup = function (arcgroup) {
+	this.arcgroups.push(arcgroup);
 };
 
 /**
@@ -292,6 +301,12 @@ Map.prototype.buildJsObj = function () {
 			mapObj.arc = [];
 		}
 		mapObj.arc.push(this.arcs[i].buildJsObj());
+	}
+	for(var i=0; i < this.arcgroups.length; i++) {
+		if (i==0) {
+			mapObj.arcgroup = [];
+		}
+		mapObj.arcgroup.push(this.arcgroups[i].buildJsObj());
 	}
 	return mapObj;
 };
@@ -354,6 +369,13 @@ Map.fromObj = function (jsObj) {
 		for (var i=0; i < arcs.length; i++) {
 			var arc = ns.Arc.fromObj({arc: arcs[i]});
 			map.addArc(arc);
+		}
+	}
+	if(jsObj.arcgroup) {
+		var arcgroups = jsObj.arcgroup;
+		for (var i=0; i < arcgroups.length; i++) {
+			var arcgroup = ns.Arcgroup.fromObj({arcgroup: arcgroups[i]});
+			map.addArcgroup(arcgroup);
 		}
 	}
 
@@ -1929,6 +1951,133 @@ Callout.fromObj = function (jsObj) {
 
 ns.Callout = Callout;
 // ------- END CALLOUT -------
+
+// ------- ARCGROUP -------
+/**
+ * Represents the <code>&lt;arcgroup&gt;</code> element.
+ * @class
+ * @extends SBGNBase
+ * @param {Object} params
+ * @param {string=} params.class_
+ * @param {Glyph[]=} params.glyphs
+ * @param {Arc[]=} params.arcs
+ */
+var Arcgroup = function (params) {
+	ns.SBGNBase.call(this, params);
+	var params = checkParams(params, ['class_', 'glyphs', 'arcs']);
+	this.class_ 		= params.class_;
+	this.glyphs 	= params.glyphs || [];
+	this.arcs 		= params.arcs || [];
+};
+
+Arcgroup.prototype = Object.create(ns.SBGNBase.prototype);
+Arcgroup.prototype.constructor = Arcgroup;
+
+/**
+ * @param {Glyph} glyph
+ */
+Arcgroup.prototype.addGlyph = function (glyph) {
+	this.glyphs.push(glyph);
+};
+
+/**
+ * @param {Arc} arc
+ */
+Arcgroup.prototype.addArc = function (arc) {
+	this.arcs.push(arc);
+};
+
+/**
+ * @return {Object} - xml2js formatted object
+ */
+Arcgroup.prototype.buildJsObj = function () {
+	var arcgroupObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.class_ != null) {
+		attributes.class = this.class_;
+	}
+	utils.addAttributes(arcgroupObj, attributes);
+
+	// children
+	this.baseToJsObj(arcgroupObj);
+	for(var i=0; i < this.glyphs.length; i++) {
+		if (i==0) {
+			arcgroupObj.glyph = [];
+		}
+		arcgroupObj.glyph.push(this.glyphs[i].buildJsObj());
+	}
+	for(var i=0; i < this.arcs.length; i++) {
+		if (i==0) {
+			arcgroupObj.arc = [];
+		}
+		arcgroupObj.arc.push(this.arcs[i].buildJsObj());
+	}
+	return arcgroupObj;
+};
+
+/**
+ * @return {string}
+ */
+Arcgroup.prototype.toXML = function () {
+	return utils.buildString({arcgroup: this.buildJsObj()});
+};
+
+/**
+ * @param {String} string
+ * @return {Arcgroup}
+ */
+Arcgroup.fromXML = function (string) {
+	var arcgroup;
+	function fn (err, result) {
+        arcgroup = Arcgroup.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return arcgroup;
+};
+
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {Arcgroup}
+ */
+Arcgroup.fromObj = function (jsObj) {
+	if (typeof jsObj.arcgroup == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName arcgroup, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var arcgroup = new ns.Arcgroup();
+	jsObj = jsObj.arcgroup;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return arcgroup;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		arcgroup.class_ = attributes.class || null;
+	}
+
+	if(jsObj.glyph) {
+		var glyphs = jsObj.glyph;
+		for (var i=0; i < glyphs.length; i++) {
+			var glyph = ns.Glyph.fromObj({glyph: glyphs[i]});
+			arcgroup.addGlyph(glyph);
+		}
+	}
+	if(jsObj.arc) {
+		var arcs = jsObj.arc;
+		for (var i=0; i < arcs.length; i++) {
+			var arc = ns.Arc.fromObj({arc: arcs[i]});
+			arcgroup.addArc(arc);
+		}
+	}
+
+	arcgroup.baseFromObj(jsObj);
+	return arcgroup;
+};
+
+ns.Arcgroup = Arcgroup;
+// ------- END ARCGROUP -------
 
 ns.render = renderExt;
 ns.annot = annotExt;
