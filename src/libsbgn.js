@@ -613,6 +613,10 @@ ns.Notes = Notes;
  * @param {string=} params.id
  * @param {string=} params.class_
  * @param {string=} params.compartmentRef
+ * @param {string|number=} params.compartmentOrder
+ * @param {string=} params.mapRef
+ * @param {string=} params.tagRef
+ * @param {string=} params.orientation
  * @param {Label=} params.label
  * @param {Bbox=} params.bbox
  * @param {StateType=} params.state
@@ -623,10 +627,15 @@ ns.Notes = Notes;
  */
 var Glyph = function (params) {
 	ns.SBGNBase.call(this, params);
-	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone', 'entity']);
-	this.id 			= params.id;
-	this.class_ 		= params.class_;
-	this.compartmentRef = params.compartmentRef;
+	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'compartmentOrder', 'mapRef',
+		'tagRef', 'orientation', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone', 'entity']);
+	this.id 				= params.id;
+	this.class_				= params.class_;
+	this.compartmentRef		= params.compartmentRef;
+	this.compartmentOrder	= parseFloat(params.compartmentOrder);
+	this.mapRef				= params.mapRef;
+	this.tagRef				= params.tagRef;
+	this.orientation		= params.orientation;
 
 	// children
 	this.label 			= params.label;
@@ -707,6 +716,18 @@ Glyph.prototype.buildJsObj = function () {
 	if(this.compartmentRef != null) {
 		attributes.compartmentRef = this.compartmentRef;
 	}
+	if(!isNaN(this.compartmentOrder)) {
+		attributes.compartmentOrder = this.compartmentOrder;
+	}
+	if(this.mapRef != null) {
+		attributes.mapRef = this.mapRef;
+	}
+	if(this.tagRef != null) {
+		attributes.tagRef = this.tagRef;
+	}
+	if(this.orientation != null) {
+		attributes.orientation = this.orientation;
+	}
 	utils.addAttributes(glyphObj, attributes);
 
 	// children
@@ -781,6 +802,10 @@ Glyph.fromObj = function (jsObj) {
 		glyph.id = attributes.id || null;
 		glyph.class_ = attributes.class || null;
 		glyph.compartmentRef = attributes.compartmentRef || null;
+		glyph.compartmentOrder = parseFloat(attributes.compartmentOrder);
+		glyph.mapRef = attributes.mapRef || null;
+		glyph.tagRef = attributes.tagRef || null;
+		glyph.orientation = attributes.orientation || null;
 	}
 
 	// children

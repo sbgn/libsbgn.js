@@ -673,6 +673,14 @@ describe('libsbgn', function() {
 				should.equal(glyph.class_, null);
 				glyph.should.have.ownProperty('compartmentRef');
 				should.equal(glyph.compartmentRef, null);
+				glyph.should.have.ownProperty('compartmentOrder');
+				glyph.compartmentOrder.should.be.NaN;
+				glyph.should.have.ownProperty('mapRef');
+				should.equal(glyph.mapRef, null);
+				glyph.should.have.ownProperty('tagRef');
+				should.equal(glyph.tagRef, null);
+				glyph.should.have.ownProperty('orientation');
+				should.equal(glyph.orientation, null);
 
 				glyph.should.have.ownProperty('label');
 				should.equal(glyph.label, null);
@@ -685,14 +693,23 @@ describe('libsbgn', function() {
 				glyph.should.have.ownProperty('ports');
 				glyph.ports.should.have.length(0);
 			});
-				it('should parse attributes', function() {
-				var glyph = sbgnjs.Glyph.fromXML("<glyph id='id' class='class' compartmentRef='ref'></glyph>");
+			it('should parse attributes', function() {
+				var glyph = sbgnjs.Glyph.fromXML("<glyph id='id' class='class' compartmentRef='ref'"+
+					" compartmentOrder='2' mapRef='mapRef' tagRef='tagRef' orientation='vertical'></glyph>");
 				should.exist(glyph.id);
 				glyph.id.should.equal('id');
 				should.exist(glyph.class_);
 				glyph.class_.should.equal('class');
 				should.exist(glyph.compartmentRef);
 				glyph.compartmentRef.should.equal('ref');
+				should.exist(glyph.compartmentOrder);
+				glyph.compartmentOrder.should.equal(2);
+				should.exist(glyph.mapRef);
+				glyph.mapRef.should.equal('mapRef');
+				should.exist(glyph.tagRef);
+				glyph.tagRef.should.equal('tagRef');
+				should.exist(glyph.orientation);
+				glyph.orientation.should.equal('vertical');
 			});
 			it('should parse empty label child', function() {
 				var glyph = sbgnjs.Glyph.fromXML("<glyph><label></label></glyph>");
@@ -765,7 +782,8 @@ describe('libsbgn', function() {
 				glyph.toXML().should.equal("<glyph/>");
 			});
 			it('should write complete glyph', function() {
-				var glyph = new sbgnjs.Glyph({id: "id", class_: "a_class", compartmentRef: "a_compartment_id"});
+				var glyph = new sbgnjs.Glyph({id: "id", class_: "a_class", compartmentRef: "a_compartment_id",
+											compartmentOrder: 1.5, mapRef: "mapRef", tagRef: "tagRef", orientation: "vertical"});
 				glyph.setLabel(new sbgnjs.Label());
 				glyph.setState(new sbgnjs.StateType());
 				glyph.setBbox(new sbgnjs.Bbox());
@@ -773,7 +791,8 @@ describe('libsbgn', function() {
 				glyph.setEntity(new sbgnjs.EntityType());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
 				glyph.addPort(new sbgnjs.Port());
-				glyph.toXML().should.equal('<glyph id="id" class="a_class" compartmentRef="a_compartment_id">'+
+				glyph.toXML().should.equal('<glyph id="id" class="a_class" compartmentRef="a_compartment_id" '+
+												'compartmentOrder="1.5" mapRef="mapRef" tagRef="tagRef" orientation="vertical">'+
 												"<label/>"+
 												"<state/>"+
 												"<clone/>"+
