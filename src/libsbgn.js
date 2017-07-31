@@ -643,6 +643,7 @@ ns.Notes = Notes;
  * @param {Bbox=} params.bbox
  * @param {StateType=} params.state
  * @param {CloneType=} params.clone
+ * @param {Callout=} params.callout
  * @param {EntityType=} params.entity
  * @param {Glyph[]=} params.glyphMembers
  * @param {Port[]=} params.ports
@@ -650,7 +651,7 @@ ns.Notes = Notes;
 var Glyph = function (params) {
 	ns.SBGNBase.call(this, params);
 	var params = checkParams(params, ['id', 'class_', 'compartmentRef', 'compartmentOrder', 'mapRef',
-		'tagRef', 'orientation', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone', 'entity']);
+		'tagRef', 'orientation', 'label', 'bbox', 'glyphMembers', 'ports', 'state', 'clone', 'entity', 'callout']);
 	this.id 				= params.id;
 	this.class_				= params.class_;
 	this.compartmentRef		= params.compartmentRef;
@@ -662,9 +663,10 @@ var Glyph = function (params) {
 	// children
 	this.label 			= params.label;
 	this.state 			= params.state;
-	this.bbox 			= params.bbox;
 	this.clone 			= params.clone;
+	this.callout 		= params.callout;
 	this.entity 		= params.entity;
+	this.bbox 			= params.bbox;
 	this.glyphMembers 	= params.glyphMembers || []; // case of complex, can have arbitrary list of nested glyphs
 	this.ports 			= params.ports || [];
 };
@@ -698,6 +700,13 @@ Glyph.prototype.setBbox = function (bbox) {
  */
 Glyph.prototype.setClone = function (clone) {
 	this.clone = clone;
+};
+
+/**
+ * @param {Callout} callout
+ */
+Glyph.prototype.setCallout = function (callout) {
+	this.callout = callout;
 };
 
 /**
@@ -762,6 +771,9 @@ Glyph.prototype.buildJsObj = function () {
 	}
 	if(this.clone != null) {
 		glyphObj.clone =  this.clone.buildJsObj();
+	}
+	if(this.callout != null) {
+		glyphObj.callout =  this.callout.buildJsObj();
 	}
 	if(this.entity != null) {
 		glyphObj.entity =  this.entity.buildJsObj();
@@ -842,6 +854,10 @@ Glyph.fromObj = function (jsObj) {
 	if(jsObj.clone) {
 		var clone = ns.CloneType.fromObj({clone: jsObj.clone[0]});
 		glyph.setClone(clone);
+	}
+	if(jsObj.callout) {
+		var callout = ns.Callout.fromObj({callout: jsObj.callout[0]});
+		glyph.setCallout(callout);
 	}
 	if(jsObj.entity) {
 		var entity = ns.EntityType.fromObj({entity: jsObj.entity[0]});

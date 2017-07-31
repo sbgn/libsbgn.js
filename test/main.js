@@ -757,6 +757,8 @@ describe('libsbgn', function() {
 				should.equal(glyph.bbox, null);
 				glyph.should.have.ownProperty('clone');
 				should.equal(glyph.clone, null);
+				glyph.should.have.ownProperty('callout');
+				should.equal(glyph.callout, null);
 				glyph.should.have.ownProperty('glyphMembers');
 				glyph.glyphMembers.should.have.length(0);
 				glyph.should.have.ownProperty('ports');
@@ -812,6 +814,13 @@ describe('libsbgn', function() {
 				glyph.clone.should.be.a('object');
 				glyph.clone.should.be.instanceOf(sbgnjs.CloneType);
 			});
+			it('should parse callout child', function() {
+				var glyph = sbgnjs.Glyph.fromXML("<glyph><callout target='truc'/></glyph>");
+				should.exist(glyph.callout);
+				glyph.callout.should.be.a('object');
+				glyph.callout.should.be.instanceOf(sbgnjs.Callout);
+				glyph.callout.target.should.equal("truc");
+			});
 			it('should parse entity child', function() {
 				var glyph = sbgnjs.Glyph.fromXML("<glyph><entity name='test'/></glyph>");
 				should.exist(glyph.entity);
@@ -857,6 +866,7 @@ describe('libsbgn', function() {
 				glyph.setState(new sbgnjs.StateType());
 				glyph.setBbox(new sbgnjs.Bbox());
 				glyph.setClone(new sbgnjs.CloneType());
+				glyph.setCallout(new sbgnjs.Callout());
 				glyph.setEntity(new sbgnjs.EntityType());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
 				glyph.addPort(new sbgnjs.Port());
@@ -865,6 +875,7 @@ describe('libsbgn', function() {
 												"<label/>"+
 												"<state/>"+
 												"<clone/>"+
+												"<callout/>"+
 												"<entity/>"+
 												"<bbox/>"+
 												"<glyph/>"+
