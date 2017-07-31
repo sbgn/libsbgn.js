@@ -141,12 +141,16 @@ describe('libsbgn', function() {
 				should.equal(map.id, null);
 				map.should.have.ownProperty('language');
 				should.equal(map.language, null);
+				map.should.have.ownProperty('version');
+				should.equal(map.version, null);
 				map.should.have.ownProperty('extension');
 				should.equal(map.extension, null);
 				map.should.have.ownProperty('glyphs');
 				map.glyphs.should.have.length(0);
 				map.should.have.ownProperty('arcs');
 				map.arcs.should.have.length(0);
+				map.should.have.ownProperty('bbox');
+				should.equal(map.bbox, null);
 			});
 			it('should parse id', function() {
 				var map = sbgnjs.Map.fromXML("<map id='a'></map>");
@@ -158,11 +162,22 @@ describe('libsbgn', function() {
 				should.exist(map.language);
 				map.language.should.equal('a');
 			});
+			it('should parse version', function() {
+				var map = sbgnjs.Map.fromXML("<map version='http://identifiers.org/combine.specifications/sbgn.pd.level-1.version-1.3'></map>");
+				should.exist(map.version);
+				map.version.should.equal('http://identifiers.org/combine.specifications/sbgn.pd.level-1.version-1.3');
+			});
 			it('should parse extension', function() {
 				var map = sbgnjs.Map.fromXML("<map><extension></extension></map>");
 				should.exist(map.extension);
 				map.extension.should.be.a('object');
 				map.extension.should.be.instanceOf(sbgnjs.Extension);
+			});
+			it('should parse bbox', function() {
+				var map = sbgnjs.Map.fromXML("<map><bbox></bbox></map>");
+				should.exist(map.bbox);
+				map.bbox.should.be.a('object');
+				map.bbox.should.be.instanceOf(sbgnjs.Bbox);
 			});
 			it('parse 2 empty glyphs', function() {
 				var map = sbgnjs.Map.fromXML("<map><glyph></glyph><glyph></glyph></map>");
@@ -187,11 +202,12 @@ describe('libsbgn', function() {
 				map.toXML().should.equal("<map/>");
 			});
 			it('should write complete map with empty stuff', function() {
-				var map = new sbgnjs.Map({id: "id", language: "language"});
+				var map = new sbgnjs.Map({id: "id", language: "language", version: "version"});
 				map.setExtension(new sbgnjs.Extension());
 				map.addGlyph(new sbgnjs.Glyph());
 				map.addArc(new sbgnjs.Arc());
-				map.toXML().should.equal('<map id="id" language="language"><extension/><glyph/><arc/></map>');
+				map.setBbox(new sbgnjs.Bbox());
+				map.toXML().should.equal('<map id="id" language="language" version="version"><extension/><bbox/><glyph/><arc/></map>');
 			});
 		});
 		describe('utilities', function() {

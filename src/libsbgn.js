@@ -200,14 +200,18 @@ ns.Sbgn = Sbgn;
  * @param {Object} params
  * @param {string=} params.id
  * @param {string=} params.language
+ * @param {string=} params.version
  * @param {Glyph[]=} params.glyphs
  * @param {Arc[]=} params.arcs
+ * @param {Bbox=} params.bbox
  */
 var Map = function (params) {
 	ns.SBGNBase.call(this, params);
-	var params = checkParams(params, ['id', 'language', 'glyphs', 'arcs']);
+	var params = checkParams(params, ['id', 'language', 'version', 'glyphs', 'arcs', 'bbox']);
 	this.id 		= params.id;
 	this.language 	= params.language;
+	this.version	= params.version;
+	this.bbox 		= params.bbox;
 	this.glyphs 	= params.glyphs || [];
 	this.arcs 		= params.arcs || [];
 };
@@ -227,6 +231,13 @@ Map.prototype.addGlyph = function (glyph) {
  */
 Map.prototype.addArc = function (arc) {
 	this.arcs.push(arc);
+};
+
+/**
+ * @param {Bbox} bbox
+ */
+Map.prototype.setBbox = function (bbox) {
+	this.bbox = bbox;
 };
 
 /**
@@ -258,10 +269,16 @@ Map.prototype.buildJsObj = function () {
 	if(this.language != null) {
 		attributes.language = this.language;
 	}
+	if(this.version != null) {
+		attributes.version = this.version;
+	}
 	utils.addAttributes(mapObj, attributes);
 
 	// children
 	this.baseToJsObj(mapObj);
+	if(this.bbox != null) {
+		mapObj.bbox =  this.bbox.buildJsObj();
+	}
 	for(var i=0; i < this.glyphs.length; i++) {
 		if (i==0) {
 			mapObj.glyph = [];
@@ -316,8 +333,13 @@ Map.fromObj = function (jsObj) {
 		var attributes = jsObj.$;
 		map.id = attributes.id || null;
 		map.language = attributes.language || null;
+		map.version = attributes.version || null;
 	}
 
+	if(jsObj.bbox) {
+		var bbox = ns.Bbox.fromObj({bbox: jsObj.bbox[0]});
+		map.setBbox(bbox);
+	}
 	if(jsObj.glyph) {
 		var glyphs = jsObj.glyph;
 		for (var i=0; i < glyphs.length; i++) {
