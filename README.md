@@ -12,7 +12,7 @@ var libsbgnjs = require('libsbgn.js');
 var sbgn = new libsbgnjs.Sbgn({xmlns: 'http://sbgn.org/libsbgn/0.3'});
 
 var map = new libsbgnjs.Map({id: 'mymap', language: 'process description'});
-sbgn.setMap(map);
+sbgn.addMap(map);
 
 var glyph1 = new libsbgnjs.Glyph({id: 'glyph1', class_: 'macromolecule'});
 glyph1.setLabel(new libsbgnjs.Label({text: 'entity A'}));

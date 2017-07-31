@@ -82,13 +82,13 @@ ns.SBGNBase = SBGNBase;
  * @extends SBGNBase
  * @param {Object} params
  * @param {string=} params.xmlns
- * @param {Map=} params.map
+ * @param {Map[]=} params.maps
  */
 var Sbgn = function (params) {
 	ns.SBGNBase.call(this, params);
-	var params = checkParams(params, ['xmlns', 'map']);
+	var params = checkParams(params, ['xmlns', 'maps']);
 	this.xmlns 	= params.xmlns;
-	this.map 	= params.map;
+	this.maps 	= params.maps || [];
 };
 
 Sbgn.prototype = Object.create(ns.SBGNBase.prototype);
@@ -97,8 +97,8 @@ Sbgn.prototype.constructor = Sbgn;
 /**
  * @param {Map} map
  */
-Sbgn.prototype.setMap = function (map) {
-	this.map = map;
+Sbgn.prototype.addMap = function (map) {
+	this.maps.push(map);
 };
 
 /**
@@ -116,8 +116,11 @@ Sbgn.prototype.buildJsObj = function () {
 
 	// children
 	this.baseToJsObj(sbgnObj);
-	if (this.map != null) {
-		sbgnObj.map = this.map.buildJsObj();
+	for(var i=0; i < this.maps.length; i++) {
+		if (i==0) {
+			sbgnObj.map = [];
+		}
+		sbgnObj.map.push(this.maps[i].buildJsObj());
 	}
 	return sbgnObj;
 };
@@ -177,12 +180,11 @@ Sbgn.fromObj = function (jsObj) {
 		}
 	}
 
-	if(jsObj.map) { // we have some children
-		// get children
-		var mapXML = jsObj.map[0];
-		if (mapXML != null) {
-			var map = ns.Map.fromObj({map: mapXML});
-			sbgn.setMap(map);
+	if(jsObj.map) {
+		var maps = jsObj.map;
+		for (var i=0; i < maps.length; i++) {
+			var map = ns.Map.fromObj({map: maps[i]});
+			sbgn.addMap(map);
 		}
 	}
 

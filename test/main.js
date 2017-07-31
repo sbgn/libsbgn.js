@@ -60,8 +60,8 @@ describe('libsbgn', function() {
 				var sbgn = sbgnjs.Sbgn.fromXML("<sbgn></sbgn>");
 				sbgn.should.have.ownProperty('xmlns');
 				should.equal(sbgn.xmlns, null);
-				sbgn.should.have.ownProperty('map');
-				should.equal(sbgn.map, null);
+				sbgn.should.have.ownProperty('maps');
+				sbgn.maps.should.have.length(0);
 			});
 			it('should parse xmlns', function() {
 				var sbgn = sbgnjs.Sbgn.fromXML("<sbgn xmlns='a'></sbgn>");
@@ -70,26 +70,35 @@ describe('libsbgn', function() {
 			});
 			it('should parse map', function() {
 				var sbgn = sbgnjs.Sbgn.fromXML("<sbgn><map></map></sbgn>");
-				should.exist(sbgn.map);
-				sbgn.map.should.be.a('object');
-				sbgn.map.should.be.instanceOf(sbgnjs.Map);
+				should.exist(sbgn.maps);
+				sbgn.maps.should.be.a('array');
+				sbgn.maps.should.have.length(1);
+				sbgn.maps[0].should.be.instanceOf(sbgnjs.Map);
+			});
+			it('should parse 2 maps', function() {
+				var sbgn = sbgnjs.Sbgn.fromXML("<sbgn><map id='m1'></map><map id='m2'></map></sbgn>");
+				should.exist(sbgn.maps);
+				sbgn.maps.should.be.a('array');
+				sbgn.maps.should.have.length(2);
+				sbgn.maps[0].should.be.instanceOf(sbgnjs.Map);
+				sbgn.maps[0].id.should.equal("m1");
+				sbgn.maps[1].should.be.instanceOf(sbgnjs.Map);
+				sbgn.maps[1].id.should.equal("m2");
 			});
 		});
 		describe('write to XML', function() {
 			it('should write empty sbgn', function() {
 				var sbgn = new sbgnjs.Sbgn();
-				should.equal(sbgn.xmlns, null);
-				should.equal(sbgn.map, null);
 				sbgn.toXML().should.equal("<sbgn/>");
 			});
 			it('should write complete sbgn with empty map', function() {
 				var sbgn = new sbgnjs.Sbgn({'xmlns': "a"});
-				sbgn.setMap(new sbgnjs.Map());
+				sbgn.addMap(new sbgnjs.Map());
 				sbgn.toXML().should.equal('<sbgn xmlns="a"><map/></sbgn>');
 			});
 			it('edge case should consider xmlns of 0', function() {
 				var sbgn = new sbgnjs.Sbgn({'xmlns': 0});
-				sbgn.setMap(new sbgnjs.Map());
+				sbgn.addMap(new sbgnjs.Map());
 				sbgn.toXML().should.equal('<sbgn xmlns="0"><map/></sbgn>');
 			});
 		});
@@ -106,7 +115,7 @@ describe('libsbgn', function() {
 					var sbgn = new sbgnjs.Sbgn();
 					sbgn.setExtension(new sbgnjs.Extension());
 					sbgn.extension.add(new renderExt.RenderInformation());
-					sbgn.setMap(new sbgnjs.Map());
+					sbgn.addMap(new sbgnjs.Map());
 					sbgn.toXML().should.equal("<sbgn><extension>"+
 								'<renderInformation xmlns="http://www.sbml.org/sbml/level3/version1/render/version1"/>'+
 								"</extension><map/></sbgn>");
@@ -124,7 +133,7 @@ describe('libsbgn', function() {
 					var sbgn = new sbgnjs.Sbgn();
 					sbgn.setNotes(new sbgnjs.Notes());
 					sbgn.notes.setContent("<p>test</p>");
-					sbgn.setMap(new sbgnjs.Map());
+					sbgn.addMap(new sbgnjs.Map());
 					sbgn.toXML().should.equal("<sbgn><notes>"+
 								'<p>test</p>'+
 								"</notes><map/></sbgn>");
@@ -928,19 +937,19 @@ describe('libsbgn', function() {
 			sbgn.should.be.instanceOf(sbgnjs.Sbgn);
 			sbgn.xmlns.should.equal('http://sbgn.org/libsbgn/0.3');
 			// map
-			should.exist(sbgn.map);
-			sbgn.map.should.be.instanceOf(sbgnjs.Map);
-			sbgn.map.language.should.equal('process description');
-			sbgn.map.id.should.equal('mapID');
+			should.exist(sbgn.maps);
+			sbgn.maps[0].should.be.instanceOf(sbgnjs.Map);
+			sbgn.maps[0].language.should.equal('process description');
+			sbgn.maps[0].id.should.equal('mapID');
 			// extension
-			should.exist(sbgn.map.extension);
-			sbgn.map.extension.should.be.instanceOf(sbgnjs.Extension);
-			sbgn.map.extension.list.should.have.ownProperty('renderInformation');
-			sbgn.map.extension.list.renderInformation.should.be.instanceOf(renderExt.RenderInformation);
+			should.exist(sbgn.maps[0].extension);
+			sbgn.maps[0].extension.should.be.instanceOf(sbgnjs.Extension);
+			sbgn.maps[0].extension.list.should.have.ownProperty('renderInformation');
+			sbgn.maps[0].extension.list.renderInformation.should.be.instanceOf(renderExt.RenderInformation);
 			// glyphs
-			sbgn.map.glyphs.should.have.lengthOf(2);
+			sbgn.maps[0].glyphs.should.have.lengthOf(2);
 			// glyph 1
-			var glyph1 = sbgn.map.glyphs[0];
+			var glyph1 = sbgn.maps[0].glyphs[0];
 			glyph1.id.should.equal('_82f19e9e-6aa2-42b3-8b5e-8cee17197085');
 			glyph1.class_.should.equal('compartment');
 			should.exist(glyph1.label);
@@ -953,7 +962,7 @@ describe('libsbgn', function() {
 			glyph1.bbox.w.should.equal(263.29323174695764);
 			glyph1.bbox.h.should.equal(297.15583352545445);
 			// glyph 2
-			var glyph2 = sbgn.map.glyphs[1];
+			var glyph2 = sbgn.maps[0].glyphs[1];
 			glyph2.id.should.equal('_66737d5c-5193-43a2-baa6-094aa1c21654');
 			glyph2.class_.should.equal('macromolecule');
 			should.exist(glyph2.label);
@@ -973,9 +982,9 @@ describe('libsbgn', function() {
 			glyph2.clone.should.be.instanceOf(sbgnjs.CloneType);
 			glyph2.clone.label.should.equal('clone label');
 			// arcs
-			sbgn.map.arcs.should.have.lengthOf(2);
+			sbgn.maps[0].arcs.should.have.lengthOf(2);
 			// arc1
-			var arc1 = sbgn.map.arcs[0];
+			var arc1 = sbgn.maps[0].arcs[0];
 			arc1.id.should.equal('id');
 			arc1.class_.should.equal('production');
 			arc1.source.should.equal('source');
@@ -996,7 +1005,7 @@ describe('libsbgn', function() {
 			arc1.nexts[1].x.should.equal(4.35);
 			arc1.nexts[1].y.should.equal(3);
 			// arc2
-			var arc2 = sbgn.map.arcs[1];
+			var arc2 = sbgn.maps[0].arcs[1];
 			arc2.id.should.equal('id2');
 			arc2.class_.should.equal('consumption');
 			arc2.source.should.equal('source2');
@@ -1043,13 +1052,13 @@ describe('libsbgn', function() {
 			should.exist(sbgn.xmlns);
 			sbgn.xmlns.should.equal('http://sbgn.org/libsbgn/0.2');
 			// map
-			should.exist(sbgn.map);
-			sbgn.map.should.be.instanceOf(sbgnjs.Map);
-			sbgn.map.language.should.equal('process description');
+			should.exist(sbgn.maps);
+			sbgn.maps[0].should.be.instanceOf(sbgnjs.Map);
+			sbgn.maps[0].language.should.equal('process description');
 			//sbgn.map.id.should.equal('mapID');
-			sbgn.map.glyphs.should.have.lengthOf(2);
+			sbgn.maps[0].glyphs.should.have.lengthOf(2);
 			// glyph 1
-			var glyph1 = sbgn.map.glyphs[0];
+			var glyph1 = sbgn.maps[0].glyphs[0];
 			glyph1.id.should.equal('g1');
 			glyph1.class_.should.equal('macromolecule');
 			should.exist(glyph1.label);
@@ -1062,7 +1071,7 @@ describe('libsbgn', function() {
 			glyph1.bbox.w.should.equal(380);
 			glyph1.bbox.h.should.equal(210);
 			// glyph 2
-			var glyph2 = sbgn.map.glyphs[1];
+			var glyph2 = sbgn.maps[0].glyphs[1];
 			glyph2.id.should.equal('g2');
 			glyph2.class_.should.equal('annotation');
 			should.exist(glyph2.label);
@@ -1086,7 +1095,7 @@ describe('usage examples', function() {
 		var sbgn = new libsbgnjs.Sbgn({xmlns: 'http://sbgn.org/libsbgn/0.3'});
 
 		var map = new libsbgnjs.Map({id: 'mymap', language: 'process description'});
-		sbgn.setMap(map);
+		sbgn.addMap(map);
 
 		var glyph1 = new libsbgnjs.Glyph({id: 'glyph1', class_: 'macromolecule'});
 		glyph1.setLabel(new libsbgnjs.Label({text: 'entity A'}));
