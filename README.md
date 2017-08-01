@@ -1,6 +1,7 @@
 # libsbgn.js
 
 [![npm](https://img.shields.io/npm/v/libsbgn.js.svg)](https://www.npmjs.com/package/libsbgn.js)
+[![Build Status](https://travis-ci.org/eisbm/libsbgn.js.svg?branch=master)](https://travis-ci.org/eisbm/libsbgn.js)
 
 Under construction.
 
