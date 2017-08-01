@@ -927,6 +927,11 @@ Label.prototype.buildJsObj = function () {
 	if(this.text != null) {
 		attributes.text = this.text;
 	}
+	else { // text is a required attribute
+		attributes.text = "";
+	}
+	// ensure encoding of line breaks is always respected
+	//attributes.text = attributes.text.replace('\n', '\n'); //'&#xA;');
 	utils.addAttributes(labelObj, attributes);
 
 	this.baseToJsObj(labelObj);

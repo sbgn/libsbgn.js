@@ -411,18 +411,20 @@ describe('libsbgn', function() {
 		});
 		it('should write empty', function() {
 			var label = new sbgnjs.Label();
-			label.toXML().should.equal('<label/>');
+			label.toXML().should.equal('<label text=""/>');
 		});
 		it('should write complete', function() {
 			var label = new sbgnjs.Label({text: 'some text', bbox: new sbgnjs.Bbox()});
 			label.toXML().should.equal('<label text="some text"><bbox/></label>');
 		});
 		it('should read and write newline in attributes', function() {
-			var label = new sbgnjs.Label({text: 'some \ntext'});
-			label.toXML().should.equal('<label text="some \ntext"/>');
-			var label2 = sbgnjs.Label.fromXML(label.toXML());
-			label2.text.should.equal('some \ntext');
-			label2.toXML().should.equal('<label text="some \ntext"/>');
+			sbgnjs.Label.fromXML('<label text="some &#10;text"/>').text.should.equal("some \ntext");
+			sbgnjs.Label.fromXML('<label text="some &#xA;text"/>').text.should.equal("some \ntext");
+			sbgnjs.Label.fromXML('<label text="some \ntext"/>').text.should.equal("some \ntext");
+
+			// ----- this should not happen, should be encoded as &#xA; ------ //
+			new sbgnjs.Label({text: "some \ntext"}).toXML().should.equal('<label text="some \ntext"/>');
+			//new sbgnjs.Label({text: "some \ntext"}).toXML().should.equal('<label text="some &#xA;text"/>');
 		});
 		it('should read and write UTF8 characters', function() {
 			var label = new sbgnjs.Label({text: 'some têxt Ʃ ڝ ஹ.'});
@@ -875,7 +877,7 @@ describe('libsbgn', function() {
 				glyph.addPort(new sbgnjs.Port());
 				glyph.toXML().should.equal('<glyph id="id" class="a_class" compartmentRef="a_compartment_id" '+
 												'compartmentOrder="1.5" mapRef="mapRef" tagRef="tagRef" orientation="vertical">'+
-												"<label/>"+
+												'<label text=""/>'+
 												"<state/>"+
 												"<clone/>"+
 												"<callout/>"+
