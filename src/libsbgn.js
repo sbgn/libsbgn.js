@@ -519,11 +519,11 @@ Extension.fromObj = function (jsObj) {
 
 		//extension.add(extInstance);
 		if (extName == 'renderInformation') {
-			var renderInformation = renderExt.RenderInformation.fromObj({renderInformation: extJsObj});
+			var renderInformation = renderExt.RenderInformation.fromObj({renderInformation: extJsObj[0]});
 			extension.add(renderInformation);
 		}
 		else if (extName == 'annotation') {
-			var annotation = annotExt.Annotation.fromObj({annotation: extJsObj});
+			var annotation = annotExt.Annotation.fromObj({annotation: extJsObj[0]});
 			extension.add(annotation);
 		}
 		else { // unsupported extension, we still store the data as is

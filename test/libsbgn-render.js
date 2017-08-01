@@ -320,4 +320,43 @@ describe('libsbgn-render', function() {
 			});
 		});
 	});
+	describe('full test', function() {
+		it('should parse renderInformation from extension', function() {
+			var xml = "<extension>"+
+			"<renderInformation id='renderInformation' programName='sbgnviz' programVersion='3.1.0' backgroundColor='#ffffff' xmlns='http://www.sbml.org/sbml/level3/version1/render/version1'>"+
+			"<listOfColorDefinitions>"+
+			"<colorDefinition id='color_1' value='#ffffff7f' />"+
+			"<colorDefinition id='color_2' value='#555555' />"+
+			"</listOfColorDefinitions>"+
+			"<listOfStyles>"+
+			"<style id='nodeffffff0.55553.2511normalnormalHelvetica' idList='_82f19e9e-6aa2-42b3-8b5e-8cee17197085 _9007194d-c2e6-4939-a795-be71ae35a60d e95a1256-8a47-4aaf-b3d8-7d8387d5a31d _23d436e2-6633-42f2-98d0-00dbb962ac3d'>"+
+			"<g fontSize='14' fontFamily='Helvetica' fontWeight='normal' fontStyle='normal' stroke='color_2' strokeWidth='3.25' fill='color_1' />"+
+			"</style>"+
+			"</listOfStyles>"+
+			"</renderInformation>"+
+			"</extension>";
+			var extension = new sbgnjs.Extension.fromXML(xml);
+			extension.should.be.instanceOf(sbgnjs.Extension);
+			extension.has('renderInformation').should.equal(true);
+
+			var renderInfo = extension.get('renderInformation');
+			renderInfo.should.be.instanceOf(renderExt.RenderInformation);
+			renderInfo.listOfColorDefinitions.should.be.instanceOf(renderExt.ListOfColorDefinitions);
+			renderInfo.listOfStyles.should.be.instanceOf(renderExt.ListOfStyles);
+
+			var listOfColors = renderInfo.listOfColorDefinitions;
+			listOfColors.colorDefinitions.should.have.lengthOf(2);
+			var c1 = listOfColors.colorDefinitions[0];
+			c1.should.be.instanceOf(renderExt.ColorDefinition);
+			c1.id.should.equal('color_1');
+			c1.value.should.equal('#ffffff7f');
+
+			var styles = renderInfo.listOfStyles.styles;
+			styles.should.have.lengthOf(1);
+			styles[0].should.be.instanceOf(renderExt.Style);
+			styles[0].id.should.equal('nodeffffff0.55553.2511normalnormalHelvetica');
+			styles[0].renderGroup.should.be.instanceOf(renderExt.RenderGroup);
+			styles[0].renderGroup.fontSize.should.equal(14);
+		});
+	});
 });
