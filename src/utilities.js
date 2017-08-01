@@ -51,10 +51,19 @@ ns.parseStringKeepPrefix = function (string, fn) {
 };
 
 ns.buildString = function (obj) {
-	return new xml2js.Builder({
+	var xmlString =  new xml2js.Builder({
 		headless: true,
 		renderOpts: {pretty: false}
 	}).buildObject(obj);
+
+	/* 	dirty hack needed to solve the newline char encoding problem
+		xml2js doesn't encode \n as &#xA; we need to do it manually
+	*/
+	var re = /<label text="((.|\n+)+?)"/gm;
+	var xmlString_correctLabel = xmlString.replace(re, function(match, p1, p2) {
+		return '<label text="'+p1.replace(/\n/g, "&#xA;")+'"';
+	});
+	return xmlString_correctLabel;
 };
 
 module.exports = ns;

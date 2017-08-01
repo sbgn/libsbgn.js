@@ -422,9 +422,10 @@ describe('libsbgn', function() {
 			sbgnjs.Label.fromXML('<label text="some &#xA;text"/>').text.should.equal("some \ntext");
 			sbgnjs.Label.fromXML('<label text="some \ntext"/>').text.should.equal("some \ntext");
 
-			// ----- this should not happen, should be encoded as &#xA; ------ //
-			new sbgnjs.Label({text: "some \ntext"}).toXML().should.equal('<label text="some \ntext"/>');
-			//new sbgnjs.Label({text: "some \ntext"}).toXML().should.equal('<label text="some &#xA;text"/>');
+			// ----- this should not happen, should be encoded as &#xA; xml2js doesn't do it------ //
+			//new sbgnjs.Label({text: "some \ntext"}).toXML().should.equal('<label text="some \ntext"/>');
+			new sbgnjs.Label({text: "some \ntext"}).toXML().should.equal('<label text="some &#xA;text"/>');
+			new sbgnjs.Label({text: "some \n more \n text"}).toXML().should.equal('<label text="some &#xA; more &#xA; text"/>');
 		});
 		it('should read and write UTF8 characters', function() {
 			var label = new sbgnjs.Label({text: 'some têxt Ʃ ڝ ஹ.'});
