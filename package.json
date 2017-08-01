@@ -1,6 +1,6 @@
 {
   "name": "libsbgn.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "SBGN-ML parsing and writing for JavaScript",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/eisbm/libsbgn.js/issues"
-    },
+  },
   "homepage": "https://github.com/eisbm/libsbgn.js",
   "devDependencies": {
     "mocha": "^3.2.0",
