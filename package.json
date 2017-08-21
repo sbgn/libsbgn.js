@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "rdflib": "https://github.com/royludo/rdflib.js",
-    "n3": "^0.10.0",
-    "xml2js": "^0.4.17"
+    "n3": "0.11.1",
+    "xml2js": "0.4.18"
   }
 }

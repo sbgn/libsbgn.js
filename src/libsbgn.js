@@ -570,10 +570,12 @@ Notes.prototype.appendContent = function (string) {
  */
 Notes.prototype.buildJsObj = function () {
 
-	var parsedContent;
-    utils.parseString(this.content, function (err, result) {
-        parsedContent = result;
-    });
+	var parsedContent = "";
+	if(this.content != "") { // xml2js refuses to parse empty strings
+	    utils.parseString(this.content, function (err, result) {
+	        parsedContent = result;
+	    });
+	}
 
 	return parsedContent;
 };
