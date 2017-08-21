@@ -1,6 +1,6 @@
 {
   "name": "libsbgn.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "SBGN-ML parsing and writing for JavaScript",
   "main": "index.js",
   "scripts": {
