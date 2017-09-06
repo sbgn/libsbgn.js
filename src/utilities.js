@@ -37,7 +37,7 @@ ns.addAttributes = function (jsObj, attributes) {
 
 ns.parseString = function (string, fn) {
 	var parser = new xml2js.Parser({
-		tagNameProcessors: [xml2js.processors.stripPrefix],
+		//tagNameProcessors: [xml2js.processors.stripPrefix],
 		attrValueProcessors: [xml2js.processors.parseNumbers, xml2js.processors.parseBooleans]
 	});
 	parser.parseString(string, fn);

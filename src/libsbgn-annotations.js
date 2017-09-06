@@ -56,12 +56,10 @@ Annotation.prototype.setRdfElement = function(rdfElement) {
 Annotation.prototype.buildJsObj = function () {
 	var annotationJsonObj = {};
 
-	// attributes
-	var attributes = {};
-	if(this.id != null) {
-		attributes.id = this.id;
+	if(this.rdfElement != null) {
+		annotationJsonObj =  this.rdfElement.buildJsObj();
 	}
-	utils.addAttributes(annotationJsonObj, attributes);
+
 	return annotationJsonObj;
 };
 
@@ -75,10 +73,10 @@ Annotation.prototype.toXML = function() {
 Annotation.fromXML = function (string) {
 	var annotation;
 	function fn (err, result) {
-        annotation = Annotation.fromObj(result);
-    };
-    utils.parseStringKeepPrefix(string, fn);
-    return annotation;
+		annotation = Annotation.fromObj(result);
+	};
+	utils.parseStringKeepPrefix(string, fn);
+	return annotation;
 };
 
 Annotation.fromObj = function (jsObj) {
@@ -94,9 +92,6 @@ Annotation.fromObj = function (jsObj) {
 
 	// children
 	if(jsObj['rdf:RDF']) {
-		/*var listOfColorDefinitions = ns.ListOfColorDefinitions.fromObj({listOfColorDefinitions: jsObj.listOfColorDefinitions[0]});
-		renderInformation.setListOfColorDefinitions(listOfColorDefinitions);*/
-
 		var obj = {};
 		obj['rdf:RDF'] = jsObj['rdf:RDF'][0];
 		var rdf = ns.RdfElement.fromObj(obj);
@@ -327,6 +322,15 @@ RdfElement.fromXML = function (string) {
     };
     utils.parseStringKeepPrefix(string, fn);
     return rdfElement;
+};
+
+RdfElement.prototype.buildJsObj = function () {
+	var rdfElementJsObj;
+	function fn (err, result) {
+		rdfElementJsObj = result;
+	};
+	utils.parseStringKeepPrefix(this.toXML(), fn);
+	return rdfElementJsObj;
 };
 
 RdfElement.fromObj = function (jsObj) {
