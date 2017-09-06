@@ -81,7 +81,7 @@ describe('libsbgn-annotations', function() {
 
 
 		beforeEach('build necessary RDF store from different test inputs', function() {
-			simplest = annot.Annotation.fromXML(header+simplestString+footer).rdfElement;
+			simplest = annot.Annotation.fromXML(header+simplestString+footer);
 			empty = annot.Annotation.fromXML(header+footer).rdfElement;
 			emptyDescription = annot.Annotation.fromXML(header+emptyDescriptionString+footer).rdfElement;
 			emptyRelation = annot.Annotation.fromXML(header+emptyRelationString+footer).rdfElement;
@@ -93,7 +93,7 @@ describe('libsbgn-annotations', function() {
 		});
 
 		it('should parse and write xml as is, ignore white space', function(){
-			simplest.toXML().should.equalIgnoreSpaces(headerRDF+simplestString+footerRDF);
+			simplest.toXML().should.equalIgnoreSpaces("<annotation>"+headerRDF+simplestString+footerRDF+"</annotation>");
 			empty.toXML().should.equalIgnoreSpaces('<rdf:RDF '+
 					'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" ></rdf:RDF>');
 			emptyDescription.toXML().should.equalIgnoreSpaces('<rdf:RDF '+
@@ -109,7 +109,7 @@ describe('libsbgn-annotations', function() {
 				emptyDescription.getAllIds().should.deep.equal([]);
 			});
 			it('should return array of ids if elements are present', function() {
-				simplest.getAllIds().should.deep.equal([testID]);
+				simplest.rdfElement.getAllIds().should.deep.equal([testID]);
 				emptyRelation.getAllIds().should.deep.equal([testID]);
 				emptyBag.getAllIds().should.deep.equal([testID]);
 				inline.getAllIds().should.deep.equal([testID]);
@@ -124,7 +124,7 @@ describe('libsbgn-annotations', function() {
 				emptyDescription.getResourcesOfId(testID).should.deep.equal({});
 			});
 			it('should return a single property if only one relation', function() {
-				var res = simplest.getResourcesOfId(testID);
+				var res = simplest.rdfElement.getResourcesOfId(testID);
 				res.should.have.ownProperty(testRelation);
 				res[testRelation].should.deep.equal([testObject]);
 				//emptyDescription.getResourcesOfId(testID).should.deep.equal({});
