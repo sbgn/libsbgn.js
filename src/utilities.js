@@ -37,11 +37,44 @@ ns.addAttributes = function (jsObj, attributes) {
 
 ns.parseString = function (string, fn) {
 	var parser = new xml2js.Parser({
-		//tagNameProcessors: [xml2js.processors.stripPrefix],
+		tagNameProcessors: [ns.removePrefixForSbgnTags],
 		attrValueProcessors: [xml2js.processors.parseNumbers, xml2js.processors.parseBooleans]
 	});
 	parser.parseString(string, fn);
 };
+
+ns.removePrefixForSbgnTags = function (name){
+	var sbgnTags = new Set([
+		"arc",
+		"arcgroup",
+		"bbox",
+		"callout",
+		"clone",
+		"end",
+		"entity",
+		"extension",
+		"glyph",
+		"label",
+		"map",
+		"next",
+		"notes",
+		"point",
+		"port",
+		"sbgn",
+		"start",
+		"sate"
+	]);
+
+	if(name.indexOf(":") !== -1) { // some prefix found
+		var tmp = name.split(":");
+		var tagName = tmp[tmp.length - 1];
+		if(sbgnTags.has(tagName)) {
+			// this is a standard sbgn element, we don't want a prefix
+			return tagName;
+		}
+	}
+	return name;
+}
 
 ns.parseStringKeepPrefix = function (string, fn) {
 	var parser = new xml2js.Parser({
