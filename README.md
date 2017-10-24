@@ -3,44 +3,61 @@
 [![npm](https://img.shields.io/npm/v/libsbgn.js.svg)](https://www.npmjs.com/package/libsbgn.js)
 [![Build Status](https://travis-ci.org/eisbm/libsbgn.js.svg?branch=master)](https://travis-ci.org/eisbm/libsbgn.js)
 
-Under construction.
+Documentation under construction.
 
 API doc is located [here](https://eisbm.github.io/libsbgn.js/API/index.html).
+More detailed documentation can be found in the wiki.
 
-## Usage example
+## 1. Installation
+
+```bash
+npm install libsbgn.js
+```
+
+Run test:
+```bash
+npm test
+```
+
+Generate API doc:
+```bash
+npm run doc
+```
+
+## 2. Quick example
 
 ```javascript
-var libsbgnjs = require('libsbgn.js');
+var libsbgn = require('libsbgn.js');
 
-var sbgn = new libsbgnjs.Sbgn({xmlns: 'http://sbgn.org/libsbgn/0.3'});
+var sbgn = new libsbgn.Sbgn({xmlns: 'http://sbgn.org/libsbgn/0.3'});
 
-var map = new libsbgnjs.Map({id: 'mymap', language: 'process description'});
+var map = new libsbgn.Map({id: 'mymap', language: 'process description'});
 sbgn.addMap(map);
 
-var glyph1 = new libsbgnjs.Glyph({id: 'glyph1', class_: 'macromolecule'});
-glyph1.setLabel(new libsbgnjs.Label({text: 'entity A'}));
-glyph1.setBbox(new libsbgnjs.Bbox({x: 0, y: 0, w:10, h:10}));
+var glyph1 = new libsbgn.Glyph({id: 'glyph1', class_: 'macromolecule'});
+glyph1.setLabel(new libsbgn.Label({text: 'entity A'}));
+glyph1.setBbox(new libsbgn.Bbox({x: 0, y: 0, w:10, h:10}));
 map.addGlyph(glyph1);
 
-var glyph2 = new libsbgnjs.Glyph({id: 'glyph2', class_: 'macromolecule'});
-glyph2.setLabel(new libsbgnjs.Label({text: 'entity B'}));
-glyph2.setBbox(new libsbgnjs.Bbox({x: 20, y: 0, w:10, h:10}));
+var glyph2 = new libsbgn.Glyph({id: 'glyph2', class_: 'macromolecule'});
+glyph2.setLabel(new libsbgn.Label({text: 'entity B'}));
+glyph2.setBbox(new libsbgn.Bbox({x: 20, y: 0, w:10, h:10}));
 map.addGlyph(glyph2);
 
-var processGlyph = new libsbgnjs.Glyph({id: 'process1', class_: 'process'});
-processGlyph.setBbox(new libsbgnjs.Bbox({x: 10, y: 0, w:10, h:10}));
+var processGlyph = new libsbgn.Glyph({id: 'process1', class_: 'process'});
+processGlyph.setBbox(new libsbgn.Bbox({x: 10, y: 0, w:10, h:10}));
 map.addGlyph(processGlyph);
 
-var arc1 = new libsbgnjs.Arc({id:'arc1', class_:'consumption',
+var arc1 = new libsbgn.Arc({id:'arc1', class_:'consumption',
 	source:'glyph1', target:'process1'});
-arc1.setStart(new libsbgnjs.StartType({x:0, y:0}));
-arc1.setEnd(new libsbgnjs.EndType({x:10, y:0}));
+arc1.setStart(new libsbgn.StartType({x:0, y:0}));
+arc1.setEnd(new libsbgn.EndType({x:10, y:0}));
 map.addArc(arc1);
 
-var arc2 = new libsbgnjs.Arc({id:'arc2', class_:'production',
+var arc2 = new libsbgn.Arc({id:'arc2', class_:'production',
 	source:'process1', target:'glyph2'});
-arc2.setStart(new libsbgnjs.StartType({x:10, y:0}));
-arc2.setEnd(new libsbgnjs.EndType({x:20, y:0}));
+arc2.setStart(new libsbgn.StartType({x:10, y:0}));
+arc2.setEnd(new libsbgn.EndType({x:20, y:0}));
 map.addArc(arc2);
 
 var xmlString = sbgn.toXML();
