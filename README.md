@@ -5,22 +5,22 @@
 
 Documentation under construction.
 
-API doc is located [here](https://eisbm.github.io/libsbgn.js/API/index.html).
+API doc is located [here](https://eisbm.github.io/libsbgn.js/).
 More detailed documentation can be found in the wiki.
 
 ## 1. Installation
 
-```bash
+```
 npm install libsbgn.js
 ```
 
 Run test:
-```bash
+```
 npm test
 ```
 
 Generate API doc:
-```bash
+```
 npm run doc
 ```
 
