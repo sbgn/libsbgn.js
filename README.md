@@ -50,14 +50,14 @@ map.addGlyph(processGlyph);
 
 var arc1 = new libsbgn.Arc({id:'arc1', class_:'consumption',
 	source:'glyph1', target:'process1'});
-arc1.setStart(new libsbgn.StartType({x:0, y:0}));
-arc1.setEnd(new libsbgn.EndType({x:10, y:0}));
+arc1.setStart(new libsbgn.Start({x:0, y:0}));
+arc1.setEnd(new libsbgn.End({x:10, y:0}));
 map.addArc(arc1);
 
 var arc2 = new libsbgn.Arc({id:'arc2', class_:'production',
 	source:'process1', target:'glyph2'});
-arc2.setStart(new libsbgn.StartType({x:10, y:0}));
-arc2.setEnd(new libsbgn.EndType({x:20, y:0}));
+arc2.setStart(new libsbgn.Start({x:10, y:0}));
+arc2.setEnd(new libsbgn.End({x:20, y:0}));
 map.addArc(arc2);
 
 var xmlString = sbgn.toXML();
