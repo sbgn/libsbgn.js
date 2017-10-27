@@ -481,13 +481,20 @@ describe('libsbgn', function() {
 	});
 	describe('state', function() {
 		it('should parse empty', function() {
-			var state = sbgnjs.StateType.fromXML("<state/>");
+			var state = sbgnjs.State.fromXML("<state/>");
 			state.should.have.ownProperty('value');
 			state.should.have.ownProperty('variable');
 			should.equal(state.value, null);
 			should.equal(state.variable, null);
 		});
 		it('should parse complete', function() {
+			var state = sbgnjs.State.fromXML('<state value="some value" variable="v"/>');
+			should.exist(state.value);
+			state.value.should.equal('some value');
+			should.exist(state.variable);
+			state.variable.should.equal('v');
+		});
+		it('should be backward compatible with deprecated name', function() {
 			var state = sbgnjs.StateType.fromXML('<state value="some value" variable="v"/>');
 			should.exist(state.value);
 			state.value.should.equal('some value');
@@ -495,52 +502,63 @@ describe('libsbgn', function() {
 			state.variable.should.equal('v');
 		});
 		it('should write empty', function() {
-			var state = new sbgnjs.StateType();
+			var state = new sbgnjs.State();
 			state.toXML().should.equal('<state/>');
 		});
 		it('should write complete', function() {
-			var state = new sbgnjs.StateType({value: 'some value', variable: 'variable'});
+			var state = new sbgnjs.State({value: 'some value', variable: 'variable'});
 			state.toXML().should.equal('<state value="some value" variable="variable"/>');
 		});
 	});
 	describe('clone', function() {
 		it('should parse empty', function() {
-			var clone = sbgnjs.CloneType.fromXML("<clone/>");
+			var clone = sbgnjs.Clone.fromXML("<clone/>");
 			clone.should.have.ownProperty('label');
 			should.equal(clone.label, null);
 		});
 		it('should parse complete', function() {
+			var clone = sbgnjs.Clone.fromXML('<clone><label text="some label"/></clone>');
+			should.exist(clone.label);
+			clone.label.should.be.instanceOf(sbgnjs.Label);
+			clone.label.text.should.equal('some label');
+		});
+		it('should be backward compatible with deprecated name', function() {
 			var clone = sbgnjs.CloneType.fromXML('<clone><label text="some label"/></clone>');
 			should.exist(clone.label);
 			clone.label.should.be.instanceOf(sbgnjs.Label);
 			clone.label.text.should.equal('some label');
 		});
 		it('should write empty', function() {
-			var clone = new sbgnjs.CloneType();
+			var clone = new sbgnjs.Clone();
 			clone.toXML().should.equal('<clone/>');
 		});
 		it('should write complete', function() {
-			var clone = new sbgnjs.CloneType({label: new sbgnjs.Label({text: 'some label'})});
+			var clone = new sbgnjs.Clone({label: new sbgnjs.Label({text: 'some label'})});
 			clone.toXML().should.equal('<clone><label text="some label"/></clone>');
 		});
 	});
 	describe('entity', function() {
 		it('should parse empty', function() {
-			var entity = sbgnjs.EntityType.fromXML("<entity/>");
+			var entity = sbgnjs.Entity.fromXML("<entity/>");
 			entity.should.have.ownProperty('name');
 			should.equal(entity.name, null);
 		});
 		it('should parse complete', function() {
+			var entity = sbgnjs.Entity.fromXML('<entity name="some name"/>');
+			should.exist(entity.name);
+			entity.name.should.equal('some name');
+		});
+		it('should be backward compatible with deprecated name', function() {
 			var entity = sbgnjs.EntityType.fromXML('<entity name="some name"/>');
 			should.exist(entity.name);
 			entity.name.should.equal('some name');
 		});
 		it('should write empty', function() {
-			var entity = new sbgnjs.EntityType();
+			var entity = new sbgnjs.Entity();
 			entity.toXML().should.equal('<entity/>');
 		});
 		it('should write complete', function() {
-			var entity = new sbgnjs.EntityType({name: 'some name'});
+			var entity = new sbgnjs.Entity({name: 'some name'});
 			entity.toXML().should.equal('<entity name="some name"/>');
 		});
 	});
@@ -574,13 +592,20 @@ describe('libsbgn', function() {
 	});
 	describe('start type', function() {
 		it('should parse empty', function() {
-			var start = sbgnjs.StartType.fromXML("<start/>");
+			var start = sbgnjs.Start.fromXML("<start/>");
 			start.should.have.ownProperty('x');
 			start.x.should.be.NaN;
 			start.should.have.ownProperty('y');
 			start.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
+			var start = sbgnjs.Start.fromXML('<start x="1" y="2"/>');
+			should.exist(start.x);
+			start.x.should.equal(1);
+			should.exist(start.y);
+			start.y.should.equal(2);
+		});
+		it('should be backwardcompatible with deprecated name', function() {
 			var start = sbgnjs.StartType.fromXML('<start x="1" y="2"/>');
 			should.exist(start.x);
 			start.x.should.equal(1);
@@ -588,23 +613,30 @@ describe('libsbgn', function() {
 			start.y.should.equal(2);
 		});
 		it('should write empty', function() {
-			var start = new sbgnjs.StartType();
+			var start = new sbgnjs.Start();
 			start.toXML().should.equal('<start/>');
 		});
 		it('should write complete', function() {
-			var start = new sbgnjs.StartType({x: 1, y: 2});
+			var start = new sbgnjs.Start({x: 1, y: 2});
 			start.toXML().should.equal('<start x="1" y="2"/>');
 		});
 	});
 	describe('end type', function() {
 		it('should parse empty', function() {
-			var end = sbgnjs.EndType.fromXML("<end/>");
+			var end = sbgnjs.End.fromXML("<end/>");
 			end.should.have.ownProperty('x');
 			end.x.should.be.NaN;
 			end.should.have.ownProperty('y');
 			end.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
+			var end = sbgnjs.End.fromXML('<end x="1" y="2"/>');
+			should.exist(end.x);
+			end.x.should.equal(1);
+			should.exist(end.y);
+			end.y.should.equal(2);
+		});
+		it('should be backward compatible with deprecated name', function() {
 			var end = sbgnjs.EndType.fromXML('<end x="1" y="2"/>');
 			should.exist(end.x);
 			end.x.should.equal(1);
@@ -612,23 +644,30 @@ describe('libsbgn', function() {
 			end.y.should.equal(2);
 		});
 		it('should write empty', function() {
-			var end = new sbgnjs.EndType();
+			var end = new sbgnjs.End();
 			end.toXML().should.equal('<end/>');
 		});
 		it('should write complete', function() {
-			var end = new sbgnjs.EndType({x: 1, y: 2});
+			var end = new sbgnjs.End({x: 1, y: 2});
 			end.toXML().should.equal('<end x="1" y="2"/>');
 		});
 	});
 	describe('next type', function() {
 		it('should parse empty', function() {
-			var next = sbgnjs.NextType.fromXML("<next/>");
+			var next = sbgnjs.Next.fromXML("<next/>");
 			next.should.have.ownProperty('x');
 			next.x.should.be.NaN;
 			next.should.have.ownProperty('y');
 			next.y.should.be.NaN;
 		});
 		it('should parse complete', function() {
+			var next = sbgnjs.Next.fromXML('<next x="1" y="2"/>');
+			should.exist(next.x);
+			next.x.should.equal(1);
+			should.exist(next.y);
+			next.y.should.equal(2);
+		});
+		it('should be backward compatible with deprecated name', function() {
 			var next = sbgnjs.NextType.fromXML('<next x="1" y="2"/>');
 			should.exist(next.x);
 			next.x.should.equal(1);
@@ -636,11 +675,11 @@ describe('libsbgn', function() {
 			next.y.should.equal(2);
 		});
 		it('should write empty', function() {
-			var next = new sbgnjs.NextType();
+			var next = new sbgnjs.Next();
 			next.toXML().should.equal('<next/>');
 		});
 		it('should write complete', function() {
-			var next = new sbgnjs.NextType({x: 1, y: 2});
+			var next = new sbgnjs.Next({x: 1, y: 2});
 			next.toXML().should.equal('<next x="1" y="2"/>');
 		});
 	});
@@ -806,7 +845,7 @@ describe('libsbgn', function() {
 				var glyph = sbgnjs.Glyph.fromXML("<glyph><state /></glyph>");
 				should.exist(glyph.state);
 				glyph.state.should.be.a('object');
-				glyph.state.should.be.instanceOf(sbgnjs.StateType);
+				glyph.state.should.be.instanceOf(sbgnjs.State);
 			});
 			it('should parse bbox child', function() {
 				var glyph = sbgnjs.Glyph.fromXML("<glyph><bbox></bbox></glyph>");
@@ -818,7 +857,7 @@ describe('libsbgn', function() {
 				var glyph = sbgnjs.Glyph.fromXML("<glyph><clone /></glyph>");
 				should.exist(glyph.clone);
 				glyph.clone.should.be.a('object');
-				glyph.clone.should.be.instanceOf(sbgnjs.CloneType);
+				glyph.clone.should.be.instanceOf(sbgnjs.Clone);
 			});
 			it('should parse callout child', function() {
 				var glyph = sbgnjs.Glyph.fromXML("<glyph><callout target='truc'/></glyph>");
@@ -831,7 +870,7 @@ describe('libsbgn', function() {
 				var glyph = sbgnjs.Glyph.fromXML("<glyph><entity name='test'/></glyph>");
 				should.exist(glyph.entity);
 				glyph.entity.should.be.a('object');
-				glyph.entity.should.be.instanceOf(sbgnjs.EntityType);
+				glyph.entity.should.be.instanceOf(sbgnjs.Entity);
 				glyph.entity.name.should.equal('test');
 			});
 			it('should parse nested glyph child', function() {
@@ -869,11 +908,11 @@ describe('libsbgn', function() {
 				var glyph = new sbgnjs.Glyph({id: "id", class_: "a_class", compartmentRef: "a_compartment_id",
 											compartmentOrder: 1.5, mapRef: "mapRef", tagRef: "tagRef", orientation: "vertical"});
 				glyph.setLabel(new sbgnjs.Label());
-				glyph.setState(new sbgnjs.StateType());
+				glyph.setState(new sbgnjs.State());
 				glyph.setBbox(new sbgnjs.Bbox());
-				glyph.setClone(new sbgnjs.CloneType());
+				glyph.setClone(new sbgnjs.Clone());
 				glyph.setCallout(new sbgnjs.Callout());
-				glyph.setEntity(new sbgnjs.EntityType());
+				glyph.setEntity(new sbgnjs.Entity());
 				glyph.addGlyphMember(new sbgnjs.Glyph());
 				glyph.addPort(new sbgnjs.Port());
 				glyph.toXML().should.equal('<glyph id="id" class="a_class" compartmentRef="a_compartment_id" '+
@@ -928,20 +967,20 @@ describe('libsbgn', function() {
 				var arc = sbgnjs.Arc.fromXML("<arc><start /></arc>");
 				should.exist(arc.start);
 				arc.start.should.be.a('object');
-				arc.start.should.be.instanceOf(sbgnjs.StartType);
+				arc.start.should.be.instanceOf(sbgnjs.Start);
 			});
 			it('should parse end child', function() {
 				var arc = sbgnjs.Arc.fromXML("<arc><end /></arc>");
 				should.exist(arc.end);
 				arc.end.should.be.a('object');
-				arc.end.should.be.instanceOf(sbgnjs.EndType);
+				arc.end.should.be.instanceOf(sbgnjs.End);
 			});
 			it('should parse next child', function() {
 				var arc = sbgnjs.Arc.fromXML("<arc><next /></arc>");
 				should.exist(arc.nexts);
 				arc.nexts.should.be.a('array');
 				arc.nexts.should.have.lengthOf(1);
-				arc.nexts[0].should.be.instanceOf(sbgnjs.NextType);
+				arc.nexts[0].should.be.instanceOf(sbgnjs.Next);
 			});
 			it('should parse glyphs child', function() {
 				var arc = sbgnjs.Arc.fromXML("<arc><glyph></glyph></arc>");
@@ -962,15 +1001,15 @@ describe('libsbgn', function() {
 				arc.target.should.equal('target');
 				should.exist(arc.start);
 				arc.start.should.be.a('object');
-				arc.start.should.be.instanceOf(sbgnjs.StartType);
+				arc.start.should.be.instanceOf(sbgnjs.Start);
 				should.exist(arc.nexts);
 				arc.nexts.should.be.a('array');
 				arc.nexts.should.have.lengthOf(2);
-				arc.nexts[0].should.be.instanceOf(sbgnjs.NextType);
-				arc.nexts[1].should.be.instanceOf(sbgnjs.NextType);
+				arc.nexts[0].should.be.instanceOf(sbgnjs.Next);
+				arc.nexts[1].should.be.instanceOf(sbgnjs.Next);
 				should.exist(arc.end);
 				arc.end.should.be.a('object');
-				arc.end.should.be.instanceOf(sbgnjs.EndType);
+				arc.end.should.be.instanceOf(sbgnjs.End);
 				should.exist(arc.glyphs);
 				arc.glyphs.should.be.a('array');
 				arc.glyphs.should.have.lengthOf(1);
@@ -984,10 +1023,10 @@ describe('libsbgn', function() {
 			});
 			it('should write complete arc', function() {
 				var arc = new sbgnjs.Arc({id: "id", class_: "a_class", source: "source", target: "target"});
-				arc.setStart(new sbgnjs.StartType());
-				arc.setEnd(new sbgnjs.EndType());
-				arc.addNext(new sbgnjs.NextType());
-				arc.addNext(new sbgnjs.NextType());
+				arc.setStart(new sbgnjs.Start());
+				arc.setEnd(new sbgnjs.End());
+				arc.addNext(new sbgnjs.Next());
+				arc.addNext(new sbgnjs.Next());
 				arc.addGlyph(new sbgnjs.Glyph());
 				arc.toXML().should.equal('<arc id="id" class="a_class" source="source" target="target">'+
 												"<glyph/>"+
@@ -1074,7 +1113,7 @@ describe('libsbgn', function() {
 			glyph2.label.should.be.instanceOf(sbgnjs.Label);
 			glyph2.label.text.should.equal('CHT1');
 			should.exist(glyph2.state);
-			glyph2.state.should.be.instanceOf(sbgnjs.StateType);
+			glyph2.state.should.be.instanceOf(sbgnjs.State);
 			glyph2.state.value.should.equal('val');
 			glyph2.state.variable.should.equal('var');
 			should.exist(glyph2.bbox);
@@ -1084,7 +1123,7 @@ describe('libsbgn', function() {
 			glyph2.bbox.w.should.equal(70);
 			glyph2.bbox.h.should.equal(35);
 			should.exist(glyph2.clone);
-			glyph2.clone.should.be.instanceOf(sbgnjs.CloneType);
+			glyph2.clone.should.be.instanceOf(sbgnjs.Clone);
 			glyph2.clone.label.text.should.equal('clone label');
 			// arcs
 			sbgn.maps[0].arcs.should.have.lengthOf(2);
@@ -1095,18 +1134,18 @@ describe('libsbgn', function() {
 			arc1.source.should.equal('source');
 			arc1.target.should.equal('target');
 			should.exist(arc1.start);
-			arc1.start.should.be.instanceOf(sbgnjs.StartType);
+			arc1.start.should.be.instanceOf(sbgnjs.Start);
 			arc1.start.x.should.equal(208.35);
 			arc1.start.y.should.equal(353);
 			should.exist(arc1.end);
-			arc1.end.should.be.instanceOf(sbgnjs.EndType);
+			arc1.end.should.be.instanceOf(sbgnjs.End);
 			arc1.end.x.should.equal(6.35);
 			arc1.end.y.should.equal(5);
 			arc1.nexts.should.have.lengthOf(2);
-			arc1.nexts[0].should.be.instanceOf(sbgnjs.NextType);
+			arc1.nexts[0].should.be.instanceOf(sbgnjs.Next);
 			arc1.nexts[0].x.should.equal(2.35);
 			arc1.nexts[0].y.should.equal(1);
-			arc1.nexts[1].should.be.instanceOf(sbgnjs.NextType);
+			arc1.nexts[1].should.be.instanceOf(sbgnjs.Next);
 			arc1.nexts[1].x.should.equal(4.35);
 			arc1.nexts[1].y.should.equal(3);
 			// arc2
@@ -1116,11 +1155,11 @@ describe('libsbgn', function() {
 			arc2.source.should.equal('source2');
 			arc2.target.should.equal('target2');
 			should.exist(arc2.start);
-			arc2.start.should.be.instanceOf(sbgnjs.StartType);
+			arc2.start.should.be.instanceOf(sbgnjs.Start);
 			arc2.start.x.should.equal(8);
 			arc2.start.y.should.equal(9);
 			should.exist(arc2.end);
-			arc2.end.should.be.instanceOf(sbgnjs.EndType);
+			arc2.end.should.be.instanceOf(sbgnjs.End);
 			arc2.end.x.should.equal(2);
 			arc2.end.y.should.equal(3);
 			arc2.nexts.should.have.lengthOf(0);
@@ -1217,13 +1256,13 @@ describe('usage examples', function() {
 		map.addGlyph(processGlyph);
 
 		var arc1 = new libsbgnjs.Arc({id:'arc1', class_:'consumption', source:'glyph1', target:'process1'});
-		arc1.setStart(new libsbgnjs.StartType({x:0, y:0}));
-		arc1.setEnd(new libsbgnjs.EndType({x:10, y:0}));
+		arc1.setStart(new libsbgnjs.Start({x:0, y:0}));
+		arc1.setEnd(new libsbgnjs.End({x:10, y:0}));
 		map.addArc(arc1);
 
 		var arc2 = new libsbgnjs.Arc({id:'arc2', class_:'production', source:'process1', target:'glyph2'});
-		arc2.setStart(new libsbgnjs.StartType({x:10, y:0}));
-		arc2.setEnd(new libsbgnjs.EndType({x:20, y:0}));
+		arc2.setStart(new libsbgnjs.Start({x:10, y:0}));
+		arc2.setEnd(new libsbgnjs.End({x:20, y:0}));
 		map.addArc(arc2);
 
 		var xmlString = sbgn.toXML();

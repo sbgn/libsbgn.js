@@ -5,21 +5,21 @@ toc:
 - Arcgroup
 - Bbox
 - Callout
-- CloneType
-- EndType
-- EntityType
+- Clone
+- End
+- Entity
 - Extension
 - Glyph
 - Label
 - Map
-- NextType
+- Next
 - Notes
 - Point
 - Port
 - Sbgn
 - SBGNBase
-- StartType
-- StateType
+- Start
+- State
 - name: Render extension
 - libsbgn.render
 - ColorDefinition

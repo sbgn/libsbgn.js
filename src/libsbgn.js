@@ -643,10 +643,10 @@ ns.Notes = Notes;
  * @param {string=} params.orientation
  * @param {Label=} params.label
  * @param {Bbox=} params.bbox
- * @param {StateType=} params.state
- * @param {CloneType=} params.clone
+ * @param {State=} params.state
+ * @param {Clone=} params.clone
  * @param {Callout=} params.callout
- * @param {EntityType=} params.entity
+ * @param {Entity=} params.entity
  * @param {Glyph[]=} params.glyphMembers
  * @param {Port[]=} params.ports
  */
@@ -684,7 +684,7 @@ Glyph.prototype.setLabel = function (label) {
 };
 
 /**
- * @param {StateType} state
+ * @param {State} state
  */
 Glyph.prototype.setState = function (state) {
 	this.state = state;
@@ -698,7 +698,7 @@ Glyph.prototype.setBbox = function (bbox) {
 };
 
 /**
- * @param {CloneType} clone
+ * @param {Clone} clone
  */
 Glyph.prototype.setClone = function (clone) {
 	this.clone = clone;
@@ -712,7 +712,7 @@ Glyph.prototype.setCallout = function (callout) {
 };
 
 /**
- * @param {EntityType} entity
+ * @param {Entity} entity
  */
 Glyph.prototype.setEntity = function (entity) {
 	this.entity = entity;
@@ -850,11 +850,11 @@ Glyph.fromObj = function (jsObj) {
 		glyph.setLabel(label);
 	}
 	if(jsObj.state) {
-		var state = ns.StateType.fromObj({state: jsObj.state[0]});
+		var state = ns.State.fromObj({state: jsObj.state[0]});
 		glyph.setState(state);
 	}
 	if(jsObj.clone) {
-		var clone = ns.CloneType.fromObj({clone: jsObj.clone[0]});
+		var clone = ns.Clone.fromObj({clone: jsObj.clone[0]});
 		glyph.setClone(clone);
 	}
 	if(jsObj.callout) {
@@ -862,7 +862,7 @@ Glyph.fromObj = function (jsObj) {
 		glyph.setCallout(callout);
 	}
 	if(jsObj.entity) {
-		var entity = ns.EntityType.fromObj({entity: jsObj.entity[0]});
+		var entity = ns.Entity.fromObj({entity: jsObj.entity[0]});
 		glyph.setEntity(entity);
 	}
 	if(jsObj.bbox) {
@@ -1094,12 +1094,12 @@ ns.Bbox = Bbox;
 // ------- STATE -------
 /**
  * Represents the <code>&lt;state&gt;</code> element.
- * @class StateType
+ * @class State
  * @param {Object} params
  * @param {string=} params.value
  * @param {string=} params.variable
  */
-var StateType = function (params) {
+var State = function (params) {
 	var params = checkParams(params, ['value', 'variable']);
 	this.value = params.value;
 	this.variable = params.variable;
@@ -1108,7 +1108,7 @@ var StateType = function (params) {
 /**
  * @return {Object} - xml2js formatted object
  */
-StateType.prototype.buildJsObj = function () {
+State.prototype.buildJsObj = function () {
 	var stateObj = {};
 
 	// attributes
@@ -1126,18 +1126,18 @@ StateType.prototype.buildJsObj = function () {
 /**
  * @return {string}
  */
-StateType.prototype.toXML = function () {
+State.prototype.toXML = function () {
 	return utils.buildString({state: this.buildJsObj()})
 };
 
 /**
  * @param {String} string
- * @return {StateType}
+ * @return {State}
  */
-StateType.fromXML = function (string) {
+State.fromXML = function (string) {
 	var state;
 	function fn (err, result) {
-        state = StateType.fromObj(result);
+        state = State.fromObj(result);
     };
     utils.parseString(string, fn);
     return state;
@@ -1145,14 +1145,14 @@ StateType.fromXML = function (string) {
 
 /**
  * @param {Object} jsObj - xml2js formatted object
- * @return {StateType}
+ * @return {State}
  */
-StateType.fromObj = function (jsObj) {
+State.fromObj = function (jsObj) {
 	if (typeof jsObj.state == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName state, got: " + Object.keys(jsObj)[0]);
 	}
 
-	var state = new ns.StateType();
+	var state = new ns.State();
 	jsObj = jsObj.state;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return state;
@@ -1166,17 +1166,22 @@ StateType.fromObj = function (jsObj) {
 	return state;
 };
 
-ns.StateType = StateType;
+ns.State = State;
+/**
+ * @class StateType
+ * @deprecated Replaced by State
+ */
+ns.StateType = State;
 // ------- END STATE -------
 
 // ------- CLONE -------
 /**
  * Represents the <code>&lt;clone&gt;</code> element.
- * @class CloneType
+ * @class Clone
  * @param {Object} params
  * @param {string=} params.label
  */
-var CloneType = function (params) {
+var Clone = function (params) {
 	var params = checkParams(params, ['label']);
 	this.label = params.label;
 };
@@ -1184,14 +1189,14 @@ var CloneType = function (params) {
 /**
  * @param {Label} label
  */
-CloneType.prototype.setLabel = function (label) {
+Clone.prototype.setLabel = function (label) {
 	this.label = label;
 };
 
 /**
  * @return {Object} - xml2js formatted object
  */
-CloneType.prototype.buildJsObj = function () {
+Clone.prototype.buildJsObj = function () {
 	var cloneObj = {};
 
 	// children
@@ -1204,18 +1209,18 @@ CloneType.prototype.buildJsObj = function () {
 /**
  * @return {string}
  */
-CloneType.prototype.toXML = function () {
+Clone.prototype.toXML = function () {
 	return utils.buildString({clone: this.buildJsObj()})
 };
 
 /**
  * @param {String} string
- * @return {CloneType}
+ * @return {Clone}
  */
-CloneType.fromXML = function (string) {
+Clone.fromXML = function (string) {
 	var clone;
 	function fn (err, result) {
-        clone = CloneType.fromObj(result);
+        clone = Clone.fromObj(result);
     };
     utils.parseString(string, fn);
     return clone;
@@ -1223,14 +1228,14 @@ CloneType.fromXML = function (string) {
 
 /**
  * @param {Object} jsObj - xml2js formatted object
- * @return {CloneType}
+ * @return {Clone}
  */
-CloneType.fromObj = function (jsObj) {
+Clone.fromObj = function (jsObj) {
 	if (typeof jsObj.clone == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName clone, got: " + Object.keys(jsObj)[0]);
 	}
 
-	var clone = new ns.CloneType();
+	var clone = new ns.Clone();
 	jsObj = jsObj.clone;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return clone;
@@ -1244,17 +1249,22 @@ CloneType.fromObj = function (jsObj) {
 	return clone;
 };
 
-ns.CloneType = CloneType;
+ns.Clone = Clone;
+/**
+ * @class CloneType
+ * @deprecated Replaced by Clone
+ */
+ns.CloneType = Clone;
 // ------- END CLONE -------
 
 // ------- ENTITYTYPE -------
 /**
  * Represents the <code>&lt;entity&gt;</code> element.
- * @class EntityType
+ * @class Entity
  * @param {Object} params
  * @param {string=} params.name
  */
-var EntityType = function (params) {
+var Entity = function (params) {
 	var params = checkParams(params, ['name']);
 	this.name = params.name;
 };
@@ -1262,7 +1272,7 @@ var EntityType = function (params) {
 /**
  * @return {Object} - xml2js formatted object
  */
-EntityType.prototype.buildJsObj = function () {
+Entity.prototype.buildJsObj = function () {
 	var entityObj = {};
 
 	// attributes
@@ -1277,18 +1287,18 @@ EntityType.prototype.buildJsObj = function () {
 /**
  * @return {string}
  */
-EntityType.prototype.toXML = function () {
+Entity.prototype.toXML = function () {
 	return utils.buildString({entity: this.buildJsObj()})
 };
 
 /**
  * @param {String} string
- * @return {EntityType}
+ * @return {Entity}
  */
-EntityType.fromXML = function (string) {
+Entity.fromXML = function (string) {
 	var entity;
 	function fn (err, result) {
-        entity = EntityType.fromObj(result);
+        entity = Entity.fromObj(result);
     };
     utils.parseString(string, fn);
     return entity;
@@ -1296,14 +1306,14 @@ EntityType.fromXML = function (string) {
 
 /**
  * @param {Object} jsObj - xml2js formatted object
- * @return {EntityType}
+ * @return {Entity}
  */
-EntityType.fromObj = function (jsObj) {
+Entity.fromObj = function (jsObj) {
 	if (typeof jsObj.entity == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName entity, got: " + Object.keys(jsObj)[0]);
 	}
 
-	var entity = new ns.EntityType();
+	var entity = new ns.Entity();
 	jsObj = jsObj.entity;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return entity;
@@ -1316,7 +1326,12 @@ EntityType.fromObj = function (jsObj) {
 	return entity;
 };
 
-ns.EntityType = EntityType;
+ns.Entity = Entity;
+/**
+ * @class EntityType
+ * @deprecated Replaced by Entity
+ */
+ns.EntityType = Entity;
 // ------- END ENTITYTYPE -------
 
 // ------- PORT -------
@@ -1418,9 +1433,9 @@ ns.Port = Port;
  * @param {string=} params.class_
  * @param {string=} params.source
  * @param {string=} params.target
- * @param {StartType=} params.start
- * @param {EndType=} params.end
- * @param {NextType=} params.nexts
+ * @param {Start=} params.start
+ * @param {End=} params.end
+ * @param {Next=} params.nexts
  * @param {Glyph[]=} params.glyphs The arc's cardinality. Possibility to have more than one glyph is left open.
  */
 var Arc = function (params) {
@@ -1441,21 +1456,21 @@ Arc.prototype = Object.create(ns.SBGNBase.prototype);
 Arc.prototype.constructor = ns.Arc;
 
 /**
- * @param {StartType} start
+ * @param {Start} start
  */
 Arc.prototype.setStart = function (start) {
 	this.start = start;
 };
 
 /**
- * @param {EndType} end
+ * @param {End} end
  */
 Arc.prototype.setEnd = function (end) {
 	this.end = end;
 };
 
 /**
- * @param {NextType} next
+ * @param {Next} next
  */
 Arc.prototype.addNext = function (next) {
 	this.nexts.push(next);
@@ -1561,18 +1576,18 @@ Arc.fromObj = function (jsObj) {
 
 	// children
 	if(jsObj.start) {
-		var start = ns.StartType.fromObj({start: jsObj.start[0]});
+		var start = ns.Start.fromObj({start: jsObj.start[0]});
 		arc.setStart(start);
 	}
 	if(jsObj.next) {
 		var nexts = jsObj.next;
 		for (var i=0; i < nexts.length; i++) {
-			var next = ns.NextType.fromObj({next: nexts[i]});
+			var next = ns.Next.fromObj({next: nexts[i]});
 			arc.addNext(next);
 		}
 	}
 	if(jsObj.end) {
-		var end = ns.EndType.fromObj({end: jsObj.end[0]});
+		var end = ns.End.fromObj({end: jsObj.end[0]});
 		arc.setEnd(end);
 	}
 	if(jsObj.glyph) {
@@ -1590,15 +1605,15 @@ Arc.fromObj = function (jsObj) {
 ns.Arc = Arc;
 // ------- END ARC -------
 
-// ------- STARTTYPE -------
+// ------- Start -------
 /**
  * Represents the <code>&lt;start&gt;</code> element.
- * @class StartType
+ * @class Start
  * @param {Object} params
  * @param {string|number=} params.x
  * @param {string|number=} params.y
  */
-var StartType = function (params) {
+var Start = function (params) {
 	var params = checkParams(params, ['x', 'y']);
 	this.x = parseFloat(params.x);
 	this.y = parseFloat(params.y);
@@ -1607,7 +1622,7 @@ var StartType = function (params) {
 /**
  * @return {Object} - xml2js formatted object
  */
-StartType.prototype.buildJsObj = function () {
+Start.prototype.buildJsObj = function () {
 	var startObj = {};
 
 	// attributes
@@ -1625,18 +1640,18 @@ StartType.prototype.buildJsObj = function () {
 /**
  * @return {string}
  */
-StartType.prototype.toXML = function () {
+Start.prototype.toXML = function () {
 	return utils.buildString({start: this.buildJsObj()})
 };
 
 /**
  * @param {String} string
- * @return {StartType}
+ * @return {Start}
  */
-StartType.fromXML = function (string) {
+Start.fromXML = function (string) {
 	var start;
 	function fn (err, result) {
-        start = StartType.fromObj(result);
+        start = Start.fromObj(result);
     };
     utils.parseString(string, fn);
     return start;
@@ -1644,14 +1659,14 @@ StartType.fromXML = function (string) {
 
 /**
  * @param {Object} jsObj - xml2js formatted object
- * @return {StartType}
+ * @return {Start}
  */
-StartType.fromObj = function (jsObj) {
+Start.fromObj = function (jsObj) {
 	if (typeof jsObj.start == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName start, got: " + Object.keys(jsObj)[0]);
 	}
 
-	var start = new ns.StartType();
+	var start = new ns.Start();
 	jsObj = jsObj.start;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return start;
@@ -1665,18 +1680,23 @@ StartType.fromObj = function (jsObj) {
 	return start;
 };
 
-ns.StartType = StartType;
-// ------- END STARTTYPE -------
+ns.Start = Start;
+/**
+ * @class StartType
+ * @deprecated Replaced by Start
+ */
+ns.StartType = Start;
+// ------- END Start -------
 
-// ------- ENDTYPE -------
+// ------- End -------
 /**
  * Represents the <code>&lt;end&gt;</code> element.
- * @class EndType
+ * @class End
  * @param {Object} params
  * @param {string|number=} params.x
  * @param {string|number=} params.y
  */
-var EndType = function (params) {
+var End = function (params) {
 	var params = checkParams(params, ['x', 'y']);
 	this.x = parseFloat(params.x);
 	this.y = parseFloat(params.y);
@@ -1685,7 +1705,7 @@ var EndType = function (params) {
 /**
  * @return {Object} - xml2js formatted object
  */
-EndType.prototype.buildJsObj = function () {
+End.prototype.buildJsObj = function () {
 	var endObj = {};
 
 	// attributes
@@ -1703,18 +1723,18 @@ EndType.prototype.buildJsObj = function () {
 /**
  * @return {string}
  */
-EndType.prototype.toXML = function () {
+End.prototype.toXML = function () {
 	return utils.buildString({end: this.buildJsObj()})
 };
 
 /**
  * @param {String} string
- * @return {EndType}
+ * @return {End}
  */
-EndType.fromXML = function (string) {
+End.fromXML = function (string) {
 	var end;
 	function fn (err, result) {
-        end = EndType.fromObj(result);
+        end = End.fromObj(result);
     };
     utils.parseString(string, fn);
     return end;
@@ -1722,14 +1742,14 @@ EndType.fromXML = function (string) {
 
 /**
  * @param {Object} jsObj - xml2js formatted object
- * @return {EndType}
+ * @return {End}
  */
-EndType.fromObj = function (jsObj) {
+End.fromObj = function (jsObj) {
 	if (typeof jsObj.end == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName end, got: " + Object.keys(jsObj)[0]);
 	}
 
-	var end = new ns.EndType();
+	var end = new ns.End();
 	jsObj = jsObj.end;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return end;
@@ -1743,18 +1763,23 @@ EndType.fromObj = function (jsObj) {
 	return end;
 };
 
-ns.EndType = EndType;
-// ------- END ENDTYPE -------
+ns.End = End;
+/**
+ * @class EndType
+ * @deprecated Replaced by End
+ */
+ns.EndType = End;
+// ------- END End -------
 
-// ------- NEXTTYPE -------
+// ------- Next -------
 /**
  * Represents the <code>&lt;next&gt;</code> element.
- * @class NextType
+ * @class Next
  * @param {Object} params
  * @param {string|number=} params.x
  * @param {string|number=} params.y
  */
-var NextType = function (params) {
+var Next = function (params) {
 	var params = checkParams(params, ['x', 'y']);
 	this.x = parseFloat(params.x);
 	this.y = parseFloat(params.y);
@@ -1763,7 +1788,7 @@ var NextType = function (params) {
 /**
  * @return {Object} - xml2js formatted object
  */
-NextType.prototype.buildJsObj = function () {
+Next.prototype.buildJsObj = function () {
 	var nextObj = {};
 
 	// attributes
@@ -1781,18 +1806,18 @@ NextType.prototype.buildJsObj = function () {
 /**
  * @return {string}
  */
-NextType.prototype.toXML = function () {
+Next.prototype.toXML = function () {
 	return utils.buildString({next: this.buildJsObj()})
 };
 
 /**
  * @param {String} string
- * @return {NextType}
+ * @return {Next}
  */
-NextType.fromXML = function (string) {
+Next.fromXML = function (string) {
 	var next;
 	function fn (err, result) {
-        next = NextType.fromObj(result);
+        next = Next.fromObj(result);
     };
     utils.parseString(string, fn);
     return next;
@@ -1800,14 +1825,14 @@ NextType.fromXML = function (string) {
 
 /**
  * @param {Object} jsObj - xml2js formatted object
- * @return {NextType}
+ * @return {Next}
  */
-NextType.fromObj = function (jsObj) {
+Next.fromObj = function (jsObj) {
 	if (typeof jsObj.next == 'undefined') {
 		throw new Error("Bad XML provided, expected tagName next, got: " + Object.keys(jsObj)[0]);
 	}
 
-	var next = new ns.NextType();
+	var next = new ns.Next();
 	jsObj = jsObj.next;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return next;
@@ -1821,8 +1846,13 @@ NextType.fromObj = function (jsObj) {
 	return next;
 };
 
-ns.NextType = NextType;
-// ------- END NEXTTYPE -------
+ns.Next = Next;
+/**
+ * @class NextType
+ * @deprecated Replaced by Next
+ */
+ns.NextType = Next;
+// ------- END Next -------
 
 // ------- POINT -------
 /**
