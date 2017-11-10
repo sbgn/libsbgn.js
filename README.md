@@ -1,11 +1,11 @@
 # libsbgn.js
 
 [![npm](https://img.shields.io/npm/v/libsbgn.js.svg)](https://www.npmjs.com/package/libsbgn.js)
-[![Build Status](https://travis-ci.org/eisbm/libsbgn.js.svg?branch=master)](https://travis-ci.org/eisbm/libsbgn.js)
+[![Build Status](https://travis-ci.org/sbgn/libsbgn.js.svg?branch=master)](https://travis-ci.org/sbgn/libsbgn.js)
 
 Documentation under construction.
 
-API doc is located [here](https://eisbm.github.io/libsbgn.js/).
+API doc is located [here](https://sbgn.github.io/libsbgn.js/).
 More detailed documentation can be found in the wiki.
 
 ## 1. Installation
