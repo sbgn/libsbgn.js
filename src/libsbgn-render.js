@@ -216,11 +216,19 @@ ns.ListOfColorDefinitions = ListOfColorDefinitions;
  * @param {string=} params.fill The element's background color
  * @param {string=} params.stroke Border color for glyphs, line color for arcs.
  * @param {string=} params.strokeWidth
+ * @param {string=} params.backgroundImage
+ * @param {string=} params.backgroundFit
+ * @param {string=} params.backgroundPosX
+ * @param {string=} params.backgroundPosY
+ * @param {string=} params.backgroundWidth
+ * @param {string=} params.backgroundHeight
+ * @param {string=} params.backgroundImageOpacity
  */
 var RenderGroup = function (params) {
 	// each of those are optional, so test if it is defined is mandatory
 	var params = checkParams(params, ['fontSize', 'fontFamily', 'fontWeight', 
-		'fontStyle', 'textAnchor', 'vtextAnchor', 'fill', 'id', 'stroke', 'strokeWidth']);
+		'fontStyle', 'textAnchor', 'vtextAnchor', 'fill', 'id', 'stroke', 'strokeWidth', 'backgroundImage',
+		'backgroundFit', 'backgroundPosX', 'backgroundPosY', 'backgroundWidth', 'backgroundHeight', 'backgroundImageOpacity']);
 	// specific to renderGroup
 	this.fontSize 		= params.fontSize;
 	this.fontFamily 	= params.fontFamily;
@@ -234,6 +242,13 @@ var RenderGroup = function (params) {
 	this.id 			= params.id;
 	this.stroke 		= params.stroke; // stroke color
 	this.strokeWidth 	= params.strokeWidth;
+	this.backgroundImage = params.backgroundImage;
+	this.backgroundFit = params.backgroundFit;
+	this.backgroundPosX = params.backgroundPosX;
+	this.backgroundPosY = params.backgroundPosY;
+	this.backgroundWidth = params.backgroundWidth;
+	this.backgroundHeight = params.backgroundHeight;
+	this.backgroundImageOpacity = params.backgroundImageOpacity;
 };
 
 /**
@@ -273,6 +288,27 @@ RenderGroup.prototype.buildJsObj = function () {
 	}
 	if(this.fill != null) {
 		attributes.fill = this.fill;
+	}
+	if(this.backgroundImage != null) {
+		attributes.backgroundImage = this.backgroundImage;
+	}
+	if(this.backgroundFit != null) {
+		attributes.backgroundFit = this.backgroundFit;
+	}
+	if(this.backgroundPosX != null) {
+		attributes.backgroundPosX = this.backgroundPosX;
+	}
+	if(this.backgroundPosY != null) {
+		attributes.backgroundPosY = this.backgroundPosY;
+	}
+	if(this.backgroundWidth != null) {
+		attributes.backgroundWidth = this.backgroundWidth;
+	}
+	if(this.backgroundHeight != null) {
+		attributes.backgroundHeight = this.backgroundHeight;
+	}
+	if(this.backgroundImageOpacity != null) {
+		attributes.backgroundImageOpacity = this.backgroundImageOpacity;
 	}
 	utils.addAttributes(renderGroupObj, attributes);
 	return renderGroupObj;
@@ -315,16 +351,23 @@ RenderGroup.fromObj = function (jsObj) {
 
 	if(jsObj.$) { // we have some attributes
 		var attributes = jsObj.$;
-		g.id 			= attributes.id || null;
-		g.fontSize 		= attributes.fontSize || null;
-		g.fontFamily 	= attributes.fontFamily || null;
-		g.fontWeight 	= attributes.fontWeight || null;
-		g.fontStyle 	= attributes.fontStyle || null;
-		g.textAnchor 	= attributes.textAnchor || null;
-		g.vtextAnchor 	= attributes.vtextAnchor || null;
-		g.stroke 		= attributes.stroke || null;
-		g.strokeWidth 	= attributes.strokeWidth || null;
-		g.fill 			= attributes.fill || null;
+		g.id 					 = attributes.id || null;
+		g.fontSize 				 = attributes.fontSize || null;
+		g.fontFamily 			 = attributes.fontFamily || null;
+		g.fontWeight 			 = attributes.fontWeight || null;
+		g.fontStyle 			 = attributes.fontStyle || null;
+		g.textAnchor 			 = attributes.textAnchor || null;
+		g.vtextAnchor 			 = attributes.vtextAnchor || null;
+		g.stroke 				 = attributes.stroke || null;
+		g.strokeWidth			 = attributes.strokeWidth || null;
+		g.fill 					 = attributes.fill || null;
+		g.backgroundImage 		 = attributes.backgroundImage || null;
+		g.backgroundFit 		 = attributes.backgroundFit || null;
+		g.backgroundPosX 		 = attributes.backgroundPosX || null;
+		g.backgroundPosY 		 = attributes.backgroundPosY || null;
+		g.backgroundWidth 		 = attributes.backgroundWidth || null;
+		g.backgroundHeight 		 = attributes.backgroundHeight || null;
+		g.backgroundImageOpacity = attributes.backgroundImageOpacity || null;
 	}
 	return g;
 };
@@ -565,6 +608,185 @@ ListOfStyles.fromObj = function (jsObj) {
 ns.ListOfStyles = ListOfStyles;
 // ------- END LISTOFSTYLES -------
 
+// ------- BACKGROUNDIMAGE -------
+/**
+ * Represents the <code>&lt;backgroundImage&gt;</code> element.
+ * @class
+ * @param {Object} params
+ * @param {string=} params.id
+ * @param {string=} params.value
+ */
+var BackgroundImage = function(params) {
+	var params = checkParams(params, ['id', 'value']);
+	this.id 	= params.id;
+	this.value 	= params.value;
+};
+
+/**
+ * @return {Object} - xml2js formatted object
+ */
+BackgroundImage.prototype.buildJsObj = function () {
+	var bgImgObj = {};
+
+	// attributes
+	var attributes = {};
+	if(this.id != null) {
+		attributes.id = this.id;
+	}
+	if(this.value != null) {
+		attributes.value = this.value;
+	}
+	utils.addAttributes(bgImgObj, attributes);
+	return bgImgObj;
+};
+
+/**
+ * @return {string}
+ */
+BackgroundImage.prototype.toXML = function () {
+	return utils.buildString({backgroundImage: this.buildJsObj()})
+};
+
+/**
+ * @param {String} string
+ * @return {BackgroundImage}
+ */
+BackgroundImage.fromXML = function (string) {
+	var backgroundImage;
+	function fn (err, result) {
+        backgroundImage = BackgroundImage.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return backgroundImage;
+};
+
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {BackgroundImage}
+ */
+BackgroundImage.fromObj = function (jsObj) {
+	if (typeof jsObj.backgroundImage == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName backgroundImage, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var backgroundImage = new ns.BackgroundImage();
+	jsObj = jsObj.backgroundImage;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return backgroundImage;
+	}
+
+	if(jsObj.$) { // we have some attributes
+		var attributes = jsObj.$;
+		backgroundImage.id = attributes.id || null;
+		backgroundImage.value = attributes.value || null;
+	}
+	return backgroundImage;
+};
+
+ns.BackgroundImage = BackgroundImage;
+// ------- END BACKGROUNDIMAGE -------
+
+// ------- LISTOFBACKGROUNDIMAGES -------
+/**
+ * Represents the <code>&lt;listOfBackgroundImages&gt;</code> element.
+ * @class
+ */
+var ListOfBackgroundImages = function () {
+	this.backgroundImages = [];
+	this.imageIndex = {};
+};
+
+/**
+ * @param {BackgroundImage} backgroundImage
+ */
+ListOfBackgroundImages.prototype.addBackgroundImage = function (backgroundImage) {
+	this.backgroundImages.push(backgroundImage);
+	this.imageIndex[backgroundImage.id] = backgroundImage.value;
+};
+
+/**
+ * Convenient method to get a background image value directly.
+ * @param {string} id
+ * @return {string}
+ */
+ListOfBackgroundImages.prototype.getBackgroundImageById = function (id) {
+	return this.imageIndex[id];
+};
+
+/**
+ * Convenient method to get all the background image values in the list.
+ * @return {string[]}
+ */
+ListOfBackgroundImages.prototype.getAllImages = function () {
+	return Object.values(this.imageIndex);
+};
+
+/**
+ * @return {Object} - xml2js formatted object
+ */
+ListOfBackgroundImages.prototype.buildJsObj = function () {
+	var listOfBgImagesObj = {};
+
+	for(var i=0; i < this.backgroundImages.length; i++) {
+		if (i==0) {
+			listOfBgImagesObj.backgroundImage = [];
+		}
+		listOfBgImagesObj.backgroundImage.push(this.backgroundImages[i].buildJsObj());
+	}
+
+	return listOfBgImagesObj;
+};
+
+/**
+ * @return {string}
+ */
+ListOfBackgroundImages.prototype.toXML = function () {
+	return utils.buildString({listOfBackgroundImages: this.buildJsObj()})
+};
+
+/**
+ * @param {String} string
+ * @return {ListOfBackgroundImages}
+ */
+ListOfBackgroundImages.fromXML = function (string) {
+	var listOfBackgroundImages;
+	function fn (err, result) {
+        listOfBackgroundImages = ListOfBackgroundImages.fromObj(result);
+    };
+    utils.parseString(string, fn);
+    return listOfBackgroundImages;
+};
+
+/**
+ * @param {Object} jsObj - xml2js formatted object
+ * @return {ListOfBackgroundImages}
+ */
+ListOfBackgroundImages.fromObj = function (jsObj) {
+	if (typeof jsObj.listOfBackgroundImages == 'undefined') {
+		throw new Error("Bad XML provided, expected tagName listOfBackgroundImages, got: " + Object.keys(jsObj)[0]);
+	}
+
+	var listOfBackgroundImages = new ns.ListOfBackgroundImages();
+	jsObj = jsObj.listOfBackgroundImages;
+	if(typeof jsObj != 'object') { // nothing inside, empty xml
+		return listOfBackgroundImages;
+	}
+
+	// children
+	if(jsObj.backgroundImage) {
+		var backgroundImages = jsObj.backgroundImage;
+		for (var i=0; i < backgroundImages.length; i++) {
+			var backgroundImage = ns.BackgroundImage.fromObj({backgroundImage: backgroundImages[i]});
+			listOfBackgroundImages.addBackgroundImage(backgroundImage);
+		}
+	}
+
+	return listOfBackgroundImages;
+};
+
+ns.ListOfBackgroundImages = ListOfBackgroundImages;
+// ------- END LISTOFBACKGROUNDIMAGES -------
+
 // ------- RENDERINFORMATION -------
 /**
  * Represents the <code>&lt;renderInformation&gt;</code> element.
@@ -577,10 +799,11 @@ ns.ListOfStyles = ListOfStyles;
  * @param {string=} params.backgroundColor
  * @param {ListOfColorDefinitions=} params.listOfColorDefinitions
  * @param {ListOfStyles=} params.listOfStyles
+ * @param {ListOfBackgroundImages=} params.listOfBackgroundImages
  */
 var RenderInformation = function (params) {
 	var params = checkParams(params, ['id', 'name', 'programName', 
-		'programVersion', 'backgroundColor', 'listOfColorDefinitions', 'listOfStyles']);
+		'programVersion', 'backgroundColor', 'listOfColorDefinitions', 'listOfStyles', 'listOfBackgroundImages']);
 	this.id 					= params.id; // required, rest is optional
 	this.name 					= params.name;
 	this.programName 			= params.programName;
@@ -588,6 +811,7 @@ var RenderInformation = function (params) {
 	this.backgroundColor 		= params.backgroundColor;
 	this.listOfColorDefinitions = params.listOfColorDefinitions;
 	this.listOfStyles 			= params.listOfStyles;
+	this.listOfBackgroundImages = params.listOfBackgroundImages;
 };
 
 /**
@@ -602,6 +826,13 @@ RenderInformation.prototype.setListOfColorDefinitions = function(listOfColorDefi
  */
 RenderInformation.prototype.setListOfStyles = function(listOfStyles) {
 	this.listOfStyles = listOfStyles;
+};
+
+/**
+ * @param {ListOfBackgroundImages} listOfBackgroundImages
+ */
+RenderInformation.prototype.setListOfBackgroundImages = function(listOfBackgroundImages) {
+	this.listOfBackgroundImages = listOfBackgroundImages;
 };
 
 /**
@@ -633,6 +864,9 @@ RenderInformation.prototype.buildJsObj = function () {
 	// children
 	if(this.listOfColorDefinitions != null) {
 		renderInformationObj.listOfColorDefinitions =  this.listOfColorDefinitions.buildJsObj();
+	}
+	if(this.listOfBackgroundImages != null) {
+		renderInformationObj.listOfBackgroundImages =  this.listOfBackgroundImages.buildJsObj();
 	}
 	if(this.listOfStyles != null) {
 		renderInformationObj.listOfStyles =  this.listOfStyles.buildJsObj();
@@ -692,6 +926,10 @@ RenderInformation.fromObj = function (jsObj) {
 	if(jsObj.listOfStyles) {
 		var listOfStyles = ns.ListOfStyles.fromObj({listOfStyles: jsObj.listOfStyles[0]});
 		renderInformation.setListOfStyles(listOfStyles);
+	}
+	if(jsObj.listOfBackgroundImages) {
+		var listOfBackgroundImages = ns.ListOfBackgroundImages.fromObj({listOfBackgroundImages: jsObj.listOfBackgroundImages[0]});
+		renderInformation.setListOfBackgroundImages(listOfBackgroundImages);
 	}
 
 	return renderInformation;
