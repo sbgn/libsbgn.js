@@ -211,6 +211,7 @@ ns.ListOfColorDefinitions = ListOfColorDefinitions;
  * @param {string=} params.fontFamily
  * @param {string=} params.fontWeight
  * @param {string=} params.fontStyle
+ * @param {string=} params.fontColor
  * @param {string=} params.textAnchor
  * @param {string=} params.vtextAnchor
  * @param {string=} params.fill The element's background color
@@ -226,14 +227,15 @@ ns.ListOfColorDefinitions = ListOfColorDefinitions;
  */
 var RenderGroup = function (params) {
 	// each of those are optional, so test if it is defined is mandatory
-	var params = checkParams(params, ['fontSize', 'fontFamily', 'fontWeight', 
-		'fontStyle', 'textAnchor', 'vtextAnchor', 'fill', 'id', 'stroke', 'strokeWidth', 'backgroundImage',
+	var params = checkParams(params, ['fontSize', 'fontFamily', 'fontWeight',
+		'fontStyle', 'fontColor', 'textAnchor', 'vtextAnchor', 'fill', 'id', 'stroke', 'strokeWidth', 'backgroundImage',
 		'backgroundFit', 'backgroundPosX', 'backgroundPosY', 'backgroundWidth', 'backgroundHeight', 'backgroundImageOpacity']);
 	// specific to renderGroup
 	this.fontSize 		= params.fontSize;
 	this.fontFamily 	= params.fontFamily;
 	this.fontWeight 	= params.fontWeight;
 	this.fontStyle 		= params.fontStyle;
+	this.fontColor		= params.fontColor;
 	this.textAnchor 	= params.textAnchor; // probably useless
 	this.vtextAnchor 	= params.vtextAnchor; // probably useless
 	// from GraphicalPrimitive2D
@@ -273,6 +275,9 @@ RenderGroup.prototype.buildJsObj = function () {
 	}
 	if(this.fontStyle != null) {
 		attributes.fontStyle = this.fontStyle;
+	}
+	if (this.fontColor != null) {
+		attributes.fontColor = this.fontColor;
 	}
 	if(this.textAnchor != null) {
 		attributes.textAnchor = this.textAnchor;
@@ -356,6 +361,7 @@ RenderGroup.fromObj = function (jsObj) {
 		g.fontFamily 			 = attributes.fontFamily || null;
 		g.fontWeight 			 = attributes.fontWeight || null;
 		g.fontStyle 			 = attributes.fontStyle || null;
+		g.fontColor				 = attributes.fontColor || null;
 		g.textAnchor 			 = attributes.textAnchor || null;
 		g.vtextAnchor 			 = attributes.vtextAnchor || null;
 		g.stroke 				 = attributes.stroke || null;
