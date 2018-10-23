@@ -39,8 +39,6 @@
     "file-system": "2.2.2",
     "libxslt": "0.7.0",
     "n3": "0.11.1",
-    "node": "^10.7.0",
-    "node-gyp": "3.6.2",
     "rdflib": "git+https://github.com/royludo/rdflib.js.git",
     "replaceall": "0.1.6",
     "util": "0.11.0",
