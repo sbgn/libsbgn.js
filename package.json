@@ -37,7 +37,7 @@
     "bluebird": "3.5.1",
     "commander": "^2.15.1",
     "file-system": "2.2.2",
-    "libxslt": "0.4.0",
+    "libxslt": "0.5.4",
     "n3": "0.11.1",
     "rdflib": "git+https://github.com/royludo/rdflib.js.git",
     "replaceall": "0.1.6",
