@@ -1,10 +1,10 @@
-var schValidator = {};
+var ns = {};
 var fs = require('file-system');
 var libxslt = require('libxslt');
 var replaceall = require("replaceall");
 var parser = require("xml2js");
 var Issue =  require('./Issue').Issue;
-schValidator.isValid = function(file) {
+ns.isValid = function(file) {
 	try {
 		var isoContent=fs.readFileSync('template.xslt', 'utf8');
 		var stylesheet2 =libxslt.parse(isoContent);
@@ -33,4 +33,4 @@ schValidator.isValid = function(file) {
 	}	
 }
 
-module.exports = schValidator;
+module.exports = ns;
