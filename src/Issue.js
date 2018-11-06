@@ -1,3 +1,4 @@
+var ns = {};
 var Issue = function Issues() {
   this.text = {};
   this.pattern = {};
@@ -21,4 +22,5 @@ Issue.prototype.setRole = function(role) {
 Issue.prototype.getPattern = function() {
   return this.role;
 };
-exports.Issue = Issue;
+ns.Issue = Issue;
+module.exports = ns;
