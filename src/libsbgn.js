@@ -1457,7 +1457,7 @@ var Arc = function (params) {
 	this.start 	= params.start;
 	this.end 	= params.end;
 	this.nexts 	= params.nexts || [];
-	this.glyphs = params.glyphs || [];
+	this.glyphs = params.glyphs || [];
 };
 
 Arc.prototype = Object.create(ns.SBGNBase.prototype);
@@ -2166,4 +2166,6 @@ ns.Arcgroup = Arcgroup;
 
 ns.render = renderExt;
 ns.annot = annotExt;
+ns.schematronValidator = schematronValidator;
 module.exports = ns;
+
