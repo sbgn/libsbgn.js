@@ -8,7 +8,7 @@ var renderExt = require('./libsbgn-render');
 var annotExt = require('./libsbgn-annotations');
 var xml2js = require('xml2js');
 var utils = require('./utilities');
-var schematronValidator = require('./SchematronValidator');
+var schematronValidator = require('./schematronValidator');
 var checkParams = utils.checkParams;
 
 var ns = {}; // namespace that encapsulates all exportable features
