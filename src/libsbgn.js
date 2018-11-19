@@ -138,7 +138,7 @@ Sbgn.prototype.toXML = function () {
  * @return {Issue[]}
  */
 Sbgn.doSchematronValidation = function (file) {
-   return schematronValidator.isValid(file);
+   return schematronValidator.SchematronValidation.isValid(file);
 };
 
 /**

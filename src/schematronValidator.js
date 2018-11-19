@@ -4,7 +4,10 @@ var libxslt = require('libxslt');
 var replaceall = require("replaceall");
 var parser = require("xml2js");
 var Issue =  require('./Issue').Issue;
-ns.isValid = function(file) {
+var SchematronValidation = function(file) {
+	this.file 	= file;
+};
+SchematronValidation.isValid = function(file) {
 	try {
 		var isoContent=fs.readFileSync('template.xslt', 'utf8');
 		var stylesheet2 =libxslt.parse(isoContent);
@@ -32,5 +35,5 @@ ns.isValid = function(file) {
 		return false;
 	}	
 }
-
+ns.SchematronValidation = SchematronValidation;
 module.exports = ns;
