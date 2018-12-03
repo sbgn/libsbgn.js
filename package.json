@@ -36,7 +36,7 @@
   "dependencies": {
     "file-system": "2.2.2",
     "n3": "0.11.1",
-    "rdflib": "git+https://github.com/royludo/rdflib.js.git"
+    "rdflib": "git+https://github.com/royludo/rdflib.js.git",
     "xml2js": "0.4.19"
 
   }
