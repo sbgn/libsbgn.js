@@ -1,12 +1,12 @@
 var ns = {};
-var fs = require('file-system');
+var fs = require('fs');
 var Issue =  require('./Issue').Issue;
 var SchematronValidation = function(file) {
 	this.file 	= file;
 };
 SchematronValidation.isValid = function(file) {
 	try {
-		var isoContent=fs.readFileSync('template.xslt', 'utf8');
+		var isoContent=fs.readFileSync('template.xslt', {encoding: 'utf8'};
 		var xsltProcessor = new XSLTProcessor();
 		xsltProcessor.importStylesheet(isoContent);
 		var ownerDocument = document.implementation.createDocument("", "", null);
