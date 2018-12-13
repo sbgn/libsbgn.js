@@ -6,7 +6,7 @@ var SchematronValidation = function(file) {
 };
 SchematronValidation.isValid = function(file) {
 	try {
-		var isoContent=fs.readFileSync('template.xslt', {encoding: 'utf8'};
+		var isoContent=fs.readFileSync('template.xslt', {encoding: 'utf8'});
 		var xsltProcessor = new XSLTProcessor();
 		xsltProcessor.importStylesheet(isoContent);
 		var ownerDocument = document.implementation.createDocument("", "", null);
