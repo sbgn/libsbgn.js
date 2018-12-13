@@ -6,7 +6,18 @@ var SchematronValidation = function(file) {
 };
 SchematronValidation.isValid = function(file) {
 	try {
-  		var isoContent= getFile();
+		if (window.XMLHttpRequest)
+		{// code for IE7+, Firefox, Chrome, Opera, Safari
+    			xmlhttp=new XMLHttpRequest();
+		}
+		else
+		{// code for IE6, IE5
+   			 xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.open("template.xslt",false);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.responseText;
+  		var isoContent= xmlDoc;
 		var xsltProcessor = new XSLTProcessor();
 		xsltProcessor.importStylesheet(isoContent);
 		var ownerDocument = document.implementation.createDocument("", "", null);
@@ -31,15 +42,5 @@ SchematronValidation.isValid = function(file) {
 		return false;
 	}	
 }
-function getFile() {
-		var xsdString;
-		try {
-			xsdString = fs.readFileSync('template.xslt', {encoding: 'utf8'});
-		}
-		catch (err) {
-			throw err;
-		}
-	        return xsdString;
-	}
 ns.SchematronValidation = SchematronValidation;
 module.exports = ns;
