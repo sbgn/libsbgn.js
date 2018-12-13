@@ -6,7 +6,11 @@ var SchematronValidation = function(file) {
 };
 SchematronValidation.isValid = function(file) {
 	try {
-		var isoContent=fs.readFileSync('template.xslt', {encoding: 'utf8'});
+		var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+		xmlDoc.async="false";
+  		xmlDoc.onreadystatechange=verify;
+  		xmlDoc.load('template.xslt');
+  		var isoContent=xmlDoc.documentElement;
 		var xsltProcessor = new XSLTProcessor();
 		xsltProcessor.importStylesheet(isoContent);
 		var ownerDocument = document.implementation.createDocument("", "", null);
