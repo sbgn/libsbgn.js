@@ -6,11 +6,7 @@ var SchematronValidation = function(file) {
 };
 SchematronValidation.isValid = function(file) {
 	try {
-		var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-		xmlDoc.async="false";
-  		xmlDoc.onreadystatechange=verify;
-  		xmlDoc.load('template.xslt');
-  		var isoContent=xmlDoc.documentElement;
+  		var isoContent= getFile();
 		var xsltProcessor = new XSLTProcessor();
 		xsltProcessor.importStylesheet(isoContent);
 		var ownerDocument = document.implementation.createDocument("", "", null);
@@ -35,5 +31,15 @@ SchematronValidation.isValid = function(file) {
 		return false;
 	}	
 }
+function getFile() {
+		var xsdString;
+		try {
+			xsdString = fs.readFileSync('template.xslt', {encoding: 'utf8'});
+		}
+		catch (err) {
+			throw err;
+		}
+	        return xsdString;
+	}
 ns.SchematronValidation = SchematronValidation;
 module.exports = ns;
