@@ -1,36 +1,44 @@
 var ns = {};
 var fs = require('fs');
+var xml2js = require('xml2js');
 var Issue =  require('./Issue').Issue;
 var SchematronValidation = function(file) {
 	this.file 	= file;
 };
 SchematronValidation.isValid = function(file) {
 	try {
-		if (window.XMLHttpRequest)
-		{// code for IE7+, Firefox, Chrome, Opera, Safari
-    			xmlhttp=new XMLHttpRequest();
-		}
-		else
-		{// code for IE6, IE5
-   			 xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.open("template.xslt",false);
-		xmlhttp.send();
-		xmlDoc=xmlhttp.responseText;
-  		var isoContent= xmlDoc;
+  		var isoContent= loadXMLDoc("node_modules/libsbgn.js/src/template.xslt");
+		var xml = new DOMParser().parseFromString(file, "text/xml");
 		var xsltProcessor = new XSLTProcessor();
-		xsltProcessor.importStylesheet(isoContent);
-		var ownerDocument = document.implementation.createDocument("", "", null);
-	  	var result = xsltProcessor.transformToFragment(xmlDoc, ownerDocument);
+	        var result ;
+		if (window.ActiveXObject || xhttp.responseType == "msxml-document")
+ 		 {
+  			result = xml.transformNode(xsl);
+  		}
+		// code for Chrome, Firefox, Opera, etc.
+		else if (document.implementation && document.implementation.createDocument)
+ 		 {
+ 			 xsltProcessor = new XSLTProcessor();
+  		         xsltProcessor.importStylesheet(isoContent);
+ 			 result = xsltProcessor.transformToFragment(xml, document);
+  		}
+		var tmp = document.createElement("div");
+		tmp.appendChild(result);
+		result = tmp.innerHTML; 
+		var parseString = xml2js.parseString;
+		var parsedResult;
+		parseString(result, function (err, data) {
+    			parsedResult = data;
+		});
 		var errors = [];
-		if(result["svrl:schematron-output"]["svrl:failed-assert"] == undefined)
+		if(parsedResult["svrl:schematron-output"]["svrl:failed-assert"] == undefined)
 			return errors;
 		var errCount= resultDocument2["svrl:schematron-output"]["svrl:failed-assert"].length;
 		for(var i=0;i<errCount;i++){
 		   var error = new Issue();
-		   error.setText(result["svrl:schematron-output"]["svrl:failed-assert"][i]["svrl:text"]);
-		   error.setPattern(result["svrl:schematron-output"]["svrl:failed-assert"][i]["$"]["id"]); 
-		   error.setRole(result["svrl:schematron-output"]["svrl:failed-assert"][i]["svrl:diagnostic-reference"][0]["_"]);	
+		   error.setText(parsedResult["svrl:schematron-output"]["svrl:failed-assert"][i]["svrl:text"]);
+		   error.setPattern(parsedResult["svrl:schematron-output"]["svrl:failed-assert"][i]["$"]["id"]); 
+		   error.setRole(parsedResult["svrl:schematron-output"]["svrl:failed-assert"][i]["svrl:diagnostic-reference"][0]["_"]);	
 		   errors.push(error);	 			
 		}
 					
@@ -41,6 +49,21 @@ SchematronValidation.isValid = function(file) {
 		console.log(e);
 		return false;
 	}	
+}
+function loadXMLDoc(filename)
+{
+if (window.ActiveXObject)
+  {
+  xhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  }
+else 
+  {
+  xhttp = new XMLHttpRequest();
+  }
+xhttp.open("GET", filename, false);
+try {xhttp.responseType = "msxml-document"} catch(err) {} // Helping IE11
+xhttp.send("");
+return xhttp.responseXML;
 }
 ns.SchematronValidation = SchematronValidation;
 module.exports = ns;
