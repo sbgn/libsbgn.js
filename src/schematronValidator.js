@@ -1,5 +1,5 @@
 var ns = {};
-var fs = require('fs');
+var fs = require('file-system');
 var xml2js = require('xml2js');
 var Issue =  require('./Issue').Issue;
 var libxslt = require('libxslt');

@@ -37,7 +37,8 @@
     "n3": "0.11.1",
     "rdflib": "git+https://github.com/royludo/rdflib.js.git",
     "xml2js": "0.4.19",
-    "libxslt" : "0.7.0"
+    "libxslt" : "0.7.0",
+    "file-system" : "2.2.2"
 
   }
 }
