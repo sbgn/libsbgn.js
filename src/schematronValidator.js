@@ -8,7 +8,7 @@ SchematronValidation.isValid = function(file) {
  		 $.ajax({
 	      type: 'post',
 	      url: "/schematronValidator/isValid",
-	      port : '8081'
+	      port : '8081',
 	      data: {file: file},
 	      success: function(data){
 		return data;
