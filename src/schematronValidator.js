@@ -1,14 +1,11 @@
 var ns = {};
 var xml2js = require('xml2js');
-var SchematronValidation = function(file) {
-	this.file 	= file;
-};
-SchematronValidation.isValid = function(file) {
+ns.doValidation = function(file) {
     var errors = []; 
 	try {
  		 $.ajax({
 	      type: 'post',
-	      url: "http://localhost:8081/schematronValidator/isValid",
+	      url: "http://localhost:8081/schematronValidator/doValidation",
 	      data: {file: file},
               async : false,
 	      success: function(data){
@@ -25,5 +22,4 @@ SchematronValidation.isValid = function(file) {
 		return null;
 	}	
 }
-ns.SchematronValidation = SchematronValidation;
 module.exports = ns;
