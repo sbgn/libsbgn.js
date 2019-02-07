@@ -83,11 +83,18 @@ xmlString contains the serialized raw XML, without any newline or indentation. A
 		<arc id="arc1" class="consumption" source="glyph1" target="process1">
 			<start x="0" y="0"/>
 			<end x="10" y="0"/>
-		</arc>
+		</arc>schematronValidator.doValidation(file);
 		<arc id="arc2" class="production" source="process1" target="glyph2">
 			<start x="10" y="0"/>
 			<end x="20" y="0"/>
 		</arc>
 	</map>
 </sbgn>
+
+## Schematron Validation Example 
+
 ```
+var libsbgn = require('libsbgn.js');
+var fs = require('file-system');
+var file=fs.readFileSync('path-of-validated-file', 'utf8');
+var errors = libsbgn.Sbgn.doValidation(file);
