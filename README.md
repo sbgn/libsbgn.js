@@ -93,7 +93,7 @@ xmlString contains the serialized raw XML, without any newline or indentation. A
 ```
 ## 3.Schematron Validation Example 
 
-```
+```javascript
 var libsbgn = require('libsbgn.js');
 
 var fs = require('file-system');
