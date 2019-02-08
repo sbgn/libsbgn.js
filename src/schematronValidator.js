@@ -30,7 +30,7 @@ ns.doValidation = function(file) {
 		var errors = [];
 		if(parsedResult["svrl:schematron-output"]["svrl:failed-assert"] == undefined)
 			return errors;
-		var errCount= resultDocument2["svrl:schematron-output"]["svrl:failed-assert"].length;
+		var errCount= parsedResult["svrl:schematron-output"]["svrl:failed-assert"].length;
 		for(var i=0;i<errCount;i++){
 		   var error = new Issue();
 		   error.setText(parsedResult["svrl:schematron-output"]["svrl:failed-assert"][i]["svrl:text"]);
