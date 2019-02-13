@@ -791,9 +791,6 @@ ListOfBackgroundImages.fromObj = function (jsObj) {
 
 ns.ListOfBackgroundImages = ListOfBackgroundImages;
 // ------- END LISTOFBACKGROUNDIMAGES -------
-
-=======
->>>>>>> d5e3240db0ad3894a404a3720085548cf5d532aa
 // ------- RENDERINFORMATION -------
 /**
  * Represents the <code>&lt;renderInformation&gt;</code> element.
@@ -806,7 +803,6 @@ ns.ListOfBackgroundImages = ListOfBackgroundImages;
  * @param {string=} params.backgroundColor
  * @param {ListOfColorDefinitions=} params.listOfColorDefinitions
  * @param {ListOfStyles=} params.listOfStyles
-<<<<<<< HEAD
  * @param {ListOfBackgroundImages=} params.listOfBackgroundImages
  */
 var RenderInformation = function (params) {
