@@ -8,6 +8,7 @@ var renderExt = require('./libsbgn-render');
 var annotExt = require('./libsbgn-annotations');
 var xml2js = require('xml2js');
 var utils = require('./utilities');
+var schematronValidator = require('./schematronValidator');
 var checkParams = utils.checkParams;
 
 var ns = {}; // namespace that encapsulates all exportable features
@@ -133,6 +134,14 @@ Sbgn.prototype.toXML = function () {
 };
 
 /**
+ * @param {String} file
+ * @return {Issue[]}
+ */
+Sbgn.doValidation = function (file) {
+   return schematronValidator.doValidation(file);
+};
+
+/**
  * @param {String} string
  * @return {Sbgn}
  */
@@ -143,7 +152,6 @@ Sbgn.fromXML = function (string) {
     }
     utils.parseString(string, fn);
     return sbgn;
-
 };
 
 /**
@@ -2158,4 +2166,7 @@ ns.Arcgroup = Arcgroup;
 
 ns.render = renderExt;
 ns.annot = annotExt;
+ns.schematronValidator = schematronValidator;
 module.exports = ns;
+
+

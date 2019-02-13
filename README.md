@@ -91,3 +91,14 @@ xmlString contains the serialized raw XML, without any newline or indentation. A
 	</map>
 </sbgn>
 ```
+## 3.Schematron Validation Example 
+
+```javascript
+var libsbgn = require('libsbgn.js');
+
+var fs = require('file-system');
+
+var file=fs.readFileSync('path-of-validated-file', 'utf8');
+
+var errors = libsbgn.Sbgn.doValidation(file);
+
