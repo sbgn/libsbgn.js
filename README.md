@@ -92,7 +92,7 @@ xmlString contains the serialized raw XML, without any newline or indentation. A
 </sbgn>
 ```
 ## 3.Schematron Validation Example 
-
+Please place templatelibsbgn.xslt file your project structure
 ```javascript
 var libsbgn = require('libsbgn.js');
 

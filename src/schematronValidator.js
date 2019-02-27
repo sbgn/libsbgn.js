@@ -3,7 +3,7 @@ var xml2js = require('xml2js');
 var Issue =  require('./Issue').Issue;
 ns.doValidation = function(file) {
  	try {
-  		var isoContent= loadXMLDoc("node_modules/libsbgn.js/src/template.xslt");
+  		var isoContent= loadXMLDoc("templatelibsbgn.xslt");
 		file = file.replace('libsbgn/0.3', 'libsbgn/0.2');
 		var xml = new DOMParser().parseFromString(file, "text/xml");
 		var xsltProcessor = new XSLTProcessor();
