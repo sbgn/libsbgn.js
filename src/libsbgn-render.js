@@ -224,12 +224,13 @@ ns.ListOfColorDefinitions = ListOfColorDefinitions;
  * @param {string=} params.backgroundWidth
  * @param {string=} params.backgroundHeight
  * @param {string=} params.backgroundImageOpacity
+ * @param {string=} params.backgroundOpacity
  */
 var RenderGroup = function (params) {
 	// each of those are optional, so test if it is defined is mandatory
 	var params = checkParams(params, ['fontSize', 'fontFamily', 'fontWeight',
 		'fontStyle', 'fontColor', 'textAnchor', 'vtextAnchor', 'fill', 'id', 'stroke', 'strokeWidth', 'backgroundImage',
-		'backgroundFit', 'backgroundPosX', 'backgroundPosY', 'backgroundWidth', 'backgroundHeight', 'backgroundImageOpacity']);
+		'backgroundFit', 'backgroundPosX', 'backgroundPosY', 'backgroundWidth', 'backgroundHeight', 'backgroundImageOpacity','backgroundOpacity' ]);
 	// specific to renderGroup
 	this.fontSize 		= params.fontSize;
 	this.fontFamily 	= params.fontFamily;
@@ -251,6 +252,7 @@ var RenderGroup = function (params) {
 	this.backgroundWidth = params.backgroundWidth;
 	this.backgroundHeight = params.backgroundHeight;
 	this.backgroundImageOpacity = params.backgroundImageOpacity;
+	this.backgroundOpacity = params.backgroundOpacity;
 };
 
 /**
@@ -315,6 +317,9 @@ RenderGroup.prototype.buildJsObj = function () {
 	if(this.backgroundImageOpacity != null) {
 		attributes.backgroundImageOpacity = this.backgroundImageOpacity;
 	}
+	if(this.backgroundOpacity != null) {
+		attributes.backgroundOpacity = this.backgroundOpacity;
+	}
 	utils.addAttributes(renderGroupObj, attributes);
 	return renderGroupObj;
 };
@@ -374,6 +379,7 @@ RenderGroup.fromObj = function (jsObj) {
 		g.backgroundWidth 		 = attributes.backgroundWidth || null;
 		g.backgroundHeight 		 = attributes.backgroundHeight || null;
 		g.backgroundImageOpacity = attributes.backgroundImageOpacity || null;
+		g.backgroundOpacity = attributes.backgroundOpacity || null;
 	}
 	return g;
 };
@@ -613,7 +619,6 @@ ListOfStyles.fromObj = function (jsObj) {
 
 ns.ListOfStyles = ListOfStyles;
 // ------- END LISTOFSTYLES -------
-
 // ------- BACKGROUNDIMAGE -------
 /**
  * Represents the <code>&lt;backgroundImage&gt;</code> element.
@@ -792,7 +797,6 @@ ListOfBackgroundImages.fromObj = function (jsObj) {
 
 ns.ListOfBackgroundImages = ListOfBackgroundImages;
 // ------- END LISTOFBACKGROUNDIMAGES -------
-
 // ------- RENDERINFORMATION -------
 /**
  * Represents the <code>&lt;renderInformation&gt;</code> element.
@@ -937,7 +941,6 @@ RenderInformation.fromObj = function (jsObj) {
 		var listOfBackgroundImages = ns.ListOfBackgroundImages.fromObj({listOfBackgroundImages: jsObj.listOfBackgroundImages[0]});
 		renderInformation.setListOfBackgroundImages(listOfBackgroundImages);
 	}
-
 	return renderInformation;
 };
 
