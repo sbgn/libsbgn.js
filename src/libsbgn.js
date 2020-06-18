@@ -526,7 +526,7 @@ Extension.fromObj = function (jsObj) {
 		var extJsObj = jsObj[extName];
 
 		//extension.add(extInstance);
-		if (extName == 'renderInformation') {
+		if (extName === 'renderInformation' || extName.endsWith(':renderInformation')) {
 			var renderInformation = renderExt.RenderInformation.fromObj({renderInformation: extJsObj[0]});
 			extension.add(renderInformation);
 		}

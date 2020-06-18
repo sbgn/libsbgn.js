@@ -359,4 +359,62 @@ describe('libsbgn-render', function() {
 			styles[0].renderGroup.fontSize.should.equal(14);
 		});
 	});
+  describe('different namespace', function () {
+    it('should parse attributes', function () {
+      var renderInfo = renderExt.RenderInformation.fromXML("<ns2:renderInformation " +
+        "ns2:id='a' ns2:name='name' ns2:programName='prog' " +
+        "ns2:programVersion='2.0.1a' ns2:backgroundColor='#FFFFFF'>" +
+        "</ns2:renderInformation>");
+      should.exist(renderInfo.id);
+      renderInfo.id.should.equal('a');
+      should.exist(renderInfo.name);
+      renderInfo.name.should.equal('name');
+      should.exist(renderInfo.programName);
+      renderInfo.programName.should.equal('prog');
+      should.exist(renderInfo.programVersion);
+      renderInfo.programVersion.should.equal('2.0.1a');
+      should.exist(renderInfo.backgroundColor);
+      renderInfo.backgroundColor.should.equal('#FFFFFF');
+    });
+    it('should parse listOfColorDefinitions', function () {
+      var xml =
+        "<ns2:renderInformation>" +
+        "<ns2:listOfColorDefinitions>" +
+        "<ns2:colorDefinition ns2:id='color_1' ns2:value='#ffffff7f' />" +
+        "<ns2:colorDefinition ns2:id='color_2' ns2:value='#555555' />" +
+        "</ns2:listOfColorDefinitions>" +
+        "</ns2:renderInformation>";
+      var renderInfo = renderExt.RenderInformation.fromXML(xml);
+
+      renderInfo.should.be.instanceOf(renderExt.RenderInformation);
+      renderInfo.listOfColorDefinitions.should.be.instanceOf(renderExt.ListOfColorDefinitions);
+
+      var listOfColors = renderInfo.listOfColorDefinitions;
+      listOfColors.colorDefinitions.should.have.lengthOf(2);
+      var c1 = listOfColors.colorDefinitions[0];
+      c1.should.be.instanceOf(renderExt.ColorDefinition);
+      c1.id.should.equal('color_1');
+      c1.value.should.equal('#ffffff7f');
+
+    });
+    it('should parse listOfStyles', function () {
+      var xml = "<ns2:renderInformation>" +
+        "<ns2:listOfStyles>" +
+        "<ns2:style ns2:id='xxx' ns2:idList='_82f19e9e-6aa2-42b3-8b5e-8cee17197085'>" +
+        "<ns2:g ns2:fontSize='14' ns2:fontFamily='Helvetica' ns2:fontWeight='normal' ns2:fontStyle='normal' ns2:strokeWidth='3.25' />" +
+        "</ns2:style>" +
+        "</ns2:listOfStyles>" +
+        "</ns2:renderInformation>";
+
+      var renderInfo = renderExt.RenderInformation.fromXML(xml);
+
+      var styles = renderInfo.listOfStyles.styles;
+      styles.should.have.lengthOf(1);
+      styles[0].should.be.instanceOf(renderExt.Style);
+      styles[0].id.should.equal('xxx');
+      styles[0].renderGroup.should.be.instanceOf(renderExt.RenderGroup);
+      styles[0].renderGroup.fontSize.should.equal(14);
+    });
+
+  });
 });
