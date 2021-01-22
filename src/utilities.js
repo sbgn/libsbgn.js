@@ -99,4 +99,34 @@ ns.buildString = function (obj) {
 	return xmlString_correctLabel;
 };
 
+/**
+ *  Returns child object from a map that correspond to the name. If attributes/node names are prefixed with namespace
+ *  this namespace is ignored. If such child does not exist null is returned.
+ *
+ * @param {Object} obj
+ * @param {string} childName
+ * @return {Object|null}
+ */
+ns.getChildByNameIgnoringNamespace = function (obj, childName) {
+  if (Array.isArray(obj)) {
+    for (var i = 0; i < obj.length; i++) {
+      var result = this.getChildByNameIgnoringNamespace(obj[i], childName);
+      if (result !== null) {
+        return result;
+      }
+    }
+  } else {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key === childName) {
+          return obj[key];
+        } else if (key.endsWith(":" + childName)) {
+          return obj[key];
+        }
+      }
+    }
+  }
+  return null;
+};
+
 module.exports = ns;

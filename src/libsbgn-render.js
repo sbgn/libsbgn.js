@@ -79,20 +79,22 @@ ColorDefinition.fromXML = function (string) {
  * @return {ColorDefinition}
  */
 ColorDefinition.fromObj = function (jsObj) {
-	if (typeof jsObj.colorDefinition == 'undefined') {
+	var colorDefinitionNode = utils.getChildByNameIgnoringNamespace(jsObj, "colorDefinition");
+
+	if (colorDefinitionNode === null) {
 		throw new Error("Bad XML provided, expected tagName colorDefinition, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var colorDefinition = new ns.ColorDefinition();
-	jsObj = jsObj.colorDefinition;
-	if(typeof jsObj != 'object') { // nothing inside, empty xml
+	jsObj = colorDefinitionNode;
+	if (typeof jsObj != 'object') { // nothing inside, empty xml
 		return colorDefinition;
 	}
 
-	if(jsObj.$) { // we have some attributes
+	if (jsObj.$) { // we have some attributes
 		var attributes = jsObj.$;
-		colorDefinition.id = attributes.id || null;
-		colorDefinition.value = attributes.value || null;
+		colorDefinition.id = utils.getChildByNameIgnoringNamespace(attributes, "id");;
+		colorDefinition.value = utils.getChildByNameIgnoringNamespace(attributes, "value");
 	}
 	return colorDefinition;
 };
@@ -176,19 +178,21 @@ ListOfColorDefinitions.fromXML = function (string) {
  * @return {ListOfColorDefinitions}
  */
 ListOfColorDefinitions.fromObj = function (jsObj) {
-	if (typeof jsObj.listOfColorDefinitions == 'undefined') {
+	var listOfColorDefinitionsNode = utils.getChildByNameIgnoringNamespace(jsObj, "listOfColorDefinitions");
+	if (listOfColorDefinitionsNode === null) {
 		throw new Error("Bad XML provided, expected tagName listOfColorDefinitions, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var listOfColorDefinitions = new ns.ListOfColorDefinitions();
-	jsObj = jsObj.listOfColorDefinitions;
-	if(typeof jsObj != 'object') { // nothing inside, empty xml
+	jsObj = listOfColorDefinitionsNode;
+	if (typeof jsObj != 'object') { // nothing inside, empty xml
 		return listOfColorDefinitions;
 	}
 
 	// children
-	if(jsObj.colorDefinition) {
-		var colorDefinitions = jsObj.colorDefinition;
+	var colorDefinitionNode = utils.getChildByNameIgnoringNamespace(jsObj, "colorDefinition");
+	if (colorDefinitionNode) {
+		var colorDefinitions = colorDefinitionNode;
 		for (var i=0; i < colorDefinitions.length; i++) {
 			var colorDefinition = ns.ColorDefinition.fromObj({colorDefinition: colorDefinitions[i]});
 			listOfColorDefinitions.addColorDefinition(colorDefinition);
@@ -349,37 +353,39 @@ RenderGroup.fromXML = function (string) {
  * @return {RenderGroup}
  */
 RenderGroup.fromObj = function (jsObj) {
-	if (typeof jsObj.g == 'undefined') {
+	var gNode = utils.getChildByNameIgnoringNamespace(jsObj, "g");
+	if (gNode === null) {
 		throw new Error("Bad XML provided, expected tagName g, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var g = new ns.RenderGroup();
-	jsObj = jsObj.g;
-	if(typeof jsObj != 'object') { // nothing inside, empty xml
+	jsObj = gNode;
+	if (typeof jsObj != 'object') { // nothing inside, empty xml
 		return g;
 	}
 
 	if(jsObj.$) { // we have some attributes
+		
 		var attributes = jsObj.$;
-		g.id 					 = attributes.id || null;
-		g.fontSize 				 = attributes.fontSize || null;
-		g.fontFamily 			 = attributes.fontFamily || null;
-		g.fontWeight 			 = attributes.fontWeight || null;
-		g.fontStyle 			 = attributes.fontStyle || null;
-		g.fontColor				 = attributes.fontColor || null;
-		g.textAnchor 			 = attributes.textAnchor || null;
-		g.vtextAnchor 			 = attributes.vtextAnchor || null;
-		g.stroke 				 = attributes.stroke || null;
-		g.strokeWidth			 = attributes.strokeWidth || null;
-		g.fill 					 = attributes.fill || null;
-		g.backgroundImage 		 = attributes.backgroundImage || null;
-		g.backgroundFit 		 = attributes.backgroundFit || null;
-		g.backgroundPosX 		 = attributes.backgroundPosX || null;
-		g.backgroundPosY 		 = attributes.backgroundPosY || null;
-		g.backgroundWidth 		 = attributes.backgroundWidth || null;
-		g.backgroundHeight 		 = attributes.backgroundHeight || null;
-		g.backgroundImageOpacity = attributes.backgroundImageOpacity || null;
-		g.backgroundOpacity = attributes.backgroundOpacity || null;
+		g.id = utils.getChildByNameIgnoringNamespace(attributes, "id");
+		g.fontSize = utils.getChildByNameIgnoringNamespace(attributes, "fontSize");
+		g.fontFamily = utils.getChildByNameIgnoringNamespace(attributes, "fontFamily");
+		g.fontWeight = utils.getChildByNameIgnoringNamespace(attributes, "fontWeight");
+		g.fontStyle = utils.getChildByNameIgnoringNamespace(attributes, "fontStyle");
+		g.fontColor = utils.getChildByNameIgnoringNamespace(attributes, "fontColor");
+		g.textAnchor = utils.getChildByNameIgnoringNamespace(attributes, "textAnchor");
+		g.vtextAnchor = utils.getChildByNameIgnoringNamespace(attributes, "vtextAnchor");
+		g.stroke = utils.getChildByNameIgnoringNamespace(attributes, "stroke");
+		g.strokeWidth = utils.getChildByNameIgnoringNamespace(attributes, "strokeWidth");
+		g.fill = utils.getChildByNameIgnoringNamespace(attributes, "fill");
+		g.backgroundImage = utils.getChildByNameIgnoringNamespace(attributes, "backgroundImage");
+		g.backgroundFit = utils.getChildByNameIgnoringNamespace(attributes, "backgroundFit");
+		g.backgroundPosX = utils.getChildByNameIgnoringNamespace(attributes, "backgroundPosX");
+		g.backgroundPosY = utils.getChildByNameIgnoringNamespace(attributes, "backgroundPosY");
+		g.backgroundWidth = utils.getChildByNameIgnoringNamespace(attributes, "backgroundWidth");
+		g.backgroundHeight = utils.getChildByNameIgnoringNamespace(attributes, "backgroundHeight");
+		g.backgroundImageOpacity = utils.getChildByNameIgnoringNamespace(attributes, "backgroundImageOpacity");
+		g.backgroundOpacity = utils.getChildByNameIgnoringNamespace(attributes, "backgroundOpacity");
 	}
 	return g;
 };
@@ -491,26 +497,28 @@ Style.fromXML = function (string) {
  * @return {Style}
  */
 Style.fromObj = function (jsObj) {
-	if (typeof jsObj.style == 'undefined') {
+	var styleNode = utils.getChildByNameIgnoringNamespace(jsObj, "style");
+	if (styleNode === null) {
 		throw new Error("Bad XML provided, expected tagName style, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var style = new ns.Style();
-	jsObj = jsObj.style;
-	if(typeof jsObj != 'object') { // nothing inside, empty xml
+	jsObj = styleNode;
+	if (typeof jsObj != 'object') { // nothing inside, empty xml
 		return style;
 	}
 
-	if(jsObj.$) { // we have some attributes
+	if (jsObj.$) { // we have some attributes
 		var attributes = jsObj.$;
-		style.id = attributes.id || null;
-		style.name = attributes.name || null;
-		style.idList = attributes.idList || null;
+		style.id = utils.getChildByNameIgnoringNamespace(attributes, "id");
+		style.name = utils.getChildByNameIgnoringNamespace(attributes, "name");
+		style.idList = utils.getChildByNameIgnoringNamespace(attributes, "idList");
 	}
 
 	// children
-	if(jsObj.g) {
-		var g = ns.RenderGroup.fromObj({g: jsObj.g[0]});
+	var gNode = utils.getChildByNameIgnoringNamespace(jsObj, "g");
+	if(gNode) {
+		var g = ns.RenderGroup.fromObj({g: gNode[0]});
 		style.setRenderGroup(g);
 	}
 
@@ -595,20 +603,21 @@ ListOfStyles.fromXML = function (string) {
  * @return {ListOfStyles}
  */
 ListOfStyles.fromObj = function (jsObj) {
-	if (typeof jsObj.listOfStyles == 'undefined') {
+	var listOfStylesNode = utils.getChildByNameIgnoringNamespace(jsObj, "listOfStyles");
+	if (listOfStylesNode === null) {
 		throw new Error("Bad XML provided, expected tagName listOfStyles, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var listOfStyles = new ns.ListOfStyles();
-	jsObj = jsObj.listOfStyles;
-	if(typeof jsObj != 'object') { // nothing inside, empty xml
+	jsObj = listOfStylesNode;
+	if (typeof jsObj != 'object') { // nothing inside, empty xml
 		return listOfStyles;
 	}
 
 	// children
-	if(jsObj.style) {
-		var styles = jsObj.style;
-		for (var i=0; i < styles.length; i++) {
+	var styles = utils.getChildByNameIgnoringNamespace(jsObj, "style");
+	if (styles) {
+		for (var i = 0; i < styles.length; i++) {
 			var style = ns.Style.fromObj({style: styles[i]});
 			listOfStyles.addStyle(style);
 		}
@@ -773,12 +782,13 @@ ListOfBackgroundImages.fromXML = function (string) {
  * @return {ListOfBackgroundImages}
  */
 ListOfBackgroundImages.fromObj = function (jsObj) {
-	if (typeof jsObj.listOfBackgroundImages == 'undefined') {
+	var listOfBackgroundImagesNode = utils.getChildByNameIgnoringNamespace(jsObj, "listOfBackgroundImages");
+	if (listOfBackgroundImagesNode === null) {
 		throw new Error("Bad XML provided, expected tagName listOfBackgroundImages, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var listOfBackgroundImages = new ns.ListOfBackgroundImages();
-	jsObj = jsObj.listOfBackgroundImages;
+	jsObj = listOfBackgroundImagesNode;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return listOfBackgroundImages;
 	}
@@ -812,7 +822,7 @@ ns.ListOfBackgroundImages = ListOfBackgroundImages;
  * @param {ListOfBackgroundImages=} params.listOfBackgroundImages
  */
 var RenderInformation = function (params) {
-	var params = checkParams(params, ['id', 'name', 'programName', 
+	var params = checkParams(params, ['id', 'name', 'programName',
 		'programVersion', 'backgroundColor', 'listOfColorDefinitions', 'listOfStyles', 'listOfBackgroundImages']);
 	this.id 					= params.id; // required, rest is optional
 	this.name 					= params.name;
@@ -909,36 +919,42 @@ RenderInformation.fromXML = function (string) {
  * @return {RenderInformation}
  */
 RenderInformation.fromObj = function (jsObj) {
-	if (typeof jsObj.renderInformation == 'undefined') {
+	var renderInformationNode = utils.getChildByNameIgnoringNamespace(jsObj, "renderInformation");
+	if (renderInformationNode === null) {
 		throw new Error("Bad XML provided, expected tagName renderInformation, got: " + Object.keys(jsObj)[0]);
 	}
 
 	var renderInformation = new ns.RenderInformation();
-	jsObj = jsObj.renderInformation;
+	jsObj = renderInformationNode;
 	if(typeof jsObj != 'object') { // nothing inside, empty xml
 		return renderInformation;
 	}
 
 	if(jsObj.$) { // we have some attributes
 		var attributes = jsObj.$;
-		renderInformation.id 				= attributes.id || null;
-		renderInformation.name 				= attributes.name || null;
-		renderInformation.programName 		= attributes.programName || null;
-		renderInformation.programVersion 	= attributes.programVersion || null;
-		renderInformation.backgroundColor 	= attributes.backgroundColor || null;
+		renderInformation.id = utils.getChildByNameIgnoringNamespace(attributes,"id");
+		renderInformation.name = utils.getChildByNameIgnoringNamespace(attributes,"name");
+		renderInformation.programName = utils.getChildByNameIgnoringNamespace(attributes,"programName");
+		renderInformation.programVersion = utils.getChildByNameIgnoringNamespace(attributes,"programVersion");
+		renderInformation.backgroundColor = utils.getChildByNameIgnoringNamespace(attributes,"backgroundColor");
 	}
 
 	// children
-	if(jsObj.listOfColorDefinitions) {
-		var listOfColorDefinitions = ns.ListOfColorDefinitions.fromObj({listOfColorDefinitions: jsObj.listOfColorDefinitions[0]});
+	var listOfColorDefinitionsNode = utils.getChildByNameIgnoringNamespace(jsObj, "listOfColorDefinitions");
+	if(listOfColorDefinitionsNode) {
+		var listOfColorDefinitions = ns.ListOfColorDefinitions.fromObj({listOfColorDefinitions: listOfColorDefinitionsNode});
 		renderInformation.setListOfColorDefinitions(listOfColorDefinitions);
 	}
-	if(jsObj.listOfStyles) {
-		var listOfStyles = ns.ListOfStyles.fromObj({listOfStyles: jsObj.listOfStyles[0]});
+
+	var listOfStylesNode = utils.getChildByNameIgnoringNamespace(jsObj, "listOfStyles");
+	if(listOfStylesNode) {
+		var listOfStyles = ns.ListOfStyles.fromObj({listOfStyles: listOfStylesNode});
 		renderInformation.setListOfStyles(listOfStyles);
 	}
-	if(jsObj.listOfBackgroundImages) {
-		var listOfBackgroundImages = ns.ListOfBackgroundImages.fromObj({listOfBackgroundImages: jsObj.listOfBackgroundImages[0]});
+
+	var listOfBackgroundImagesNode = utils.getChildByNameIgnoringNamespace(jsObj, "listOfBackgroundImages");
+	if(listOfBackgroundImagesNode) {
+		var listOfBackgroundImages = ns.ListOfBackgroundImages.fromObj({listOfBackgroundImages: listOfBackgroundImagesNode[0]});
 		renderInformation.setListOfBackgroundImages(listOfBackgroundImages);
 	}
 	return renderInformation;
