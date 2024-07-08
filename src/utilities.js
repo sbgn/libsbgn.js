@@ -62,7 +62,7 @@ ns.removePrefixForSbgnTags = function (name){
 		"port",
 		"sbgn",
 		"start",
-		"sate"
+		"state"
 	]);
 
 	if(name.indexOf(":") !== -1) { // some prefix found
