@@ -753,7 +753,7 @@ Glyph.prototype.buildJsObj = function () {
 		attributes.id = this.id;
 	}
 	if(this.class_ != null) {
-		attributes.class = this.class_;
+		attributes.class = (this.class_ === 'source and sink') ? 'emptyset' : this.class_;
 	}
 	if(this.compartmentRef != null) {
 		attributes.compartmentRef = this.compartmentRef;
@@ -846,6 +846,9 @@ Glyph.fromObj = function (jsObj) {
 		var attributes = jsObj.$;
 		glyph.id = attributes.id || null;
 		glyph.class_ = attributes.class || null;
+		if (glyph.class_ === 'source and sink') {
+			glyph.class_ = 'emptyset';
+		}
 		glyph.compartmentRef = attributes.compartmentRef || null;
 		glyph.compartmentOrder = parseFloat(attributes.compartmentOrder);
 		glyph.mapRef = attributes.mapRef || null;
