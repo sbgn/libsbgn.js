@@ -26,7 +26,7 @@ ns.GlyphClass = Object.freeze({
     COMPLEX: "complex",
     COMPLEX_MULTIMER: "complex multimer",
     SOURCE_AND_SINK: "source and sink",
-    EMPTYSET: "emptyset",
+    EMPTY_SET: "empty set",
     PERTURBATION: "perturbation",
     BIOLOGICAL_ACTIVITY: "biological activity",
     PERTURBING_AGENT: "perturbing agent",
